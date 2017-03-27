@@ -1,0 +1,299 @@
+package com.wgjev.weibus.service.impl;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.wgjev.weibus.dao.OperatorSysMapper;
+import com.wgjev.weibus.dao.SiteInfoMapper;
+import com.wgjev.weibus.entity.BusResult;
+import com.wgjev.weibus.entity.OperatorSys;
+import com.wgjev.weibus.entity.SiteInfo;
+import com.wgjev.weibus.service.SiteExcelService;
+
+@Service
+public class SiteExcelServiceImpl implements SiteExcelService{
+
+	@Resource
+	private SiteInfoMapper siteInfoMapper;
+	
+	@Resource
+	private OperatorSysMapper operatorSysMapper;
+	
+	/**
+	 * 批量导入站点信息
+	 */
+	@SuppressWarnings("unchecked")
+	public BusResult importFile(Integer operatorID, Integer companyID, MultipartFile mFile, String rootPath,
+			String loginIP) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		List<SiteInfo> siteList = new ArrayList<SiteInfo>();
+		String errorRow = "";
+		String fileName = mFile.getOriginalFilename();
+		String suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+		String ym = new SimpleDateFormat("yyyy-MM").format(new Date());
+		String filePath = "uploadFile/" + ym + fileName;
+		
+		try {
+			File file = new File(rootPath + filePath);
+			if (file.exists()) {
+				file.delete();
+				file.mkdirs();
+			} else {
+				file.mkdirs();
+			}
+			mFile.transferTo(file);
+
+			if ("xls".equals(suffix) || "XLS".equals(suffix)) {
+				Map<String, Object> map = importXls(file, companyID);
+				siteList = (List<SiteInfo>) map.get("siteList");
+				errorRow = (String) map.get("errorRow");
+				for (SiteInfo siteInfo : siteList) {
+					siteInfo.setCreatetime(new Date());
+					siteInfoMapper.insertSelective(siteInfo);
+				}
+			} else if ("xlsx".equals(suffix) || "XLSX".equals(suffix)) {
+				Map<String, Object> map = importXlsx(file, companyID);
+				siteList = (List<SiteInfo>) map.get("siteList");
+				errorRow = (String) map.get("errorRow");
+				for (SiteInfo siteInfo : siteList) {
+					siteInfo.setCreatetime(new Date());
+					siteInfoMapper.insertSelective(siteInfo);
+				}
+			}
+			result.setStatus(0);
+			result.setData(siteList.size());
+			result.setMsg(errorRow);
+		} catch (Exception e) {
+			result.setStatus(1);
+			e.printStackTrace();
+		}
+		
+		
+		return result;
+	}
+
+	/**
+	 * Xls文件
+	 * @param file
+	 * @param companyID
+	 * @return
+	 */
+	private Map<String, Object> importXls(File file, Integer companyID) {
+		List<SiteInfo> siteList = new ArrayList<SiteInfo>();
+		String errorRow="";
+		InputStream is = null;
+		HSSFWorkbook hWorkbook = null;
+		
+		try {
+			is = new FileInputStream(file);
+			hWorkbook = new HSSFWorkbook(is);
+			HSSFSheet hSheet = hWorkbook.getSheetAt(0);
+			
+			if (null != hSheet) {
+				for (int i = 11; i < hSheet.getPhysicalNumberOfRows(); i++) {
+					SiteInfo siteInfo = new SiteInfo();
+					HSSFRow hRow = hSheet.getRow(i);
+					try {
+						siteInfo.setSitename(hRow.getCell(1).toString());
+						//判断站点编号是否重复
+						Map<String, Object> params = new HashMap<String, Object>();
+						params.put("companyID", companyID);
+						params.put("siteNo", hRow.getCell(2).toString());
+						List<SiteInfo> siteArr = siteInfoMapper.findSiteInfoBySiteNoAndCompanyID(params);
+						if (siteArr.size() == 0) {
+							siteInfo.setSitecode(hRow.getCell(2).toString());
+						}else {
+							if (i==hSheet.getPhysicalNumberOfRows()-1) {
+								errorRow=errorRow+(i-10);
+							}else {
+								errorRow=errorRow+(i-10)+"、";
+							}
+							continue;
+						}
+						//站点负责人
+						OperatorSys operatorSys = operatorSysMapper.findByTelPhone(hRow.getCell(3).toString());
+						if (operatorSys == null) {
+							if (i==hSheet.getPhysicalNumberOfRows()-1) {
+								errorRow=errorRow+(i-10);
+							}else {
+								errorRow=errorRow+(i-10)+"、";
+							}
+							continue;
+						}else {
+							siteInfo.setSitemanid(operatorSys.getSysoperatorid());
+							siteInfo.setSiteman(operatorSys.getSysusename());
+						}
+						//
+						siteInfo.setSiteaddress(hRow.getCell(4).toString());
+						siteInfo.setStarttime(hRow.getCell(5).toString());
+						siteInfo.setEndtime(hRow.getCell(6).toString());
+						siteInfo.setStatus(new Double(hRow.getCell(7).toString()).intValue());
+						siteInfo.setCompanyid(companyID);
+						siteInfo.setPilestatus(new Double(hRow.getCell(8).toString()).intValue());
+						siteInfo.setLongitude(new BigDecimal(new Double(hRow.getCell(9).toString())));
+						siteInfo.setLatitude(new BigDecimal(new Double(hRow.getCell(10).toString())));
+						siteInfo.setSiteradius(new BigDecimal(new Double(hRow.getCell(11).toString())));
+						siteInfo.setParkingcount(new Double(hRow.getCell(12).toString()).intValue());
+						siteInfo.setZcode(hRow.getCell(13).toString());
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+						if (i==hSheet.getPhysicalNumberOfRows()-1) {
+							errorRow=errorRow+(i-10);
+						}else {
+							errorRow=errorRow+(i-10)+"、";
+						}
+						continue;
+					}
+					siteList.add(siteInfo);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (null != is) {
+				try {
+					is.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (null != hWorkbook) {
+				try {
+					hWorkbook.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("siteList", siteList);
+		map.put("errorRow", errorRow);
+		
+		return map;
+	}
+
+	/**
+	 * Xlsx文件
+	 */
+	private Map<String, Object> importXlsx(File file, Integer companyID) {
+		List<SiteInfo> siteList = new ArrayList<SiteInfo>();
+		String errorRow="";
+		InputStream is = null;
+		XSSFWorkbook xWorkbook = null;
+		try {
+			is = new FileInputStream(file);
+			xWorkbook = new XSSFWorkbook(is);
+			XSSFSheet xSheet = xWorkbook.getSheetAt(0);
+
+			if (null != xSheet) {
+				for (int i = 11; i < xSheet.getPhysicalNumberOfRows(); i++) {
+					SiteInfo siteInfo = new SiteInfo();
+					XSSFRow hRow = xSheet.getRow(i);
+
+					try {
+						siteInfo.setSitename(hRow.getCell(1).toString());
+						//判断站点编号是否重复
+						Map<String, Object> params = new HashMap<String, Object>();
+						params.put("companyID", companyID);
+						params.put("siteNo", hRow.getCell(2).toString());
+						List<SiteInfo> siteArr = siteInfoMapper.findSiteInfoBySiteNoAndCompanyID(params);
+						if (siteArr.size() == 0) {
+							siteInfo.setSitecode(hRow.getCell(2).toString());
+						}else {
+							if (i==xSheet.getPhysicalNumberOfRows()-1) {
+								errorRow=errorRow+(i-10);
+							}else {
+								errorRow=errorRow+(i-10)+"、";
+							}
+							continue;
+						}
+						//站点负责人
+						OperatorSys operatorSys = operatorSysMapper.findByTelPhone(hRow.getCell(3).toString());
+						if (operatorSys == null) {
+							if (i==xSheet.getPhysicalNumberOfRows()-1) {
+								errorRow=errorRow+(i-10);
+							}else {
+								errorRow=errorRow+(i-10)+"、";
+							}
+							continue;
+						}else {
+							siteInfo.setSitemanid(operatorSys.getSysoperatorid());
+							siteInfo.setSiteman(operatorSys.getSysusename());
+						}
+						//
+						siteInfo.setSiteaddress(hRow.getCell(4).toString());
+						siteInfo.setStarttime(hRow.getCell(5).toString());
+						siteInfo.setEndtime(hRow.getCell(6).toString());
+						siteInfo.setStatus(new Double(hRow.getCell(7).toString()).intValue());
+						siteInfo.setCompanyid(companyID);
+						siteInfo.setPilestatus(new Double(hRow.getCell(8).toString()).intValue());
+						siteInfo.setLongitude(new BigDecimal(new Double(hRow.getCell(9).toString())));
+						siteInfo.setLatitude(new BigDecimal(new Double(hRow.getCell(10).toString())));
+						siteInfo.setSiteradius(new BigDecimal(new Double(hRow.getCell(11).toString())));
+						siteInfo.setParkingcount(new Double(hRow.getCell(12).toString()).intValue());
+						siteInfo.setZcode(hRow.getCell(13).toString());
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+						if (i==xSheet.getPhysicalNumberOfRows()-1) {
+							errorRow=errorRow+(i-10);
+						}else {
+							errorRow=errorRow+(i-10)+"、";
+						}
+						continue;
+					}
+					
+					siteList.add(siteInfo);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (null != is) {
+				try {
+					is.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (null != xWorkbook) {
+				try {
+					xWorkbook.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("siteList", siteList);
+		map.put("errorRow", errorRow);
+		
+		return map;
+	}
+	
+	
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.ZcodeInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.ZcodeInfo" >
+    <result column="Zcode" property="zcode" jdbcType="VARCHAR" />
+    <result column="Prov" property="prov" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="Town" property="town" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.ZcodeInfo" >
+    insert into t_info_china_zcode (Zcode, Prov, City, 
+      Town)
+    values (#{zcode,jdbcType=VARCHAR}, #{prov,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{town,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.ZcodeInfo" >
+    insert into t_info_china_zcode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="zcode != null" >
+        Zcode,
+      </if>
+      <if test="prov != null" >
+        Prov,
+      </if>
+      <if test="city != null" >
+        City,
+      </if>
+      <if test="town != null" >
+        Town,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="zcode != null" >
+        #{zcode,jdbcType=VARCHAR},
+      </if>
+      <if test="prov != null" >
+        #{prov,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null" >
+        #{town,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 加载所有操作员的信息 -->
+  <select id="loadChinaZcodes" resultType="com.wgjev.weibus.entity.ZcodeInfo">
+  	SELECT * FROM t_info_china_zcode 
+  </select>
+  
+</mapper>

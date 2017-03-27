@@ -1,0 +1,168 @@
+package com.wgjev.weibus.entity.json;
+
+
+public class PriceJson {
+	private Integer priceID;
+	private Integer priceVersion;
+	private String priceName;
+	private Integer carModel;
+	private Integer calcType;
+	private double cleanFee;
+	private double safeFee;
+	private double minutePrice;
+	private double hourMileage;
+	private double superPrice;
+	private String earlyBegin;
+	private String earlyEnd;
+	private double earlySale;
+	private String nightBegin;
+	private String nightEnd;
+	private double nightSale;
+	private String createMan;
+	private String createTime;
+	private Integer status;
+	private Integer newStatus;
+	private String alias;
+	private String carModelName;
+	private String companyName;
+	
+	public String getAlias() {
+		return alias;
+	}
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+	public String getCarModelName() {
+		return carModelName;
+	}
+	public void setCarModelName(String carModelName) {
+		this.carModelName = alias+carModelName;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	public Integer getPriceID() {
+		return priceID;
+	}
+	public void setPriceID(Integer priceID) {
+		this.priceID = priceID;
+	}
+	public Integer getPriceVersion() {
+		return priceVersion;
+	}
+	public void setPriceVersion(Integer priceVersion) {
+		this.priceVersion = priceVersion;
+	}
+	public String getPriceName() {
+		return priceName;
+	}
+	public void setPriceName(String priceName) {
+		this.priceName = priceName;
+	}
+	public Integer getCarModel() {
+		return carModel;
+	}
+	public void setCarModel(Integer carModel) {
+		this.carModel = carModel;
+	}
+	public Integer getCalcType() {
+		return calcType;
+	}
+	public void setCalcType(Integer calcType) {
+		this.calcType = calcType;
+	}
+	public double getCleanFee() {
+		return cleanFee;
+	}
+	public void setCleanFee(double cleanFee) {
+		this.cleanFee = cleanFee;
+	}
+	public double getSafeFee() {
+		return safeFee;
+	}
+	public void setSafeFee(double safeFee) {
+		this.safeFee = safeFee;
+	}
+	public double getMinutePrice() {
+		return minutePrice;
+	}
+	public void setMinutePrice(double minutePrice) {
+		this.minutePrice = minutePrice;
+	}
+	public double getHourMileage() {
+		return hourMileage;
+	}
+	public void setHourMileage(double hourMileage) {
+		this.hourMileage = hourMileage;
+	}
+	public double getSuperPrice() {
+		return superPrice;
+	}
+	public void setSuperPrice(double superPrice) {
+		this.superPrice = superPrice;
+	}
+	public String getEarlyBegin() {
+		return earlyBegin;
+	}
+	public void setEarlyBegin(String earlyBegin) {
+		this.earlyBegin = earlyBegin;
+	}
+	public String getEarlyEnd() {
+		return earlyEnd;
+	}
+	public void setEarlyEnd(String earlyEnd) {
+		this.earlyEnd = earlyEnd;
+	}
+	public double getEarlySale() {
+		return earlySale;
+	}
+	public void setEarlySale(double earlySale) {
+		this.earlySale = earlySale;
+	}
+	public String getNightBegin() {
+		return nightBegin;
+	}
+	public void setNightBegin(String nightBegin) {
+		this.nightBegin = nightBegin;
+	}
+	public String getNightEnd() {
+		return nightEnd;
+	}
+	public void setNightEnd(String nightEnd) {
+		this.nightEnd = nightEnd;
+	}
+	public double getNightSale() {
+		return nightSale;
+	}
+	public void setNightSale(double nightSale) {
+		this.nightSale = nightSale;
+	}
+	public String getCreateMan() {
+		return createMan;
+	}
+	public void setCreateMan(String createMan) {
+		this.createMan = createMan;
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public Integer getNewStatus() {
+		return newStatus;
+	}
+	public void setNewStatus(Integer newStatus) {
+		this.newStatus = newStatus;
+	}
+
+}

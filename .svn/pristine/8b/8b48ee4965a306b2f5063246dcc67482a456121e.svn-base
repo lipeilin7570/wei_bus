@@ -1,0 +1,294 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>区域信息</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="../../css/screen.css" >
+<script src="../../js/jquery-1.11.3.min.js" type="text/javascript"></script>
+<script src="../../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../js/bootstrap/DateFormat.js" type="text/javascript"></script>
+<script src="../../js/bootstrap/bootstrap-table.js" type="text/javascript"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.fr.js" type="text/javascript"></script>
+<script src="../../js/bootbox.js" type="text/javascript"></script>
+<script src="../../js/script/Info/region.js" type="text/javascript"></script>
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+			font-family: "Microsoft YaHei";
+			font-size: 12px;
+		}
+		.title{
+			background-color:#ccc;
+		}
+	</style>
+<script type="text/javascript">
+		$().ready(function() {
+  			$("#regionForm").validate({meta: "validate"});
+		});
+				
+</script>
+</head>
+<body>
+	<div class="container" style="width:100%; border:0px; border-style:solid;">
+		<div class="panel center-block">
+			<h4>区域信息</h4>
+			<div id="custom-toolbar" style="padding-top:10px;">
+				<form class="form-horizontal" role="form" action="" method="get">
+					<div class="form-group">						
+						<label for="status" class="col-sm-2 control-label">区域状态</label>
+						<div class="col-sm-2">
+							<select id="status" class="form-control"> 
+								<option value="">请选择</option>
+								<option value="1">正常</option>
+								<option value="2">暂停</option>
+							</select>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-info" onclick="ss();">
+								<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>查询
+							</button>
+						</div>
+						<div class="form-group">
+							 <input type="text" id="txt1"/>
+							
+						</div>
+						<div style="margin-left:83%">
+							<button type="button" class="btn btn-primary" onclick="add();">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+							</button>	
+												
+							<button onclick="list();"><span class="glyphicon glyphicon-plus"></span>选择配置</button>
+						</div>
+					</div>										
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-height="400" data-url="" data-id="row.regionid" data-side-pagination="server" data-pagination="true" data-show-refresh="true" data-search="true"></table>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 可配置-->
+	<button id="check" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#checkModal"></button>
+	<div class="modal fade" id="checkModal" tabindex="-1" role="dialog"
+		aria-labelledby="checkModalLabel" aria-hidden="true" style="top:15%;">
+		<div class="modal-dialog" style="width:300px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="checkModalLabel">请选择</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:200px;overflow:auto;">
+					<table class="table table-bordered">
+						<tr><td><input type="checkbox"id="name" name="item"><label for="name">区域名称</label></td></tr>
+						<tr><td><input type="checkbox"id="regionno" name="item"><label for="regionno">区域编号</label></td></tr>
+						<tr><td><input type="checkbox"id="status" name="item"><label for="status">区域状态</label></td></tr>
+						<tr><td><input type="checkbox"id="zcode" name="item"><label for="zcode">行政区域</label></td></tr>
+						<tr><td><input type="checkbox"id="remark" name="item"><label for="remark">备注</label></td></tr>
+						<tr><td><input type="checkbox"id="operation" name="item"><label for="operation">操作</label></td></tr>
+						
+					</table>
+				</div>
+				<div class="modal-footer" style="text-align:center;">
+					<button id="updata-table" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- 新增区域-->
+	<button id="impload" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#impModal">
+	</button>
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="impModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true" style="top:25%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">新增区域信息</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:200px;overflow:auto;">
+					<table id="regionForm" class="table table-bordered"> 
+						<tr>				
+							<td><label for="name">区域名称</label></td>
+							<td>							
+								<input type="text" id="name" value="">
+							</td>	
+						<tr>
+							<td><label for="regionNo">区域编号</label></td>
+							<td>
+								<input type="text" id="regionNo" value="">
+							</td>
+						</tr>																														
+						<tr>
+							<td><label for="zcode">行政区域</label></td>
+							<td>
+								<input type="text" id="zcode" value="">
+							</td>
+						</tr>								
+						<tr>
+							<td><label for="remark">备注</label></td>
+							<td>
+								<input type="text" id="remark" value="">
+							</td>
+						</tr>																																																																																																																																										
+					</table>
+				</div>
+				<div class="modal-footer" style="text-aling:center;">
+					<button id="impbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="urlSubmit();doFn();">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 修改区域-->
+	<button id="editLoad" style="display:none;" class="btn btn-primary btn-lg" 
+			data-toggle="modal" data-target="#editModal"></button>
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+		aria-labelledby="editModalLabel" aria-hidden="true" style="top:25%;">
+		<div class="modal-dialog" style="width:500px">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="editModalLabel">修改区域信息</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:200px;overflow:auto;">
+					<table class="table table-bordered" id="revise_table">
+							<tr>															
+								<td class="title">区域名称</td>
+								<td><input type="text" id="Name" name="name" value=""></td>
+								<td class="title">区域编号</td>
+								<td><input type="text" id="RegionNo" name="regionNo" value=""></td>
+							</tr>
+							<tr>								
+								<td class="title">行政区域</td>
+								<td><input type="text" id="Zcode" name="zcode" value=""></td>
+								<td class="title">备注</td>
+								<td><input type="text" id="Remark" name="remark" value=""></td>
+							</tr>														
+						</table>
+				</div>
+				<div class="modal-footer" style="text-align:center;">
+					<button id="editbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+			
+	<!-- 按钮触发模态框 -->
+	<button id="remove" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal"
+			data-target="#removeModal"></button>	
+	<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModalLabel" aria-hidden="true" style="top:25%;">
+		<div class="modal-dialog" style="width: 500px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="removeModalLabel">温馨提示：</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="removemsg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="removebut" type="button" class="btn btn-default btn-sm"
+					data-dismiss="modal" onclick="urlDel();">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>		
+	<script type="text/javascript">
+		function doFn(){			 
+			 var flag = true;//是否全部输入  默认true			 
+			 $("#revise_table input").each(function (){			 
+			 	if($(this).val()==""){//有空输入，将flag置为false			 
+			   		flag = false;//			 
+			  	}			 
+			 });			 
+			 if(flag){			 
+			  	alert("全部输入，提交内容");			 
+			 }else{			 
+			  	alert("有空输入，不能提交!");			 
+			 }			 
+		}
+	</script>
+	<script>
+        $(function(){
+            //根据选中的字段重新渲染表格
+            $(".update-table").click(updateTable);
+        });
+        function updateTable(){
+            var ckdItem_arr = [];
+            //遍历所有 name=item的选中状态的复选框
+            var $ckb = $("input[name='item']:checked");
+
+            $ckb.each(function(){
+                var items = $(this).val();
+                ckdItem_arr.push(items);
+            });
+
+            //若有勾选项,则获取已选字段的json
+            if(ckdItem_arr.length) {
+                var newTableJson = drawNewJson(jsonData, ckdItem_arr);
+                drawTable(newTableJson);//重新渲染table
+                $(".no-data").hide();   //隐藏无数据提示
+            }else{
+                $(".mytable").html("").siblings(".no-data").show(); //显示无数据提示
+            }
+        }
+
+        //重建新的json用来渲染表格
+        function drawNewJson(jsonData,ckdItem_arr){
+            var newJson = [];
+            //遍历每行对象（即jsonData中的每个{}，这里jsonData长度为4，故有4个）
+            for(var x=0; x<jsonData.length; x++){
+                var obj = {};                               //匹配当前勾选的字段，相同的拿出来，新组建一个对象
+                for(var k=0; k<ckdItem_arr.length; k++){
+                    var item = ckdItem_arr[k];              //把所选字段名存在一个变量里
+                    obj[item] = jsonData[x][item];          //拥有新字段的单个obj对象
+                }
+                newJson.push(obj);                              //重组过的、用于渲染表格的新json
+            }
+            return newJson;
+        }
+        //js渲染表格
+        function drawTable(data){
+            //遍历行:第一行表头(只有一行就直接拼接+=字符串了)
+            var thead_html = '<tr>';
+            for(var k in data[0]) {
+                thead_html += '<th>'+ k +'</th>';
+            }
+            thead_html += '</tr>';
+
+            //遍历行:后面的内容行(行数较多，出于性能考虑用push比较好)
+            var tbody_html = [];
+            for(var i=0; i<data.length; i++){
+                tbody_html.push('<tr>');
+                for(var j in data[i]) {
+                    tbody_html.push('<td>'+ data[i][j] +'</td>');
+                }
+                tbody_html.push('</tr>');
+            }
+            tbody_html = tbody_html.join(""); //array to string
+
+            //填充table html
+           var table_html = '<table><thead>'+ thead_html + '</thead><tbody>'+ tbody_html +'</tbody></table>';
+           $(".mytable").html(table_html);
+        }
+
+    </script>	
+</body>
+</html>

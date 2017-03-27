@@ -1,0 +1,28 @@
+package com.wgjev.weibus.controller.price;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.wgjev.weibus.entity.BusResult;
+import com.wgjev.weibus.service.PriceService;
+
+@Controller
+@RequestMapping("/price")
+public class QueryHolidayController {
+	@Resource
+	private PriceService priceService;
+	
+	@RequestMapping("/queryHoliday.do")
+	@ResponseBody
+	public BusResult execute(Integer operatorID, Integer carModel, Integer year,
+			HttpServletRequest request, HttpServletResponse response){
+		String loginIP = request.getRemoteHost();
+		return priceService.queryHoliday(operatorID, carModel, year, loginIP);
+	}
+	
+}

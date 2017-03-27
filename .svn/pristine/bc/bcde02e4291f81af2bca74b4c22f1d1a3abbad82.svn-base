@@ -1,0 +1,117 @@
+package com.wgjev.weibus.service;
+
+
+import com.wgjev.weibus.entity.BusResult;
+
+public interface PriceService {
+	
+	/**
+	 * 显示公司的价格表
+	 * @param companyID
+	 * @return
+	 */
+	public BusResult loadAllPriceByCompanyID(int companyID);
+	
+	/**
+	 * 调价
+	 * @param operatorID
+	 * @param priceID
+	 * @param cleanFee
+	 * @param safeFee
+	 * @param minutePrice
+	 * @param hourMileage
+	 * @param superPrice
+	 * @param earlyBegin
+	 * @param earlyEnd
+	 * @param earlySale
+	 * @param nightBegin
+	 * @param nightEnd
+	 * @param nightSale
+	 * @return
+	 */
+	public BusResult changeCompanyPrice(Integer operatorID, Integer priceID, double cleanFee, double safeFee, double minutePrice,
+			double hourMileage, double superPrice, String earlyBegin, String earlyEnd, double earlySale, String nightBegin, 
+			String nightEnd, double nightSale);
+	
+	/**
+	 * 查看价格详情
+	 * @param priceID
+	 * @return
+	 */
+	public BusResult findPriceByPriceID(int priceID);
+	
+	/**
+	 * 新增价格信息
+	 * @param operatorID
+	 * @param companyID
+	 * @param priceName
+	 * @param carModel
+	 * @param calcType
+	 * @param cleanFee
+	 * @param safeFee
+	 * @param minutePrice
+	 * @param hourMileage
+	 * @param superPrice
+	 * @param earlyBegin
+	 * @param earlyEnd
+	 * @param earlySale
+	 * @param nightBegin
+	 * @param nightEnd
+	 * @param nightSale
+	 * @return
+	 */
+	public BusResult addCompanyPrice(Integer operatorID, Integer companyID, String priceName, Integer carModel, 
+			Integer calcType, double cleanFee, double safeFee, double minutePrice,
+			double hourMileage, double superPrice, String earlyBegin, String earlyEnd, double earlySale, String nightBegin, 
+			String nightEnd, double nightSale);
+	
+	/**
+	 * 查询节假日调价信息
+	 * @param operatorID
+	 * @param carModel
+	 * @param year
+	 * @param loginIP
+	 * @return
+	 */
+	public BusResult queryHoliday(Integer operatorID, Integer carModel, Integer year, String loginIP);
+	
+	/**
+	 * 增加节假日调价信息
+	 * @param operatorID
+	 * @param carModel
+	 * @param holidayName
+	 * @param incPrice
+	 * @param beginDate
+	 * @param endDate
+	 * @param loginIP
+	 * @return
+	 */
+	public BusResult addHoliday(Integer operatorID, Integer carModel, String holidayName, 
+			double incPrice, String beginDate, String endDate, String loginIP);
+	
+	/**
+	 * 调整节假日调价信息
+	 * @param holidayID
+	 * @param holidayName
+	 * @param incPrice
+	 * @param beginDate
+	 * @param endDate
+	 * @param loginIP
+	 * @return
+	 */
+	public BusResult modifyHoliday(Integer operatorID, Integer holidayID, String holidayName, double incPrice,
+			String beginDate, String endDate, String loginIP);
+	
+	/**
+	 * 删除节假日调价信息
+	 * @param operatorID
+	 * @param delCause
+	 * @param loginIP
+	 * @return
+	 */
+	public BusResult delHoliday(Integer operatorID, Integer holidayID, String delCause, String loginIP);
+	
+	
+	
+	
+}

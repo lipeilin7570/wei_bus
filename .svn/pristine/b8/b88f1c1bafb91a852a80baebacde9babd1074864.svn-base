@@ -1,0 +1,334 @@
+package com.wgjev.weibus.service.impl;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+
+import com.wgjev.weibus.dao.OperatorSysMapper;
+import com.wgjev.weibus.dao.PriceFinanceMapper;
+import com.wgjev.weibus.dao.json.PriceJsonMapper;
+import com.wgjev.weibus.entity.BusResult;
+import com.wgjev.weibus.entity.OperatorSys;
+import com.wgjev.weibus.entity.PriceFinance;
+import com.wgjev.weibus.entity.json.PriceJson;
+import com.wgjev.weibus.service.PriceService;
+import com.wgjev.weibus.util.BusUtil;
+import com.wgjev.weibus.util.JsonPostUtil;
+
+@Service
+public class PriceServiceImpl implements PriceService {
+	
+	@Resource
+	private PriceFinanceMapper priceFinanceMapper;
+	
+	@Resource
+	private PriceJsonMapper priceJsonMapper;
+	
+	@Resource
+	private OperatorSysMapper operatorSysMapper;
+	
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+	/**
+	 * 显示公司的价格表
+	 */
+	public BusResult loadAllPriceByCompanyID(int companyID) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		List<PriceJson> list;
+		if (companyID == 0) {
+			list = priceJsonMapper.loadAllPrice();
+		}else {
+			list = priceJsonMapper.loadAllPriceByCompanyID(new Integer(companyID));
+		}
+		result.setStatus(0);
+		result.setData(list);
+		
+		return result;
+	}
+
+	/**
+	 * 调价
+	 */
+	public BusResult changeCompanyPrice(Integer operatorID, Integer priceID, double cleanFee, double safeFee, double minutePrice,
+			double hourMileage, double superPrice, String earlyBegin, String earlyEnd, double earlySale, String nightBegin, 
+			String nightEnd, double nightSale) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		PriceFinance oldPrice = priceFinanceMapper.selectByPrimaryKey(priceID);
+		PriceFinance newPrice = priceFinanceMapper.selectByPrimaryKey(priceID);
+		OperatorSys operatorSys = operatorSysMapper.selectByPrimaryKey(operatorID);
+		
+		//新价格
+		newPrice.setPriceid(null);
+		newPrice.setPriceversion(oldPrice.getPriceversion()+1);
+		if (cleanFee >= 0) {
+			newPrice.setCleanfee(new BigDecimal(cleanFee));
+		}
+		if (safeFee >= 0) {
+			newPrice.setSafefee(new BigDecimal(safeFee));
+		}
+		if (minutePrice >= 0) {
+			newPrice.setMinuteprice(new BigDecimal(minutePrice));
+		}
+		if (hourMileage >= 0) {
+			newPrice.setHourmileage(new BigDecimal(hourMileage));
+		}
+		if (superPrice >= 0) {
+			newPrice.setSuperprice(new BigDecimal(superPrice));
+		}
+		if (earlyBegin != null && !earlyBegin.equals("")) {
+			newPrice.setEarlybegin(earlyBegin);
+		}
+		if (earlyEnd != null && !earlyEnd.equals("")) {
+			newPrice.setEarlyend(earlyEnd);
+		}
+		if (earlySale >= 0) {
+			newPrice.setEarlysale(new BigDecimal(earlySale));
+		}
+		if (nightBegin != null && nightBegin.equals("")) {
+			newPrice.setNightbegin(nightBegin);
+		}
+		if (nightEnd != null && nightEnd.equals("")) {
+			newPrice.setNightend(nightEnd);
+		}
+		if (nightSale >= 0) {
+			newPrice.setNightsale(new BigDecimal(nightSale));
+		}
+		newPrice.setOldpriceid(oldPrice.getPriceid());
+		newPrice.setCreatemanid(operatorID);
+		newPrice.setCreateman(operatorSys.getSysusename());
+		newPrice.setCreatetime(new Date());
+		priceFinanceMapper.insertSelective(newPrice);
+		
+		oldPrice.setStatus(2);
+		oldPrice.setNewstatus(0);
+		priceFinanceMapper.updateByPrimaryKeySelective(oldPrice);
+		
+		result.setStatus(0);
+		return result;
+	}
+
+	/**
+	 * 查看价格详情
+	 */
+	public BusResult findPriceByPriceID(int priceID) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		PriceJson priceJson = priceJsonMapper.findPriceByPriceID(new Integer(priceID));
+		result.setStatus(0);
+		result.setData(priceJson);
+		return result;
+	}
+	
+	/**
+	 * 新增价格信息
+	 */
+	public BusResult addCompanyPrice(Integer operatorID, Integer companyID, String priceName, Integer carModel, 
+			Integer calcType, double cleanFee, double safeFee, double minutePrice,
+			double hourMileage, double superPrice, String earlyBegin, String earlyEnd, double earlySale, String nightBegin, 
+			String nightEnd, double nightSale) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		
+		PriceJson has_price = priceJsonMapper.findPriceByCarModel(carModel);
+		if (has_price != null) {
+			result.setStatus(101);
+			return result;
+		}
+		
+		PriceFinance newPrice = new PriceFinance();
+		OperatorSys operatorSys = operatorSysMapper.selectByPrimaryKey(operatorID);
+		
+		newPrice.setPriceversion(1);
+		newPrice.setPricename(priceName);
+		newPrice.setCarmodel(carModel);
+		newPrice.setCalctype(calcType);
+		if (cleanFee >= 0) {
+			newPrice.setCleanfee(new BigDecimal(cleanFee));
+		}
+		if (safeFee >= 0) {
+			newPrice.setSafefee(new BigDecimal(safeFee));
+		}
+		if (minutePrice >= 0) {
+			newPrice.setMinuteprice(new BigDecimal(minutePrice));
+		}
+		if (hourMileage >= 0) {
+			newPrice.setHourmileage(new BigDecimal(hourMileage));
+		}
+		if (superPrice >= 0) {
+			newPrice.setSuperprice(new BigDecimal(superPrice));
+		}
+		if (earlyBegin != null && !earlyBegin.equals("")) {
+			newPrice.setEarlybegin(earlyBegin);
+		}
+		if (earlyEnd != null && !earlyEnd.equals("")) {
+			newPrice.setEarlyend(earlyEnd);
+		}
+		if (earlySale >= 0) {
+			newPrice.setEarlysale(new BigDecimal(earlySale));
+		}
+		if (nightBegin != null && nightBegin.equals("")) {
+			newPrice.setNightbegin(nightBegin);
+		}
+		if (nightEnd != null && nightEnd.equals("")) {
+			newPrice.setNightend(nightEnd);
+		}
+		if (nightSale >= 0) {
+			newPrice.setNightsale(new BigDecimal(nightSale));
+		}
+		newPrice.setCreatemanid(operatorID);
+		newPrice.setCreateman(operatorSys.getSysusename());
+		newPrice.setCreatetime(new Date());
+		newPrice.setStatus(1);
+		newPrice.setNewstatus(1);
+		priceFinanceMapper.insertSelective(newPrice);
+		
+		result.setStatus(0);
+		return result;
+	}
+	
+	/**
+	 * 查询节假日调价信息
+	 */
+	public BusResult queryHoliday(Integer operatorID, Integer carModel, Integer year, String loginIP) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		
+		JSONObject obj = new JSONObject();
+		obj.putOpt("CarModel", carModel);
+		obj.putOpt("Year", year);
+		
+		
+        String url = BusUtil.BASE_IP+"Finance/QueryHoliday/?UserID="+operatorID+"&UserType=1&UserIP="+loginIP;
+        
+        BusResult  jsonResult = JsonPostUtil.sendPost(url, obj.toString());
+        String jsonStr = jsonResult.getData().toString();
+		
+        JSONObject jsonObject = new JSONObject(jsonStr);
+		int status = jsonObject.getInt("Result");
+		result.setStatus(status);
+		
+		if (status != 0) {
+			return result;
+		}
+		List<Map<String, Object>> Illegals = new ArrayList<Map<String,Object>>();
+		JSONArray Holidays = jsonObject.getJSONArray("Holidays");
+		for (int i = 0; i < Holidays.length(); i++) {
+			JSONObject jsonItem = Holidays.getJSONObject(i);
+			Integer HolidayID = jsonItem.getInt("HolidayID");
+			String HolidayName = jsonItem.getString("HolidayName");
+			Integer CarModel = jsonItem.getInt("CarModel");
+			String ModelName = jsonItem.getString("ModelName");
+			String BeginDate = jsonItem.getString("BeginDate");
+			String EndDate = jsonItem.getString("EndDate");
+			Double IncPrice = jsonItem.getDouble("IncPrice");
+			String UpdateTime = jsonItem.getString("UpdateTime");
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("HolidayID", HolidayID);
+			map.put("HolidayName", HolidayName);
+			map.put("CarModel", CarModel);
+			map.put("ModelName", ModelName);
+			map.put("BeginDate", BeginDate);
+			map.put("EndDate", EndDate);
+			map.put("IncPrice", IncPrice);
+			map.put("UpdateTime", UpdateTime);
+			
+			Illegals.add(map);
+		}
+		result.setData(Illegals);
+		
+		return result;
+	}
+
+	/**
+	 * 增加节假日调价信息
+	 */
+	public BusResult addHoliday(Integer operatorID, Integer carModel, String holidayName, double incPrice,
+			String beginDate, String endDate, String loginIP) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		
+		JSONObject obj = new JSONObject();
+		obj.putOpt("CarModel", carModel);
+		obj.putOpt("HolidayName", holidayName);
+		obj.putOpt("IncPrice", incPrice);
+		obj.putOpt("BeginDate", beginDate);
+		obj.putOpt("EndDate", endDate);
+		obj.putOpt("OptID", operatorID);
+		
+        String url = BusUtil.BASE_IP+"Finance/AddHoliday/?UserID="+operatorID+"&UserType=1&UserIP="+loginIP;
+        
+        BusResult  jsonResult = JsonPostUtil.sendPost(url, obj.toString());
+        String jsonStr = jsonResult.getData().toString();
+		
+        JSONObject jsonObject = new JSONObject(jsonStr);
+		int status = jsonObject.getInt("Result");
+		result.setStatus(status);
+		
+		return result;
+	}
+
+	/**
+	 * 调整节假日调价信息
+	 */
+	public BusResult modifyHoliday(Integer operatorID, Integer holidayID, String holidayName, double incPrice, String beginDate,
+			String endDate, String loginIP) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		
+		JSONObject obj = new JSONObject();
+		obj.putOpt("OptID", operatorID);
+		obj.putOpt("HolidayID", holidayID);
+		obj.putOpt("HolidayName", holidayName);
+		obj.putOpt("IncPrice", incPrice);
+		obj.putOpt("BeginDate", beginDate);
+		obj.putOpt("EndDate", endDate);
+		
+		
+        String url = BusUtil.BASE_IP+"Finance/ModifyHoliday/?UserID="+operatorID+"&UserType=1&UserIP="+loginIP;
+        
+        BusResult  jsonResult = JsonPostUtil.sendPost(url, obj.toString());
+        String jsonStr = jsonResult.getData().toString();
+		
+        JSONObject jsonObject = new JSONObject(jsonStr);
+		int status = jsonObject.getInt("Result");
+		result.setStatus(status);
+		
+		return result;
+	}
+
+	/**
+	 * 删除节假日调价信息
+	 */
+	public BusResult delHoliday(Integer operatorID, Integer holidayID, String delCause, String loginIP) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		
+		JSONObject obj = new JSONObject();
+		obj.putOpt("OptID", operatorID);
+		obj.putOpt("HolidayID", holidayID);
+		obj.putOpt("DelCause", delCause);
+		
+        String url = BusUtil.BASE_IP+"Finance/DelHoliday/?UserID="+operatorID+"&UserType=1&UserIP="+loginIP;
+        
+        BusResult  jsonResult = JsonPostUtil.sendPost(url, obj.toString());
+        String jsonStr = jsonResult.getData().toString();
+		
+        JSONObject jsonObject = new JSONObject(jsonStr);
+		int status = jsonObject.getInt("Result");
+		result.setStatus(status);
+		
+		return result;
+	}
+
+}

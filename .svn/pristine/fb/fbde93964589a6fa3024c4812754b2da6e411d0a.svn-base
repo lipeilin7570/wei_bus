@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+	<component name="Encoding">
+		<file url="file://$PROJECT_DIR$/include/info/map.html" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/include/system/roles.html"
+			charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/js/script/admin.js" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/js/script/car.js" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/js/script/company.js" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/js/script/illegal.js" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/js/script/memberInfo.js" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/js/script/rentCar.js" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/js/script/roles.js" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/js/script/site.js" charset="UTF-8" />
+		<file url="file://$PROJECT_DIR$/login.html" charset="UTF-8" />
+	</component>
+</project>

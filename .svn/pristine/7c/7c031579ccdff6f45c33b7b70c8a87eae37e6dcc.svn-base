@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.CarServiceInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.CarServiceInfo" >
+    <id column="CarID" property="carid" jdbcType="INTEGER" />
+    <result column="LastTime" property="lasttime" jdbcType="TIMESTAMP" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="UpdateManID" property="updatemanid" jdbcType="INTEGER" />
+    <result column="UpdateMan" property="updateman" jdbcType="VARCHAR" />
+    <result column="UpdateManType" property="updatemantype" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CarID, LastTime, Status, UpdateManID, UpdateMan, UpdateManType, Remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_carservice
+    where CarID = #{carid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_carservice
+    where CarID = #{carid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.CarServiceInfo" >
+    insert into t_info_carservice (CarID, LastTime, Status, 
+      UpdateManID, UpdateMan, UpdateManType, 
+      Remark)
+    values (#{carid,jdbcType=INTEGER}, #{lasttime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{updatemanid,jdbcType=INTEGER}, #{updateman,jdbcType=VARCHAR}, #{updatemantype,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.CarServiceInfo" >
+    insert into t_info_carservice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carid != null" >
+        CarID,
+      </if>
+      <if test="lasttime != null" >
+        LastTime,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="updatemanid != null" >
+        UpdateManID,
+      </if>
+      <if test="updateman != null" >
+        UpdateMan,
+      </if>
+      <if test="updatemantype != null" >
+        UpdateManType,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carid != null" >
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="lasttime != null" >
+        #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updatemanid != null" >
+        #{updatemanid,jdbcType=INTEGER},
+      </if>
+      <if test="updateman != null" >
+        #{updateman,jdbcType=VARCHAR},
+      </if>
+      <if test="updatemantype != null" >
+        #{updatemantype,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.CarServiceInfo" >
+    update t_info_carservice
+    <set >
+      <if test="lasttime != null" >
+        LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updatemanid != null" >
+        UpdateManID = #{updatemanid,jdbcType=INTEGER},
+      </if>
+      <if test="updateman != null" >
+        UpdateMan = #{updateman,jdbcType=VARCHAR},
+      </if>
+      <if test="updatemantype != null" >
+        UpdateManType = #{updatemantype,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CarID = #{carid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.CarServiceInfo" >
+    update t_info_carservice
+    set LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      Status = #{status,jdbcType=INTEGER},
+      UpdateManID = #{updatemanid,jdbcType=INTEGER},
+      UpdateMan = #{updateman,jdbcType=VARCHAR},
+      UpdateManType = #{updatemantype,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR}
+    where CarID = #{carid,jdbcType=INTEGER}
+  </update>
+</mapper>

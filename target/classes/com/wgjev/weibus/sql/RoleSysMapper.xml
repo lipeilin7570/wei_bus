@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.RoleSysMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.RoleSys" >
+    <id column="SysRoleID" property="sysroleid" jdbcType="INTEGER" />
+    <result column="SysRoleNo" property="sysroleno" jdbcType="VARCHAR" />
+    <result column="SysRoleName" property="sysrolename" jdbcType="VARCHAR" />
+    <result column="SysMenuList" property="sysmenulist" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="UpdateCounts" property="updatecounts" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SysRoleID, SysRoleNo, SysRoleName, SysMenuList, status, CreateTime, UpdateTime, UpdateCounts, 
+    Remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_system_role
+    where SysRoleID = #{sysroleid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_system_role
+    where SysRoleID = #{sysroleid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.RoleSys" >
+    insert into t_system_role (SysRoleID, SysRoleNo, SysRoleName, 
+      SysMenuList, status, CreateTime, 
+      UpdateTime, UpdateCounts, Remark
+      )
+    values (#{sysroleid,jdbcType=INTEGER}, #{sysroleno,jdbcType=VARCHAR}, #{sysrolename,jdbcType=VARCHAR}, 
+      #{sysmenulist,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updatecounts,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.RoleSys" >
+    insert into t_system_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysroleid != null" >
+        SysRoleID,
+      </if>
+      <if test="sysroleno != null" >
+        SysRoleNo,
+      </if>
+      <if test="sysrolename != null" >
+        SysRoleName,
+      </if>
+      <if test="sysmenulist != null" >
+        SysMenuList,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime,
+      </if>
+      <if test="updatecounts != null" >
+        UpdateCounts,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysroleid != null" >
+        #{sysroleid,jdbcType=INTEGER},
+      </if>
+      <if test="sysroleno != null" >
+        #{sysroleno,jdbcType=VARCHAR},
+      </if>
+      <if test="sysrolename != null" >
+        #{sysrolename,jdbcType=VARCHAR},
+      </if>
+      <if test="sysmenulist != null" >
+        #{sysmenulist,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatecounts != null" >
+        #{updatecounts,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.RoleSys" >
+    update t_system_role
+    <set >
+      <if test="sysroleno != null" >
+        SysRoleNo = #{sysroleno,jdbcType=VARCHAR},
+      </if>
+      <if test="sysrolename != null" >
+        SysRoleName = #{sysrolename,jdbcType=VARCHAR},
+      </if>
+      <if test="sysmenulist != null" >
+        SysMenuList = #{sysmenulist,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatecounts != null" >
+        UpdateCounts = #{updatecounts,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SysRoleID = #{sysroleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.RoleSys" >
+    update t_system_role
+    set SysRoleNo = #{sysroleno,jdbcType=VARCHAR},
+      SysRoleName = #{sysrolename,jdbcType=VARCHAR},
+      SysMenuList = #{sysmenulist,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      UpdateCounts = #{updatecounts,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR}
+    where SysRoleID = #{sysroleid,jdbcType=INTEGER}
+  </update>
+</mapper>

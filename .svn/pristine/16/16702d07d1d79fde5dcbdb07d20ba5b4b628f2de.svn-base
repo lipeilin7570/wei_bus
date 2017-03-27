@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>活动公告</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.fr.js"></script>
+<script src="../../js/bootbox.js"></script>
+<style>
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+}
+</style>
+</head>
+<body>
+	<div class="container" style="width:100%; border:0px; border-style:solid;">
+		<div class="panel center-block">
+			<h4 align="center">活动公告</h4>
+			<div id="custom-toolbar" style="padding-top: 10px;">
+				<form class="form-horizontal" role="form" action="" method="">
+					<div class="form-group">
+						<label for="noticeNum" class="col-sm-2 control-label">公告编号</label>
+						<div class="col-sm-2">
+							<input type="text" id="noticeNum" class="form-control" />
+						</div>
+						<label for="noticeTitle" class="col-sm-2 control-label">公告标题</label>
+						<div class="col-sm-2">
+							<input type="text" id="noticeTitle" class="form-control" />
+						</div>
+						<label for="noticeStatus" class="col-sm-2 control-label">公告状态</label>
+						<div class="col-sm-2">
+							<select name="" id="noticeStatus" class="form-control">
+								<option value="1">正常</option>
+								<option value="2">下架</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="startTime" class="col-sm-2 control-label">开始时间</label>
+						<div class="col-sm-2">
+							<input type="text" id="startTime" class="form-control" />
+						</div>
+						<label for="endTime" class="col-sm-2 control-label">结束时间</label>
+						<div class="col-sm-2">
+							<input type="text" id="endTime" class="form-control" />
+						</div>
+						<label for="createTime" class="col-sm-2 control-label">创建时间</label>
+						<div class="col-sm-2">
+							<input type="text" id="createTime" class="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="noticeObj" class="col-sm-2 control-label">公告对象</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="noticeObj">
+								<option value="1">对外</option>
+								<option value="2">对内</option>
+							</select>
+						</div>
+						<label for="downType" class="col-sm-2 control-label">下架类型</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="downType">
+								<option value="1">自动</option>
+								<option value="2">手动</option>
+							</select>
+						</div>
+						<div>
+							<button type="button" class="btn btn-info" onclick="ss();"
+								style="margin-left: 250px">查询</button>
+							<button type="button" class="btn btn-warning"
+								onclick="reset();doreset();">重置</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-height="500" data-url=""
+					data-side-pagination="server" data-pagination="true"></table>
+			</div>
+		</div>
+	</div>
+	<!-- 按钮触发模态框 -->
+	<button id="del_btn" style="display: none;"
+		class="btn btn-primary btn-lg" data-toggle="modal"
+		data-target="#delModal"></button>
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+		aria-labelledby="delModalLabel" aria-hidden="true" style="top: 25%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="del_msg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm"
+						data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../../js/script/Operative/activityNotice.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.SiteJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.SiteJson" >
+    <id column="SiteID" property="siteID" jdbcType="INTEGER" />
+    <result column="SiteCode" property="siteNo" jdbcType="VARCHAR" />
+    <result column="SiteName" property="siteName" jdbcType="VARCHAR" />
+    <result column="SiteAddress" property="siteAddress" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Longitude" property="lng" jdbcType="DECIMAL" />
+    <result column="Latitude" property="lat" jdbcType="DECIMAL" />
+    <result column="StartTime" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="EndTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="SitePicIcon" property="sitePicIcon" jdbcType="VARCHAR" />
+    <result column="PileStatus" property="pileStatus" jdbcType="INTEGER" />
+    <result column="Zcode" property="Zcode" jdbcType="VARCHAR" />
+    <result column="SiteMan" property="siteMan" jdbcType="VARCHAR" />
+    <result column="ShortName" property="companyShortName" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    
+	<result column="UsableCar" property="usableCar" jdbcType="INTEGER" />
+	<result column="UsablePark" property="usablePark" jdbcType="INTEGER" />
+	<result column="UsablePile" property="usablePile" jdbcType="INTEGER" />
+	
+	<result column="Cars" property="cars" jdbcType="INTEGER" />
+	<result column="Parks" property="parks" jdbcType="INTEGER" />
+	<result column="beacons" property="beaconCount" jdbcType="INTEGER" />
+    <result column="SiteRadius" property="siteRadius" jdbcType="DECIMAL" />
+	
+  </resultMap>
+  
+  <!-- 加载所有站点信息 -->
+  <select id="loadAllSiteJson" resultMap="BaseResultMap" >
+    SELECT s.SiteID,s.SiteCode,s.SiteName,s.SiteAddress,s.`Status` ,s.Longitude,s.Latitude,
+			 s.StartTime,s.EndTime,s.SitePicIcon,s.PileStatus,s.Zcode,s.CreateTime,s.SiteMan,s.SiteRadius,
+			 c.ShortName,
+				(select count(*) from v_info_car cs where cs.SiteID =s.SiteID and cs.canrent =1) UsableCar,
+				(select count(*)from v_info_carstatus cs where  cs.SiteID =s.SiteID) Cars,
+				s.ParkingCount -(select count(*)from v_info_carstatus cs where  cs.SiteID =s.SiteID) UsablePark,
+				s.ParkingCount Parks,
+				(select count(*) from t_info_pile p where p.`Status` =1 and p.SiteID =s.SiteID) UsablePile,
+				(SELECT COUNT(*) FROM t_info_beacon b WHERE b.`Status`=1 AND b.SiteID = s.SiteID) beacons
+	from t_info_site s
+	LEFT JOIN t_info_company c ON s.CompanyID=c.CompanyID
+  </select>
+  
+  <!-- 根据companyID显示站点信息 -->
+  <select id="loadAllSiteJsonByCompanyID" resultMap="BaseResultMap" parameterType="integer" >
+    SELECT s.SiteID,s.SiteCode,s.SiteName,s.SiteAddress,s.`Status` ,s.Longitude,s.Latitude,
+			 s.StartTime,s.EndTime,s.SitePicIcon,s.PileStatus,s.Zcode,s.CreateTime,s.SiteMan,s.SiteRadius,
+			 c.ShortName,
+				(select count(*) from v_info_car cs where cs.SiteID =s.SiteID and cs.canrent =1) UsableCar,
+				(select count(*)from v_info_carstatus cs where  cs.SiteID =s.SiteID) Cars,
+				s.ParkingCount -(select count(*)from v_info_carstatus cs where  cs.SiteID =s.SiteID) UsablePark,
+				s.ParkingCount Parks,
+				(select count(*) from t_info_pile p where p.`Status` =1 and p.SiteID =s.SiteID) UsablePile,
+				(SELECT COUNT(*) FROM t_info_beacon b WHERE b.`Status`=1 AND b.SiteID = s.SiteID) beacons
+	from t_info_site s
+	LEFT JOIN t_info_company c ON s.CompanyID=c.CompanyID
+	where s.CompanyID=#{companyID}
+  </select>
+  
+  <!-- 根据siteID显示站点信息 -->
+  <select id="loadStationBySiteID" resultMap="BaseResultMap" parameterType="integer" >
+    SELECT s.SiteID,s.SiteCode,s.SiteName,s.SiteAddress,s.`Status` ,s.Longitude,s.Latitude,
+			 s.StartTime,s.EndTime,s.SitePicIcon,s.PileStatus,s.Zcode,s.CreateTime,s.SiteMan,s.SiteRadius,
+			 c.ShortName,
+				(select count(*) from v_info_car cs where cs.SiteID =s.SiteID and cs.canrent =1) UsableCar,
+				(select count(*)from v_info_carstatus cs where  cs.SiteID =s.SiteID) Cars,
+				s.ParkingCount -(select count(*)from v_info_carstatus cs where  cs.SiteID =s.SiteID) UsablePark,
+				s.ParkingCount Parks,
+				(select count(*) from t_info_pile p where p.`Status` =1 and p.SiteID =s.SiteID) UsablePile,
+				(SELECT COUNT(*) FROM t_info_beacon b WHERE b.`Status`=1 AND b.SiteID = s.SiteID) beacons
+	from t_info_site s
+	LEFT JOIN t_info_company c ON s.CompanyID=c.CompanyID
+	where s.SiteID=#{siteID}
+  </select>
+  
+</mapper>
+
+
+

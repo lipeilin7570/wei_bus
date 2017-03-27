@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.PriceJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.PriceJson" >
+    <id column="PriceID" property="priceID" jdbcType="INTEGER" />
+    <result column="PriceVersion" property="priceVersion" jdbcType="INTEGER" />
+    <result column="PriceName" property="priceName" jdbcType="VARCHAR" />
+    <result column="CarModel" property="carModel" jdbcType="INTEGER" />
+    <result column="CalcType" property="calcType" jdbcType="INTEGER" />
+    <result column="CleanFee" property="cleanFee" jdbcType="DECIMAL" />
+    <result column="SafeFee" property="safeFee" jdbcType="DECIMAL" />
+    <result column="MinutePrice" property="minutePrice" jdbcType="DECIMAL" />
+    <result column="HourMileage" property="hourMileage" jdbcType="DECIMAL" />
+    <result column="SuperPrice" property="superPrice" jdbcType="DECIMAL" />
+    <result column="EarlyBegin" property="earlyBegin" jdbcType="VARCHAR" />
+    <result column="EarlyEnd" property="earlyEnd" jdbcType="VARCHAR" />
+    <result column="EarlySale" property="earlySale" jdbcType="DECIMAL" />
+    <result column="NightBegin" property="nightBegin" jdbcType="VARCHAR" />
+    <result column="NightEnd" property="nightEnd" jdbcType="VARCHAR" />
+    <result column="NightSale" property="nightSale" jdbcType="DECIMAL" />
+    <result column="CreateMan" property="createMan" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="VARCHAR" />
+    <result column="Alias" property="alias" jdbcType="VARCHAR" />
+    <result column="DetailName" property="carModelName" jdbcType="VARCHAR" />
+    <result column="CompanyName" property="companyName" jdbcType="VARCHAR" />
+    
+    
+    
+    
+    <result column="ModelName" property="carModelName" jdbcType="INTEGER" />
+    <result column="HourPrice" property="hourPrice" jdbcType="DECIMAL" />
+    <result column="StartPrice" property="startPrice" jdbcType="DECIMAL" />
+    <result column="FreeTime" property="freeTime" jdbcType="INTEGER" />
+    <result column="DayPrice" property="dayPrice" jdbcType="DECIMAL" />
+    <result column="NightPrice" property="nightPrice" jdbcType="DECIMAL" />
+    <result column="WeekPrice" property="weekPrice" jdbcType="DECIMAL" />
+    <result column="HourMileage" property="hourMileage" jdbcType="DECIMAL" />
+    <result column="DayMileage" property="dayMileage" jdbcType="DECIMAL" />
+    <result column="NightMileage" property="nightMileage" jdbcType="DECIMAL" />
+    <result column="WeekMileage" property="weekMileage" jdbcType="DECIMAL" />
+    <result column="SuperPrice" property="superPrice" jdbcType="DECIMAL" />
+    <result column="StartCharge" property="startCharge" jdbcType="INTEGER" />
+    <result column="DayBeginTime" property="dayBeginTime" jdbcType="VARCHAR" />
+    <result column="DayEndTime" property="dayEndTime" jdbcType="VARCHAR" />
+    
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CreateMan" property="createMan" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CompanyID" property="companyID" jdbcType="INTEGER" />
+    <result column="CompanyName" property="companyName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+   <!-- 显示某公司的价格表 -->
+  <select id="loadAllPriceByCompanyID" resultMap="BaseResultMap" parameterType="integer" >
+    SELECT 
+		p.PriceID,p.PriceVersion,p.PriceName,p.CarModel,p.CalcType,p.CleanFee,p.SafeFee,p.MinutePrice,p.HourMileage,
+		p.SuperPrice,p.EarlyBegin,p.EarlyEnd,p.EarlySale,p.NightBegin,p.NightEnd,p.NightSale,p.CreateMan,p.CreateTime,
+		p.`Status`,p.NewStatus,
+		cm.Alias,md.DetailName,
+		co.CompanyName
+	FROM t_finance_price p
+	LEFT JOIN t_info_modeldetail md ON md.ModelDetailID=p.CarModel
+	LEFT JOIN t_info_carmodel cm ON cm.CarModelID=md.CarModelID
+	LEFT JOIN t_info_company co ON co.CompanyID=p.CompanyID
+	WHERE p.`Status` in(1,2) and p.CompanyID=#{companyID}
+  </select>
+  
+  <!-- 显示所有价格表 -->
+  <select id="loadAllPrice" resultMap="BaseResultMap" >
+    SELECT 
+		p.PriceID,p.PriceVersion,p.PriceName,p.CarModel,p.CalcType,p.CleanFee,p.SafeFee,p.MinutePrice,p.HourMileage,
+		p.SuperPrice,p.EarlyBegin,p.EarlyEnd,p.EarlySale,p.NightBegin,p.NightEnd,p.NightSale,p.CreateMan,p.CreateTime,
+		p.`Status`,p.NewStatus,
+		cm.Alias,md.DetailName,
+		co.CompanyName
+	FROM t_finance_price p
+	LEFT JOIN t_info_modeldetail md ON md.ModelDetailID=p.CarModel
+	LEFT JOIN t_info_carmodel cm ON cm.CarModelID=md.CarModelID
+	LEFT JOIN t_info_company co ON co.CompanyID=p.CompanyID
+	WHERE p.`Status` in(1,2)
+  </select>
+  
+  <!-- 查看价格表详情 -->
+  <select id="findPriceByPriceID" resultMap="BaseResultMap" parameterType="integer">
+    SELECT 
+		p.PriceID,p.PriceVersion,p.PriceName,p.CarModel,p.CalcType,p.CleanFee,p.SafeFee,p.MinutePrice,p.HourMileage,
+		p.SuperPrice,p.EarlyBegin,p.EarlyEnd,p.EarlySale,p.NightBegin,p.NightEnd,p.NightSale,p.CreateMan,p.CreateTime,
+		p.`Status`,p.NewStatus,
+		cm.Alias,md.DetailName,
+		co.CompanyName
+	FROM t_finance_price p
+	LEFT JOIN t_info_modeldetail md ON md.ModelDetailID=p.CarModel
+	LEFT JOIN t_info_carmodel cm ON cm.CarModelID=md.CarModelID
+	LEFT JOIN t_info_company co ON co.CompanyID=p.CompanyID
+	WHERE p.PriceID=#{priceID}
+  </select>
+  
+  <!-- 根据车型查找对应的价格信息 -->
+  <select id="findPriceByCarModel" resultMap="BaseResultMap" parameterType="integer" >
+    SELECT 
+		p.PriceID,p.PriceVersion,p.PriceName,p.CarModel,p.CalcType,p.CleanFee,p.SafeFee,p.MinutePrice,p.HourMileage,
+		p.SuperPrice,p.EarlyBegin,p.EarlyEnd,p.EarlySale,p.NightBegin,p.NightEnd,p.NightSale,p.CreateMan,p.CreateTime,
+		p.`Status`,p.NewStatus,
+		cm.Alias,md.DetailName,
+		co.CompanyName
+	FROM t_finance_price p
+	LEFT JOIN t_info_modeldetail md ON md.ModelDetailID=p.CarModel
+	LEFT JOIN t_info_carmodel cm ON cm.CarModelID=md.CarModelID
+	LEFT JOIN t_info_company co ON co.CompanyID=p.CompanyID
+	WHERE p.`Status`=1 AND p.CarModel=#{carModel}
+  </select>
+  
+  
+  
+</mapper>

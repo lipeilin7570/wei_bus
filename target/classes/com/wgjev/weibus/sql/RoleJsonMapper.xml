@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.RoleJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.RoleJson" >
+    <id column="SysRoleID" property="roleID" jdbcType="INTEGER" />
+    <result column="SysRoleNo" property="roleNo" jdbcType="VARCHAR" />
+    <result column="SysRoleName" property="roleName" jdbcType="VARCHAR" />
+    <result column="SysMenuList" property="menuList" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateCounts" property="updateCounts" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <!-- 根据角色ID查找角色信息 -->
+  <select id="queryRoleByRoleID" resultMap="BaseResultMap" parameterType="integer" >
+   	SELECT 
+	r.SysRoleID,r.SysRoleNo,r.SysRoleName,r.SysMenuList,r.`status`,r.CreateTime,
+	r.UpdateTime,r.UpdateCounts,r.Remark
+	FROM t_system_role r
+	WHERE r.SysRoleID = #{roleID,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 加载所有角色信息 -->
+  <select id="loadAllRoles" resultMap="BaseResultMap" >
+   	SELECT 
+	r.SysRoleID,r.SysRoleNo,r.SysRoleName,r.SysMenuList,r.`status`,r.CreateTime,
+	r.UpdateTime,r.UpdateCounts,r.Remark
+	FROM t_system_role r
+	WHERE r.`status` = 1
+  </select>
+	
+</mapper>

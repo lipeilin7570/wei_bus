@@ -1,0 +1,97 @@
+package com.wgjev.weibus.service;
+
+import com.wgjev.weibus.entity.BusResult;
+
+public interface OrderService {
+	/**
+	 * 显示订单
+	 * @return
+	 */
+	public BusResult loadAllLeaseOrder();
+	
+	/**
+	 * 根据订单号显示预约订单
+	 * @param leaseID
+	 * @return
+	 */
+	public BusResult shouReserve(Integer leaseID);
+	
+	/**
+	 * 违章信息录入
+	 * @param operatorID
+	 * @param leaseID
+	 * @param description
+	 * @param address
+	 * @param collectionUnit
+	 * @param illegalTime
+	 * @param points
+	 * @param fine
+	 * @param remark
+	 * @return
+	 */
+	public BusResult addIllegal(Integer operatorID, Integer leaseID, String description, 
+			String address, String collectionUnit, String illegalTime, Integer points, 
+			double fine, String remark, String loginIP);
+	
+	/**
+	 * 故障信息录入
+	 * @param operatorID
+	 * @param leaseID
+	 * @param faultTime
+	 * @param faultDuty
+	 * @param description
+	 * @param remark
+	 * @param loginIP
+	 * @return
+	 */
+	public BusResult addFault(Integer operatorID, Integer leaseID, String faultTime, 
+			Integer faultDuty, String description, String remark, String loginIP);
+	
+	
+	/**
+	 * 事故信息录入
+	 * @param operatorID
+	 * @param leaseID
+	 * @param accidentTime
+	 * @param accidentDuty
+	 * @param description
+	 * @param remark
+	 * @param loginIP
+	 * @return
+	 */
+	public BusResult addAccident(Integer operatorID, Integer leaseID, String accidentTime, 
+			Integer accidentDuty, String description, String remark, String loginIP);
+	
+	/**
+	 * 查看订单的验车信息
+	 * @param leaseID
+	 * @return
+	 */
+	public BusResult findCheckOrderByLeaseID(Integer leaseID);
+	
+	
+	/**
+	 * 还车
+	 * @param operatorID
+	 * @param userIP
+	 * @return
+	 */
+	public BusResult backCar(Integer operatorID, Integer leaseID, Integer siteID, String remark, String backTime, String loginIP);
+	
+	/**
+	 * 强行结束订单
+	 * @param operatorID
+	 * @param leaseID
+	 * @param finishType
+	 * @param cancelFee
+	 * @param couponFee
+	 * @param remark
+	 * @param finishTime
+	 * @param loginIP
+	 * @return
+	 */
+	public BusResult finishOrder(Integer operatorID, Integer leaseID, Integer finishType, 
+			Integer cancelFee, double couponFee, String remark, String finishTime, String loginIP);
+	
+	
+}

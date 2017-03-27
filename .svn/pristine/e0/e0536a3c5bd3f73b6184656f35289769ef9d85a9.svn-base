@@ -1,0 +1,588 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>租车信息</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+<!--  <link rel="stylesheet" href="../../js/jqueryui/jquery-ui.css" />-->
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/tableExport.js"></script>
+<script src="../../js/jquery.base64.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.fr.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.zh-CN.js"></script>
+<!-- <script type="text/javascript" src="../../js/jqueryui/jquery-ui.js" /></script>
+<script type="text/javascript" src="../../js/jqueryui/jquery-ui-timepicker-addon.js" /></script>
+<script type="text/javascript" src="../../js/jqueryui/jquery-ui-timepicker-zh-CN.js" /></script> -->
+<script src="../../js/bootstrap/DateFormat.js"></script>
+<script src="../../js/script/Order/rentCar.js"></script>
+<script src="../../js/common2.js" type="text/javascript"></script>
+<style>
+* {
+	padding:0;
+	margin:0;
+	font-family:"Microsoft YaHei";
+	font-size:12px;
+}
+#listCount{
+	height:50px;
+	width:100%;
+	border:1px solid #fff;
+	background-color:#F6F6F6;
+}
+.title{background-color:#F6F6F6;}
+</style>
+</head>
+<body>
+	<div class="container" style="width:100%; border:0px; border-style:solid;">
+		<div class="panel center-block">
+			<h4>租车订单信息</h4>
+			<div id="custom-toolbar" style="padding-top:10px;">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">						
+						<label for="leaseStatus" class="col-sm-2 control-label">订单状态</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="leaseStatus">
+								<option value="0">订单完成</option>
+								<option value="1">预约中</option>
+								<option value="2">已取消</option>
+								<option value="3">已提车</option>
+								<option value="4">已还车</option>
+								<option value="5">未支付</option>
+								<option value="6">已支付</option>
+							</select>
+						</div>
+						<label for="leaseType" class="col-sm-2 control-label">订单类型</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="leaseType">
+								<option value="0">分时</option>
+								<option value="1">周租</option>
+							</select>						
+						</div>
+						<div class="col-sm-4">
+							<button type="button" class="btn btn-info" onclick="ss();">查询</button>
+							<button type="button" onclick="$('#tab').tableExport({ type:'excel',separator:';', escape:'false'});"class="btn btn-danger">
+								<i class="glyphicon glyphicon-search">导出Excel</i>
+							</button>
+						</div>						
+					</div>																
+				</form>
+			</div>			
+			<!--<button onclick="show();"><span class="glyphicon glyphicon-plus"></span>选择配置</button>  -->
+				<div style="padding-top:15px" id="listCount">
+					预约:<span style="color:dodgerblue"><span id="carTotal"></span>辆</span>
+					提车:<span style="color:dodgerblue"><span id="carTotal"></span>辆</span>
+					待支付:<span style="color:dodgerblue"><span id="carTotal"></span>辆</span>
+					违章待办:<span style="color:dodgerblue"><span id="carTotal"></span>辆</span>
+					事故待办:<span style="color:dodgerblue"><span id="carTotal"></span>辆</span>
+				</div>													
+			<div class="table-responsive">
+			<table id="tab" data-id="row.leaseID" data-userid="row.userID" data-carid="row.carID" data-carNo="row.carNo" data-height="400" data-url="" data-side-pagination="server" data-pagination="true" data-show-refresh="true" data-search="true" data-show-columns="true"></table>
+		</div>
+		</div>
+	</div>		
+	
+	<!-- 按钮触发模态框 -->
+	<button id="del_btn" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#delModal"></button>
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+		aria-labelledby="delModalLabel" aria-hidden="true" style="top: 25%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="del_msg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 验车详情-->
+	<button id="impload" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#impModal"></button>
+	<div class="modal fade" id="impModal" tabindex="-1" role="dialog"
+		aria-labelledby="impModalLabel" aria-hidden="true" style="top:15%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="impModalLabel">验车信息</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:300px;overflow:auto">
+					<table class="table table-bordered">
+						<tr>
+							<td class="title">验车编号</td>
+							<td><input type="text" id="checkNo" name="checkNo" value=""></td>
+							<td class="title">车牌号</td>
+							<td><input type="text" id="CarNo" name="CarNo" value=""></td>						
+						</tr>						
+						<tr>
+							<td class="title">验车时间</td>
+							<td><input type="text" id="checkTime" name="checkTime" value=""></td>
+							<td class="title">备注</td>
+							<td><input type="text" id="reMark" name="reMark" value=""></td>
+						</tr>
+					</table>
+					<table class="table table-bordered">
+						<tr>
+							<td class="title">前侧照片</td>
+							<td><img src="" name="frontImg" id="frontImg" style="width:200px;height:150px;"></td>
+						</tr>																	
+						<tr>
+							<td class="title">左侧照片</td>
+							<td><img src="" name="leftImg" id="leftImg" style="width:200px;height:150px;"></td>
+						</tr>
+						<tr>
+							<td class="title">后侧照片</td>
+							<td><img src="" name="backImg" id="backImg" style="width:200px;height:150px;"></td>
+						</tr>
+						<tr>
+							<td class="title">右侧照片</td>
+							<td><img src="" name="rightImg" id="rightImg" style="width:200px;height:150px;"></td>
+						</tr>															
+					</table>											
+															
+				</div>
+				<div class="modal-footer">
+					<button id="impbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>			
+	<!--还车-->
+	<button id="overload" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#overModal"></button>
+	<div class="modal fade" id="overModal" tabindex="-1" role="dialog"
+		aria-labelledby="overModalLabel" aria-hidden="true" style="top:15%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="overModalLabel">还车</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:150px;overflow:auto">
+					<table class="table table-bordered" id="over_table">												
+						<tr>
+							<td>还车时间</td>
+							<td><input type="text" id="backTime" value=""></td>
+							<td>备注</td>
+							<td><input type="text" id="remark" value=""></td>
+						</tr>
+						<!-- <tr>							
+							<td>站点</td>  
+            				<td align="left">  
+                				<select name="" id="site"   
+                        				style="margin-left: 16px; height: 30px; width: 110px; text-align: left; size: 3; color: #505050;">  
+                    				<option value="-1">---请选择---</option>  
+                				</select>  
+            				</td> 
+						</tr> -->
+					</table>																															
+				</div>
+				<div class="modal-footer">
+					<button id="overbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>				
+		<!--违章新增-->		
+		<button id="vip" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#vipModal"></button>
+		<div class="modal fade" id="vipModal" tabindex="-1" role="dialog" aria-labelledby="vipModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:700px; padding-top:5%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" id="vipModalLabel">违章录入</h5>
+					</div>
+					<div class="modal-body" style="padding-left:10px; padding-top:30px;">
+						<table class="table table-bordered" id="vip_table">
+							<tr>
+								<td class="title">车牌号码</td>
+								<td><span id="carNo"></span></td>
+								<td class="title">违章内容</td>
+								<td><input type="text" id="description" name="description" value=""></td>								
+							</tr>
+							<tr>
+								<td class="title">采集单位</td>
+								<td><input type="text" id="collectionUnit" name="collectionUnit" value=""></td>
+								<td class="title">违章时间</td>
+								<td><input type="text" id="illegalTime" name="illegalTime" value=""></td>
+							</tr>
+							<tr>
+								<td class="title">分数</td>
+								<td><input type="text" id="points" name="points" value=""></td>
+								<td class="title">罚款</td>
+								<td><input type="text" id="fine" name="fine"></td>
+							</tr>
+							<tr>
+								<td class="title">违章地址</td>
+								<td><input type="text" id="address" name="address"></td>
+								<td class="title">备注</td>
+								<td><textarea id="Remark" ></textarea></td>								
+							</tr>
+						</table>
+					</div>
+					<div class="modal-footer" style="text-align:center;">
+						<button id="illegalBut" type="button" class="btn btn-default btn-sm" data-dismiss="modal">保存</button>
+					</div>
+				</div>			
+			</div>
+		</div>
+		
+		<!--故障新增-->		
+		<button id="vipAcc" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#vipAccModal"></button>
+		<div class="modal fade" id="vipAccModal" tabindex="-1" role="dialog" aria-labelledby="vipAccModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:700px; padding-top:5%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" id="vipAccModalLabel">故障录入</h5>
+					</div>
+					<div class="modal-body" style="padding-left:10px; padding-top:30px;">
+						<table class="table table-bordered" id="vipACC_table">
+							<tr>
+								<td class="title">发生时间</td>
+								<td><input type="text" id="faultTime" name="faultTime" value=""></td>
+								<td class="title">故障责任</td>
+								<td>
+									<select id="faultDuty">
+										<option value="1">车辆自身故障</option>
+										<option value="2">会员导致的故障</option>
+										<option value="3">无法判断，等待巡检人员到达查勘</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>故障简要说明</td>
+								<td>
+									<textarea id="faultBrief"></textarea>
+								</td>	
+							</tr>																											
+						</table>
+						<!--车辆自身故障处理-->
+						<table class="table table-bordered" id="car_Self_fault" style="display:none">
+							<tr>
+								<td class="title">结束订单是否取消计费</td>
+								<td>
+									<select id="cancleFee">
+										<option value="1">取消</option>
+										<option value="2">不取消</option>
+										<option value="3">优惠计费</option>
+									</select>
+								</td>
+								<td class="title"><span class="couponFee_hide_show">优惠额度</span></td>
+								<td>
+									<input type="text" id="couponFee" class="couponFee_hide_show"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="title">用户是否需要缴纳故障保证金</td>
+								<td>
+									<select id="payBail">
+										<option value="1">是</option>
+										<option value="2">否</option>
+									</select>
+								</td>
+								<td class="title"><span class="bailFee_hide_show">需缴纳故障保证金额</span></td>
+								<td><input type="text" id="bailFee" class="bailFee_hide_show"/></td>
+							</tr>	
+							<tr>
+								<td class="title">车辆设为故障状态</td>
+								<td>
+									<select id="addFault">
+										<option value="1">是</option>
+										<option value="2">否</option>
+									</select>
+								</td>
+								<td class="title">备注</td>
+								<td>
+									<textarea id="faultRemark"></textarea>
+								</td>
+							</tr>														
+						</table>
+					</div>
+					<div class="modal-footer" style="text-align:center;">
+						<button id="faultBut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">保存</button>
+					</div>
+				</div>			
+			</div>
+		</div>
+		<!--事故新增-->		
+		<button id="accidentBtn" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#accidentModal"></button>
+		<div class="modal fade" id="accidentModal" tabindex="-1" role="dialog" aria-labelledby="accidentModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:700px; padding-top:5%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" id="accidentModalLabel">事故录入</h5>
+					</div>
+					<div class="modal-body" style="padding-left:10px; padding-top:30px;">
+						<table class="table table-bordered" id="accident_table">
+							<tr>
+								<td class="title">发生时间</td>
+								<td><input type="text" id="accidentTime" name="accidentTime" value=""></td>
+								<td class="title">事故责任</td>
+								<td>
+									<select id="accidentDuty">
+										<option value="1">己方</option>
+										<option value="2">对方</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td class="title">事故描述</td>
+								<td><textarea id="description" name="description"></textarea></td>
+								<td class="title">备注</td>
+								<td><textarea id="remark" name="remark"></textarea></td>
+							</tr>														
+						</table>
+					</div>
+					<div class="modal-footer" style="text-align:center;">
+						<button id="accidentBut" type="button" class="btn btn-default btn-sm" data-dismiss="modal">保存</button>
+					</div>
+				</div>			
+			</div>
+		</div>
+		<!--强行结束订单-->		
+		<button id="Vips" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#VipsModal"></button>
+		<div class="modal fade" id="VipsModal" tabindex="-1" role="dialog" aria-labelledby="VipsModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:600px; padding-top:5%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" id="VipsModalLabel">结束订单选择</h5>
+					</div>
+					<div class="modal-body" style="padding-left:10px; padding-top:30px;height:200px;overfolw:auto;">
+						<table class="table table-bordered" id="Vips_table">
+							<tr>
+								<td class="title">结束类型</td>
+								<td>
+									<select id="finishType">
+										<option value="">请选择</option>
+										<option value="1">因故障结束</option>
+										<option value="2">因事故结束</option>
+									</select>
+								</td>
+								<td class="title">订单结束时间</td>
+								<td><input type="text" id="finishTime" name="" value=""></td>
+							</tr>							
+							<tr id="two" class="tdstyle">
+								<td class="title">是否取消计费 </td>								
+								<td>
+									<select id="cancelFee">
+										<option value="">请选择</option>
+										<option value="1">取消</option>
+										<option value="2">不取消</option>
+										<option value="3">优惠计费</option>
+									</select>
+								</td>
+								<td>优惠额(元)</td>
+								<td><input type="text" id="couponFee" name="" value=""></td>								
+							</tr>							
+							<tr>								
+								<td class="title">备注</td>
+								<td><textarea id="remark" name=""></textarea></td>
+							</tr>
+						</table>						
+					</div>
+					<div class="modal-footer" style="text-align:center;">
+						<button type="button" id="Vipsbut" class="btn btn-info btn-sm" data-dismiss="modal">确定</button>
+					</div>
+				</div>			
+			</div>
+		</div>
+		<!--缴费-->		
+		<button id="vips" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#vipsModal"></button>
+		<div class="modal fade" id="vipsModal" tabindex="-1" role="dialog" aria-labelledby="vipsModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:600px; padding-top:5%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" id="vipsModalLabel">缴费信息</h5>
+					</div>
+					<div class="modal-body" style="padding-left:10px; padding-top:30px;height:300px;overfolw:auto;">
+						<table class="table table-bordered" id="vips_table">
+							<tr>
+								<td class="title">缴费类型</td>
+								<td>
+									<select id="payType" onchange="sel_table(this)">
+										<option value="">请选择</option>
+										<option value="1">事故</option>
+										<option value="2">故障</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+						<table class="table table-bordered" id="1" style="display:none">
+							<tr>
+								<td class="title">维修费 (元)</td>
+								<td><input type="text" id="" name="" value=""></td>
+								<td class="title">停运损失费 (元)</td>
+								<td><input type="text" id="" name="" value=""></td>
+							</tr>
+							<tr>
+								<td class="title">缴费总额(元)</td>
+								<td><input type="text" id="" name="" value=""></td>
+								<td class="title">事故发生地</td>
+								<td><input type="text" id="" name="" value=""></td>
+							</tr>
+							<tr>
+								<td class="title">缴费截止日期</td>
+								<td><input type="text" id="payEndTime" name="payendTime" value=""></td>
+								<td class="title">事故保证金(元)</td>
+								<td><input type="text" id="" name="" value="1000"></td>
+							</tr>
+							<tr>
+								<td class="title">备注</td>
+								<td><textarea id="" name=""></textarea></td>
+							</tr>
+						</table>
+						<table class="table table-bordered" id="2" style="display:none">
+							<tr>
+								<td class="title">维修费 (元)</td>
+								<td><input type="text" id="" name="" value=""></td>
+								<td class="title">服务费 (元)</td>
+								<td><input type="text" id="" name="" value=""></td>
+							</tr>
+							<tr>
+								<td class="title">缴费总额(元)</td>
+								<td><input type="text" id="" name="" value=""></td>
+								<td class="title">事故发生地</td>
+								<td><input type="text" id="" name="" value=""></td>
+							</tr>
+							<tr>
+								<td class="title">缴费截止日期</td>
+								<td><input type="text" id="payEndTime" name="payEndtime" value=""></td>
+								<td class="title">事故保证金(元)</td>
+								<td><input type="text" id="" name="" value="1000"></td>
+							</tr>
+							<tr>
+								<td class="title">备注</td>
+								<td><textarea id="" name=""></textarea></td>
+							</tr>
+						</table>
+					</div>
+					<div class="modal-footer" style="text-align:center;">
+						<button type="button" id="vipsbut" class="btn btn-default btn-sm" data-dismiss="modal">确定</button>
+					</div>
+				</div>			
+			</div>
+		</div>
+	<script type="text/javascript">	
+	$(document).ready(function(){  		
+        get_app_site();           
+    });
+	//下拉公司
+	/*function get_app_company() { 		
+        $.ajax({  
+            type: "post",  
+            url: "../../company/loadCompany.do", //获取json数据  
+            dataType: "json",             
+            success: function(data) { 
+                var c =data.data;  
+                console.log(c);
+                for(var i = 0; i < c.length; i++) {  
+                    var id = c[i].companyID;  
+                    var name = c[i].companyName;  
+                    var opt = "<option value='" + id + "'>" + name + "</option>";  
+                    $("#company").append(opt);  
+                }  
+            },  
+            error: function() {  
+                alert("系统异常，请稍后再试！"); 
+            }  
+        });            
+    }  */
+	//下拉站点
+	function get_app_site() { 
+		var cookieval=readCookie("companyID");
+		var data={
+				'companyID':cookieval
+		}
+        $.ajax({  
+            type: "post",  
+            url: "../../site/loadSite.do", //获取json数据  
+            dataType: "json",  
+            data:data,
+            success: function(data) { 
+                var d =data.data;          
+                for(var i = 0; i < d.length; i++) {  
+                    var id = d[i].siteID;  
+                    var name = d[i].siteName;  
+                    var opt = "<option value='" + id + "'>" + name + "</option>";  
+                    $("#site").append(opt);  
+                }  
+            },  
+            error: function() {  
+                alert("系统异常，请稍后再试！")  
+            }  
+        });            
+    }  
+	//还车时间
+	/*$('#backTime').datetimepicker({
+		   showSecond: true,		  
+		   timeFormat: 'yyyy-mm-dd hh:mm:ss',
+		 
+		   stepHour: 1,
+           stepMinute: 1,
+           stepSecond: 1
+	   });*/	
+	$("#backTime").datetimepicker({
+		format:"yyyy-mm-dd hh:ii:ss",
+		language:'zh-CN',
+		autoclose:true,
+		todayBtn:true,
+		pickerPosition:"bottom-left"
+	});
+	//违章时间
+	$("#illegalTime").datetimepicker({
+		format:"yyyy-mm-dd hh:ii:ss",
+		language:'zh-CN',
+		autoclose:true,
+		todayBtn:true,
+		pickerPosition:"bottom-left"
+	});
+	//故障时间
+	$("#faultTime").datetimepicker({
+		format:"yyyy-mm-dd hh:ii:ss",
+		language:'zh-CN',
+		autoclose:true,
+		todayBtn:true,
+		pickerPosition:"bottom-left"
+	});
+	//事故时间
+	$("#accident").datetimepicker({
+		format:"yyyy-mm-dd hh:ii:ss",
+		language:'zh-CN',
+		autoclose:true,
+		todayBtn:true,
+		pickerPosition:"bottom-left"
+	});
+	//截止日期(事故)
+	$("input[name=payendTime]").datetimepicker({
+		format:"yyyy-mm-dd hh:ii",
+		language:'zh-CN',
+		autoclose:true,
+		todayBtn:true,
+		pickerPosition:"bottom-left"
+	});
+	//截止日期(故障)
+	$("input[name=payEndtime]").datetimepicker({
+		format:"yyyy-mm-dd hh:ii",
+		language:'zh-CN',
+		autoclose:true,
+		todayBtn:true,
+		pickerPosition:"bottom-left"
+	});				
+	</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.CheckOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.CheckOrder" >
+    <id column="CheckID" property="checkid" jdbcType="INTEGER" />
+    <result column="CheckNo" property="checkno" jdbcType="VARCHAR" />
+    <result column="LeaseID" property="leaseid" jdbcType="INTEGER" />
+    <result column="CarID" property="carid" jdbcType="INTEGER" />
+    <result column="CarNo" property="carno" jdbcType="VARCHAR" />
+    <result column="CheckType" property="checktype" jdbcType="INTEGER" />
+    <result column="CheckTime" property="checktime" jdbcType="TIMESTAMP" />
+    <result column="FrontImg" property="frontimg" jdbcType="VARCHAR" />
+    <result column="LeftImg" property="leftimg" jdbcType="VARCHAR" />
+    <result column="BackImg" property="backimg" jdbcType="VARCHAR" />
+    <result column="RightImg" property="rightimg" jdbcType="VARCHAR" />
+    <result column="SysOptID" property="sysoptid" jdbcType="INTEGER" />
+    <result column="SysOptName" property="sysoptname" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CheckID, CheckNo, LeaseID, CarID, CarNo, CheckType, CheckTime, FrontImg, LeftImg, 
+    BackImg, RightImg, SysOptID, SysOptName, Status, Remark, CompanyID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_check
+    where CheckID = #{checkid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_order_check
+    where CheckID = #{checkid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.CheckOrder" >
+    insert into t_order_check (CheckID, CheckNo, LeaseID, 
+      CarID, CarNo, CheckType, 
+      CheckTime, FrontImg, LeftImg, 
+      BackImg, RightImg, SysOptID, 
+      SysOptName, Status, Remark, 
+      CompanyID)
+    values (#{checkid,jdbcType=INTEGER}, #{checkno,jdbcType=VARCHAR}, #{leaseid,jdbcType=INTEGER}, 
+      #{carid,jdbcType=INTEGER}, #{carno,jdbcType=VARCHAR}, #{checktype,jdbcType=INTEGER}, 
+      #{checktime,jdbcType=TIMESTAMP}, #{frontimg,jdbcType=VARCHAR}, #{leftimg,jdbcType=VARCHAR}, 
+      #{backimg,jdbcType=VARCHAR}, #{rightimg,jdbcType=VARCHAR}, #{sysoptid,jdbcType=INTEGER}, 
+      #{sysoptname,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{companyid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.CheckOrder" >
+    insert into t_order_check
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="checkid != null" >
+        CheckID,
+      </if>
+      <if test="checkno != null" >
+        CheckNo,
+      </if>
+      <if test="leaseid != null" >
+        LeaseID,
+      </if>
+      <if test="carid != null" >
+        CarID,
+      </if>
+      <if test="carno != null" >
+        CarNo,
+      </if>
+      <if test="checktype != null" >
+        CheckType,
+      </if>
+      <if test="checktime != null" >
+        CheckTime,
+      </if>
+      <if test="frontimg != null" >
+        FrontImg,
+      </if>
+      <if test="leftimg != null" >
+        LeftImg,
+      </if>
+      <if test="backimg != null" >
+        BackImg,
+      </if>
+      <if test="rightimg != null" >
+        RightImg,
+      </if>
+      <if test="sysoptid != null" >
+        SysOptID,
+      </if>
+      <if test="sysoptname != null" >
+        SysOptName,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="checkid != null" >
+        #{checkid,jdbcType=INTEGER},
+      </if>
+      <if test="checkno != null" >
+        #{checkno,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseid != null" >
+        #{leaseid,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null" >
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="checktype != null" >
+        #{checktype,jdbcType=INTEGER},
+      </if>
+      <if test="checktime != null" >
+        #{checktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frontimg != null" >
+        #{frontimg,jdbcType=VARCHAR},
+      </if>
+      <if test="leftimg != null" >
+        #{leftimg,jdbcType=VARCHAR},
+      </if>
+      <if test="backimg != null" >
+        #{backimg,jdbcType=VARCHAR},
+      </if>
+      <if test="rightimg != null" >
+        #{rightimg,jdbcType=VARCHAR},
+      </if>
+      <if test="sysoptid != null" >
+        #{sysoptid,jdbcType=INTEGER},
+      </if>
+      <if test="sysoptname != null" >
+        #{sysoptname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.CheckOrder" >
+    update t_order_check
+    <set >
+      <if test="checkno != null" >
+        CheckNo = #{checkno,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseid != null" >
+        LeaseID = #{leaseid,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null" >
+        CarID = #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        CarNo = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="checktype != null" >
+        CheckType = #{checktype,jdbcType=INTEGER},
+      </if>
+      <if test="checktime != null" >
+        CheckTime = #{checktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frontimg != null" >
+        FrontImg = #{frontimg,jdbcType=VARCHAR},
+      </if>
+      <if test="leftimg != null" >
+        LeftImg = #{leftimg,jdbcType=VARCHAR},
+      </if>
+      <if test="backimg != null" >
+        BackImg = #{backimg,jdbcType=VARCHAR},
+      </if>
+      <if test="rightimg != null" >
+        RightImg = #{rightimg,jdbcType=VARCHAR},
+      </if>
+      <if test="sysoptid != null" >
+        SysOptID = #{sysoptid,jdbcType=INTEGER},
+      </if>
+      <if test="sysoptname != null" >
+        SysOptName = #{sysoptname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where CheckID = #{checkid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.CheckOrder" >
+    update t_order_check
+    set CheckNo = #{checkno,jdbcType=VARCHAR},
+      LeaseID = #{leaseid,jdbcType=INTEGER},
+      CarID = #{carid,jdbcType=INTEGER},
+      CarNo = #{carno,jdbcType=VARCHAR},
+      CheckType = #{checktype,jdbcType=INTEGER},
+      CheckTime = #{checktime,jdbcType=TIMESTAMP},
+      FrontImg = #{frontimg,jdbcType=VARCHAR},
+      LeftImg = #{leftimg,jdbcType=VARCHAR},
+      BackImg = #{backimg,jdbcType=VARCHAR},
+      RightImg = #{rightimg,jdbcType=VARCHAR},
+      SysOptID = #{sysoptid,jdbcType=INTEGER},
+      SysOptName = #{sysoptname,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CompanyID = #{companyid,jdbcType=INTEGER}
+    where CheckID = #{checkid,jdbcType=INTEGER}
+  </update>
+</mapper>

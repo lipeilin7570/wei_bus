@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.ReserveOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.ReserveOrder" >
+    <id column="ReserveID" property="reserveid" jdbcType="INTEGER" />
+    <result column="ReserveNo" property="reserveno" jdbcType="VARCHAR" />
+    <result column="LeaseID" property="leaseid" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="EndTime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="ReserveObj" property="reserveobj" jdbcType="INTEGER" />
+    <result column="ReserveMan" property="reserveman" jdbcType="VARCHAR" />
+    <result column="ReserveWay" property="reserveway" jdbcType="VARCHAR" />
+    <result column="SiteID" property="siteid" jdbcType="INTEGER" />
+    <result column="CarID" property="carid" jdbcType="INTEGER" />
+    <result column="CarNo" property="carno" jdbcType="VARCHAR" />
+    <result column="CancelObj" property="cancelobj" jdbcType="INTEGER" />
+    <result column="CancelManID" property="cancelmanid" jdbcType="INTEGER" />
+    <result column="ReserveManID" property="reservemanid" jdbcType="INTEGER" />
+    <result column="CancelMan" property="cancelman" jdbcType="VARCHAR" />
+    <result column="CancelTime" property="canceltime" jdbcType="TIMESTAMP" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ReserveID, ReserveNo, LeaseID, CreateTime, EndTime, ReserveObj, ReserveMan, ReserveWay, 
+    SiteID, CarID, CarNo, CancelObj, CancelManID, ReserveManID, CancelMan, CancelTime, 
+    Status, Remark, CompanyID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_reserve
+    where ReserveID = #{reserveid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_order_reserve
+    where ReserveID = #{reserveid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.ReserveOrder" >
+    insert into t_order_reserve (ReserveID, ReserveNo, LeaseID, 
+      CreateTime, EndTime, ReserveObj, 
+      ReserveMan, ReserveWay, SiteID, 
+      CarID, CarNo, CancelObj, 
+      CancelManID, ReserveManID, CancelMan, 
+      CancelTime, Status, Remark, 
+      CompanyID)
+    values (#{reserveid,jdbcType=INTEGER}, #{reserveno,jdbcType=VARCHAR}, #{leaseid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{reserveobj,jdbcType=INTEGER}, 
+      #{reserveman,jdbcType=VARCHAR}, #{reserveway,jdbcType=VARCHAR}, #{siteid,jdbcType=INTEGER}, 
+      #{carid,jdbcType=INTEGER}, #{carno,jdbcType=VARCHAR}, #{cancelobj,jdbcType=INTEGER}, 
+      #{cancelmanid,jdbcType=INTEGER}, #{reservemanid,jdbcType=INTEGER}, #{cancelman,jdbcType=VARCHAR}, 
+      #{canceltime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{companyid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.ReserveOrder" >
+    insert into t_order_reserve
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reserveid != null" >
+        ReserveID,
+      </if>
+      <if test="reserveno != null" >
+        ReserveNo,
+      </if>
+      <if test="leaseid != null" >
+        LeaseID,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="endtime != null" >
+        EndTime,
+      </if>
+      <if test="reserveobj != null" >
+        ReserveObj,
+      </if>
+      <if test="reserveman != null" >
+        ReserveMan,
+      </if>
+      <if test="reserveway != null" >
+        ReserveWay,
+      </if>
+      <if test="siteid != null" >
+        SiteID,
+      </if>
+      <if test="carid != null" >
+        CarID,
+      </if>
+      <if test="carno != null" >
+        CarNo,
+      </if>
+      <if test="cancelobj != null" >
+        CancelObj,
+      </if>
+      <if test="cancelmanid != null" >
+        CancelManID,
+      </if>
+      <if test="reservemanid != null" >
+        ReserveManID,
+      </if>
+      <if test="cancelman != null" >
+        CancelMan,
+      </if>
+      <if test="canceltime != null" >
+        CancelTime,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reserveid != null" >
+        #{reserveid,jdbcType=INTEGER},
+      </if>
+      <if test="reserveno != null" >
+        #{reserveno,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseid != null" >
+        #{leaseid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reserveobj != null" >
+        #{reserveobj,jdbcType=INTEGER},
+      </if>
+      <if test="reserveman != null" >
+        #{reserveman,jdbcType=VARCHAR},
+      </if>
+      <if test="reserveway != null" >
+        #{reserveway,jdbcType=VARCHAR},
+      </if>
+      <if test="siteid != null" >
+        #{siteid,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null" >
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelobj != null" >
+        #{cancelobj,jdbcType=INTEGER},
+      </if>
+      <if test="cancelmanid != null" >
+        #{cancelmanid,jdbcType=INTEGER},
+      </if>
+      <if test="reservemanid != null" >
+        #{reservemanid,jdbcType=INTEGER},
+      </if>
+      <if test="cancelman != null" >
+        #{cancelman,jdbcType=VARCHAR},
+      </if>
+      <if test="canceltime != null" >
+        #{canceltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.ReserveOrder" >
+    update t_order_reserve
+    <set >
+      <if test="reserveno != null" >
+        ReserveNo = #{reserveno,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseid != null" >
+        LeaseID = #{leaseid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        EndTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reserveobj != null" >
+        ReserveObj = #{reserveobj,jdbcType=INTEGER},
+      </if>
+      <if test="reserveman != null" >
+        ReserveMan = #{reserveman,jdbcType=VARCHAR},
+      </if>
+      <if test="reserveway != null" >
+        ReserveWay = #{reserveway,jdbcType=VARCHAR},
+      </if>
+      <if test="siteid != null" >
+        SiteID = #{siteid,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null" >
+        CarID = #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        CarNo = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelobj != null" >
+        CancelObj = #{cancelobj,jdbcType=INTEGER},
+      </if>
+      <if test="cancelmanid != null" >
+        CancelManID = #{cancelmanid,jdbcType=INTEGER},
+      </if>
+      <if test="reservemanid != null" >
+        ReserveManID = #{reservemanid,jdbcType=INTEGER},
+      </if>
+      <if test="cancelman != null" >
+        CancelMan = #{cancelman,jdbcType=VARCHAR},
+      </if>
+      <if test="canceltime != null" >
+        CancelTime = #{canceltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ReserveID = #{reserveid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.ReserveOrder" >
+    update t_order_reserve
+    set ReserveNo = #{reserveno,jdbcType=VARCHAR},
+      LeaseID = #{leaseid,jdbcType=INTEGER},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      EndTime = #{endtime,jdbcType=TIMESTAMP},
+      ReserveObj = #{reserveobj,jdbcType=INTEGER},
+      ReserveMan = #{reserveman,jdbcType=VARCHAR},
+      ReserveWay = #{reserveway,jdbcType=VARCHAR},
+      SiteID = #{siteid,jdbcType=INTEGER},
+      CarID = #{carid,jdbcType=INTEGER},
+      CarNo = #{carno,jdbcType=VARCHAR},
+      CancelObj = #{cancelobj,jdbcType=INTEGER},
+      CancelManID = #{cancelmanid,jdbcType=INTEGER},
+      ReserveManID = #{reservemanid,jdbcType=INTEGER},
+      CancelMan = #{cancelman,jdbcType=VARCHAR},
+      CancelTime = #{canceltime,jdbcType=TIMESTAMP},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CompanyID = #{companyid,jdbcType=INTEGER}
+    where ReserveID = #{reserveid,jdbcType=INTEGER}
+  </update>
+</mapper>

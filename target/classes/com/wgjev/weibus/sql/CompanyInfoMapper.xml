@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.CompanyInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.CompanyInfo" >
+    <id column="CompanyID" property="companyid" jdbcType="INTEGER" />
+    <result column="CompanyName" property="companyname" jdbcType="VARCHAR" />
+    <result column="ShortName" property="shortname" jdbcType="VARCHAR" />
+    <result column="PartentID" property="partentid" jdbcType="INTEGER" />
+    <result column="CompanyPhone" property="companyphone" jdbcType="VARCHAR" />
+    <result column="Contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="Zcode" property="zcode" jdbcType="VARCHAR" />
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    <result column="CompanyOrder" property="companyorder" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="ConpanyCode" property="conpanycode" jdbcType="INTEGER" />
+    <result column="Longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="Latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="RegionStatus" property="regionstatus" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CompanyID, CompanyName, ShortName, PartentID, CompanyPhone, Contacts, Zcode, Address, 
+    CompanyOrder, CreateTime, Status, ConpanyCode, Longitude, Latitude, RegionStatus, 
+    Remark
+  </sql>
+  
+  <!-- 查询公司信息 -->
+  <select id="loadCompanies" resultType="com.wgjev.weibus.entity.CompanyInfo">
+    select *
+    from t_info_company
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_company
+    where CompanyID = #{companyid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_company
+    where CompanyID = #{companyid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.CompanyInfo" >
+    insert into t_info_company (CompanyID, CompanyName, ShortName, 
+      PartentID, CompanyPhone, Contacts, 
+      Zcode, Address, CompanyOrder, 
+      CreateTime, Status, ConpanyCode, 
+      Longitude, Latitude, RegionStatus, 
+      Remark)
+    values (#{companyid,jdbcType=INTEGER}, #{companyname,jdbcType=VARCHAR}, #{shortname,jdbcType=VARCHAR}, 
+      #{partentid,jdbcType=INTEGER}, #{companyphone,jdbcType=VARCHAR}, #{contacts,jdbcType=VARCHAR}, 
+      #{zcode,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{companyorder,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{conpanycode,jdbcType=INTEGER}, 
+      #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, #{regionstatus,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.CompanyInfo" >
+    insert into t_info_company
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+      <if test="companyname != null" >
+        CompanyName,
+      </if>
+      <if test="shortname != null" >
+        ShortName,
+      </if>
+      <if test="partentid != null" >
+        PartentID,
+      </if>
+      <if test="companyphone != null" >
+        CompanyPhone,
+      </if>
+      <if test="contacts != null" >
+        Contacts,
+      </if>
+      <if test="zcode != null" >
+        Zcode,
+      </if>
+      <if test="address != null" >
+        Address,
+      </if>
+      <if test="companyorder != null" >
+        CompanyOrder,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="conpanycode != null" >
+        ConpanyCode,
+      </if>
+      <if test="longitude != null" >
+        Longitude,
+      </if>
+      <if test="latitude != null" >
+        Latitude,
+      </if>
+      <if test="regionstatus != null" >
+        RegionStatus,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="companyname != null" >
+        #{companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="shortname != null" >
+        #{shortname,jdbcType=VARCHAR},
+      </if>
+      <if test="partentid != null" >
+        #{partentid,jdbcType=INTEGER},
+      </if>
+      <if test="companyphone != null" >
+        #{companyphone,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null" >
+        #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="zcode != null" >
+        #{zcode,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="companyorder != null" >
+        #{companyorder,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="conpanycode != null" >
+        #{conpanycode,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="regionstatus != null" >
+        #{regionstatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.CompanyInfo" >
+    update t_info_company
+    <set >
+      <if test="companyname != null" >
+        CompanyName = #{companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="shortname != null" >
+        ShortName = #{shortname,jdbcType=VARCHAR},
+      </if>
+      <if test="partentid != null" >
+        PartentID = #{partentid,jdbcType=INTEGER},
+      </if>
+      <if test="companyphone != null" >
+        CompanyPhone = #{companyphone,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null" >
+        Contacts = #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="zcode != null" >
+        Zcode = #{zcode,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        Address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="companyorder != null" >
+        CompanyOrder = #{companyorder,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="conpanycode != null" >
+        ConpanyCode = #{conpanycode,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        Longitude = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        Latitude = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="regionstatus != null" >
+        RegionStatus = #{regionstatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CompanyID = #{companyid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.CompanyInfo" >
+    update t_info_company
+    set CompanyName = #{companyname,jdbcType=VARCHAR},
+      ShortName = #{shortname,jdbcType=VARCHAR},
+      PartentID = #{partentid,jdbcType=INTEGER},
+      CompanyPhone = #{companyphone,jdbcType=VARCHAR},
+      Contacts = #{contacts,jdbcType=VARCHAR},
+      Zcode = #{zcode,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=VARCHAR},
+      CompanyOrder = #{companyorder,jdbcType=INTEGER},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      Status = #{status,jdbcType=INTEGER},
+      ConpanyCode = #{conpanycode,jdbcType=INTEGER},
+      Longitude = #{longitude,jdbcType=DECIMAL},
+      Latitude = #{latitude,jdbcType=DECIMAL},
+      RegionStatus = #{regionstatus,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR}
+    where CompanyID = #{companyid,jdbcType=INTEGER}
+  </update>
+</mapper>

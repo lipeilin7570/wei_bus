@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.CarInfoJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.CarInfoJson" >
+    <id column="CarID" property="carID" jdbcType="INTEGER" />
+    <result column="CarNo" property="carNo" jdbcType="VARCHAR" />
+    <result column="CarVin" property="carVin" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="DATE" />
+    <result column="TerminalNo" property="terminalNo" jdbcType="VARCHAR" />
+    <result column="BluetoothNo" property="bluetoothNo" jdbcType="VARCHAR" />
+    <result column="SIMNo" property="SIMNo" jdbcType="VARCHAR" />
+    <result column="SiteID" property="siteID" jdbcType="INTEGER" />
+    <result column="ElectricityStatus" property="electricityStatus" jdbcType="INTEGER" />
+    <result column="Status" property="carRentStatus" jdbcType="INTEGER" />
+    
+    <result column="Electricity" property="electricity" jdbcType="INTEGER" />
+    <result column="RemainKON" property="remainKON" jdbcType="DECIMAL" />
+    <result column="ShortName" property="companyShortName" jdbcType="VARCHAR" />
+    
+    <result column="Seats" property="people" jdbcType="INTEGER" />
+    <result column="SiteName" property="siteName" jdbcType="VARCHAR" />
+    <result column="DetailName" property="modelName" jdbcType="VARCHAR" />
+    <result column="Alias" property="alias" jdbcType="VARCHAR" />
+    
+  </resultMap>
+	<select id="loadAllCarInfos" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	SELECT c.CarID,c.CarNo,c.CarVin,c.CreateTime,c.TerminalNo,c.BluetoothNo,c.SIMNo,
+    cst.SiteID,cst.ElectricityStatus,cst.Electricity,cst.RemainKON,
+	cse.Status,
+	cp.ShortName,
+	s.SiteName,
+	md.DetailName,cm.Alias,md.Seats
+	FROM t_info_car c
+	LEFT JOIN t_info_carservice cse ON c.CarID =cse.CarID 
+	LEFT JOIN t_info_carstatus cst ON c.CarID =cst.CarID
+	LEFT JOIN t_info_company cp ON cp.CompanyID=c.CompanyID
+	LEFT JOIN t_info_site s ON s.SiteID=cst.SiteID
+	LEFT JOIN t_info_modeldetail md ON md.ModelDetailID=c.ModelDetailID
+	LEFT JOIN t_info_carmodel cm ON cm.CarModelID=md.CarModelID
+	WHERE C.CarStatus != 6 AND c.CompanyID=#{companyID,jdbcType=INTEGER}
+	ORDER BY c.CarID
+  </select>
+
+  <select id="findCarInfoJsonByCarID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	SELECT c.CarID,c.CarNo,c.CarVin,c.CreateTime,c.TerminalNo,c.BluetoothNo,c.SIMNo,
+    cst.SiteID,cst.ElectricityStatus,cst.Electricity,cst.RemainKON,
+	cse.Status,
+	cp.ShortName,
+	s.SiteName,
+	md.DetailName,cm.Alias,md.Seats
+	FROM t_info_car c
+	LEFT JOIN t_info_carservice cse ON c.CarID =cse.CarID 
+	LEFT JOIN t_info_carstatus cst ON c.CarID =cst.CarID
+	LEFT JOIN t_info_company cp ON cp.CompanyID=c.CompanyID
+	LEFT JOIN t_info_site s ON s.SiteID=cst.SiteID
+	LEFT JOIN t_info_modeldetail md ON md.ModelDetailID=c.ModelDetailID
+	LEFT JOIN t_info_carmodel cm ON cm.CarModelID=md.CarModelID
+	WHERE c.CarStatus != 6 AND c.CarID=#{carID,jdbcType=INTEGER}
+	ORDER BY c.CarID
+  </select>
+
+
+</mapper>

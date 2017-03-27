@@ -1,0 +1,610 @@
+$(document).ready(function(){
+    search();
+})
+//从表格查询
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){
+    return res;
+}
+//请求后台和返回的参数数据
+function search() {
+	var cookieval=readCookie("companyID");
+	var data={
+			'companyID':cookieval
+	}
+    $('#tab').bootstrapTable({
+        method:'post',
+        url:'../../run/loadCoupon.do',
+        cache:false,
+        height:"auto",
+        striped:true,
+        pagination:true,
+        pageList:[ 10, 20,30,50,100 ],
+        pageSize:5,
+        pageNumber:1,
+        //search : true,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:data,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"couponNo",
+        sortOrder:"esc",
+        //showColumns : true,
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                width:'30px',
+                checkbox:true
+            }, {
+                field:'couponNo',
+                title:'优惠券编号',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'couponName',
+                title:'优惠券名称',
+                align:'center',
+                valign:'middle',
+            }, {
+                field:'couponModel',
+                title:'优惠券类别',
+                align:'center',
+                valign:'middle',
+                formatter:couponModelFormatter,
+            }, {
+                field:'couponType',
+                title:'优惠券类型',
+                align:'center',
+                valign:'middle',
+                formatter:couponTypeFormatter,
+                sortable:true
+            }, {
+                field:'sendModel',
+                title:'下发模式',
+                align:'center',
+                valign:'middle',
+                formatter:sendTypeFormatter,
+            }, {
+                field:'sendType',
+                title:'下发类型',
+                align:'center',
+                valign:'middle',
+                formatter:sendTypeFormatter
+            }, {
+                field:'sendDate',
+                title:'下发日期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+//                formatter:dateFormatter 
+                sortable:true
+            }, {
+                field:'status',
+                title:'状态',
+                align:'center',
+                valign:'middle',
+                formatter:statusFormatter
+            }, {
+                field:'beginDate',
+                title:'开始时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+//                formatter:dateFormatter
+                sortable:true
+            }, {
+                field:'endDate',
+                title:'结束时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+//                formatter:dateFormatter            
+            }, {
+                field:'createMan',
+                title:'创建人',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'couponMoney',
+                title:'优惠额/元',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'limitMoney',
+                title:'优惠使用最小金额/元',
+                align:'center',
+                valign:'middle'
+            }, {
+                field: 'shortName',
+                title: '指定公司简称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign: 'middle'
+            }, {
+                field: 'auditStatus',
+                title: '审核状态',
+                align: 'center',
+                valign: 'middle',
+                formatter:auditStatusFormatter
+            }, {
+                field: 'operate',
+                title: '操作 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign: 'middle',
+                formatter:operateFormatter,
+                events:operateEvents          
+            }
+        ],
+        onLoadSuccess:function(){
+            //alert("success");
+        },
+        onLoadError:function(){
+           // location.reload();
+        }
+    });
+};
+//操作
+function operateFormatter(value, row, index){
+    return [
+        '<a class="info" href="javascript:void(0)" title="like">审核派发</a>'       
+    ].join('');
+}
+window.operateEvents={
+		'click .info': function (e, value, row, index){ 
+			$('#modal_table').attr("data-id",row.couponID)
+			$('#couponNum').text(row.couponNo);
+			$('#couponNam').text(row.couponName);
+			$('#couponMon').text(row.couponMoney);
+			$('#Modal').click();	
+		}
+	}
+function urlsubmit(){		
+	var cookieval=readCookie("operateID");
+	var data={
+			"operatorID":cookieval,
+			"couponID":$('#modal_table').attr("data-id"),
+			"auditStatus":$('#auditStatus').val(),
+			"failCause":$('#failCause').val()
+		};
+		$.ajax({
+			type:'post',
+			url:'../../run/auditCoupon.do',
+			dataType:'json',
+			data:data,
+			success:function(data){
+				if(data.status==0){
+					$('#del_btn').click();
+					$('.del_msg').text("审核派发成功！");
+					search();
+					ss();
+				}else if(data.status==101){
+					$('#del_btn').click();
+					$('.del_msg').text("找不到操作员！");
+				}else if(data.status==102){
+					$('#del_btn').click();
+					$('.del_msg').text("优惠券已审核或已失效！");
+				}else{
+					$('#del_btn').click();
+					$('.del_msg').text("系统错误！");
+				}
+			},
+			error:function(){
+				$('#del_btn').click();
+				$('.del_msg').text("服务异常！");
+			}
+		})	
+	}
+//审核失败切换
+window.onload = function(){
+	var obj_select = document.getElementById("auditStatus");
+	var obj_div = document.getElementById("two");
+		obj_select.onchange = function(){
+			obj_div.style. visibility = this.value==2? "visible" : "hidden";
+		}
+}
+//审核状态
+function auditStatusFormatter(value,row,index){
+    var auditStatus;
+    switch(value){
+        case 0:
+        	auditStatus='未审核';
+            break;
+        case 1:
+        	auditStatus='审核成功';
+            break;
+        case 2:
+        	auditStatus='审核失败';
+            break;
+        default :
+        	auditStatus='';
+            break;
+    }
+    return auditStatus;
+}
+//查询请求参数
+var sn;
+var so;
+function queryParams(params) {
+    sn = params.sortName;
+    so = params.sortOrder;
+    return {
+        pageSize: params.pageSize,
+        pageNumber: params.pageNumber,
+        sortName: params.sortName,
+        sortOrder: params.sortOrder,
+        couponNum: $('#couponNum').val(),
+        couponName: $('#couponName').val(),
+        couponModel: $('#couponModel').val(),
+        couponType: $('#couponType').val(),
+        startTime: $('#startTime').val(),
+        endTime: $('#endTime').val(),
+        sendType: $('#sendType').val(),
+        sendModel: $('#sendModel').val()
+    };
+}
+
+//时间校验
+/*function dateFormatter(value, row, index){
+    var myDate=new  Date();
+    myDate.setTime(row.createTime);
+    return myDate.format('yy-MM-dd')
+}*/
+//优惠券状态
+function statusFormatter(value,row,index){
+    var status;
+    switch(value)
+    {
+        case 1:
+            status='正常';
+            break;
+        case 2:
+            status='过期';
+            break;
+        default :
+            status='';
+            break
+    }
+    return status;
+}
+//优惠券模式
+function couponModelFormatter(value,row,index){
+    var couponModel;
+    switch(value){
+        case 1:
+            couponModel='优惠券';
+            break;
+        case 2:
+            couponModel='推荐券';
+            break;
+        case 3:
+            couponModel='新人券';
+            break;
+        default :
+            couponModel='';
+            break;
+    }
+    return couponModel;
+}
+//优惠券类型
+function couponTypeFormatter(value,row,index){
+    var couponType;
+    switch(value)
+    {
+        case 1:
+            couponType='折扣';
+            break;
+        case 2:
+            couponType='额度';
+            break;
+        default :
+            couponType='';
+            break
+    }
+    return couponType;
+}
+//下发模式
+function sendModelFormatter(value,row,index){
+    var sendModel;
+    switch(value)
+    {
+        case 1:
+            sendModel='即时';
+            break;
+        case 2:
+            sendModel='定时';
+            break;
+        default :
+            sendModel='';
+            break;
+    }
+    return sendModel;
+}
+//下发类型
+function sendTypeFormatter(value,row,index){
+    var sendType;
+    switch(value)
+    {
+        case 1:
+            sendType='自动';
+            break;
+        case 2:
+            sendType='手动';
+            break;
+        default :
+            sendType='';
+            break;
+    }
+    return sendType;
+}
+var now =new Date();
+$("#startTime").datetimepicker({
+	format:"yyyy-mm-dd hh:ii",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#endTime").datetimepicker({
+	format:"yyyy-mm-dd hh:ii",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+//重置
+function doreset(){
+    $("#startTime").datetimepicker('setEndDate', now);
+    $("#endTime").datetimepicker('setStartDate', null);
+}
+//时间顺序设定
+$(function(){
+    $("#startTime").on("changeDate", function (e) {
+        var start = new Date(Date.parse($("#startTime").val()));
+        $('#end').datetimepicker('setStartDate', start);
+    });
+    $("#endTime").on("changeDate", function (e) {
+        var end = new Date(Date.parse($("#endTime").val()));
+        $('#startTime').datetimepicker('setEndDate', end);
+    });
+})
+//邀请码
+function invitation(){
+	$('#invitationBtn').click();
+}
+function Submit(){
+//	判断邀请码类型
+	var typeValue = $("#CouponType").val();
+	if(typeValue=="1"){
+		if($("#CouponMoney").val()>=1||$("#CouponMoney").val()<=0){
+			$('#del_btn').click();
+			$('.del_msg').text("抵用额应大于0小于1！");
+			return;
+		}
+	}else if(typeValue=="2"){
+		var realFee = $("#CouponMoney").val();
+		var changeFee = Math.floor(realFee);
+		if(realFee>changeFee||realFee<=0){
+			$('#del_btn').click();
+			$('.del_msg').text("抵用额应为整数！");
+			return;
+		}
+	}	
+	var cookieval=readCookie("operateID");
+	var data={
+			'operatorID':cookieval,
+			'couponName':$('#CouponName').val(),
+			'inviteType':$('#InviteType').val(),
+			'inviteEndTime':$('#InviteEndTime').val(),
+			'regBegin':$('#RegBegin').val(),
+			'regEnd':$('#RegEnd').val(),
+			'userAuth':$('#UserAuth').val(),
+			'hasOrder':$('#HasOrder').val(),
+			'newUser':$('#NewUser').val(),
+			'users':$('#Users').val(),
+			'inviteSelf':$('#InviteSelf').val(),
+			'inviteLime':$('#InviteLime').val(),
+			'bUserAuth':$('#BUserAuth').val(),
+			'bHasOrder':$('#BHasOrder').val(),
+			'bHasOrderDays':$('#BHasOrderDays').val(),
+			'appointCompany':$('#AppointCompany').val(),
+			'validateDays':$('#ValidateDays').val(),
+			'couponType':$('#CouponType').val(),
+			'couponMoney':$('#CouponMoney').val(),
+			'limitMoney':$('#LimitMoney').val(),
+			'remark':$('#REmark').val(),					
+	};
+	$.ajax({
+        type:"POST",
+        dataType:"json",
+        url: "../../run/addInvite.do",
+        traditional:true,
+        data:data,
+        success: function (data) {
+            if(data.status==0){
+            	$('#del_btn').click();
+				$('.del_msg').text("新增成功！");
+                search();
+                ss();
+            }else{
+            	$('#del_btn').click();
+				$('.del_msg').text("新增失败！");
+            }
+        },
+        error: function(){
+        	$('#del_btn').click();
+			$('.del_msg').text("服务异常！");
+        }
+    });  
+}
+//新增优惠券
+function add(){
+	$('#addbtn').click();
+}
+function urlSubmit(){
+	var cookieval=readCookie("operateID");
+	var cookievals=readCookie("companyID");
+	//取值判断
+	var validateBegin="";
+	var validateEnd="";
+	var reachTime="";
+	var reachEndTime="";
+	var regBegin="";
+	var regEnd="";
+	var userAuth=0;
+	var hasOrder=0;
+	var hasOrderDays=0;
+	var newUser=0;
+	var validateType=0;
+	var validateDays=0;
+	var users="";
+	var couponNum=0;
+	if($('#couponModel').val()==1){
+		validateBegin=$('#A').val();
+		validateEnd=$('#B').val();
+		regBegin=$('#AA').val();
+		regEnd=$('#BB').val();
+		userAuth=$('#G').val();
+		hasOrder=$('#GG').val();
+	}else if($('#couponModel').val()==2){
+		validateBegin=$('#C').val();
+		validateEnd=$('#D').val();
+		regBegin=$('#CC').val();
+		regEnd=$('#DD').val();
+		userAuth=$('#H').val();
+		hasOrder=$('#HH').val();
+		reachTime=$('#aa').val();
+		reachEndTime=$('#bb').val();
+		validateType=$('#AAAA').val();
+		validateDays=$('#aaaa').val();
+		newUser=$('#AAA').val();
+		couponNum=$('#aaa').val();
+	}else if($('#couponModel').val()==3){		
+		regBegin=$('#EE').val();
+		regEnd=$('#FF').val();
+		userAuth=$('#I').val();
+		hasOrder=$('#II').val();
+		reachTime=$('#cc').val();
+		reachEndTime=$('#dd').val();
+		hasOrderDays=$('#orderday').val();
+		validateDays=$('#bbbb').val();
+		newUser=$('#BBB').val();
+		couponNum=$('#bbb').val();
+	}else if($('#couponModel').val()==4){
+		userAuth=$('#J').val();
+		hasOrder=$('#JJ').val();
+		reachTime=$('#ee').val();
+		reachEndTime=$('#ff').val();
+		hasOrderDays=$('#orderday1').val();
+		validateDays=$('#cccc').val();
+		couponNum=$('#ccc').val();
+	}else if($('#couponModel').val()==5){
+		validateBegin=$('#E').val();
+		validateEnd=$('#F').val();
+		users=$('#zz').val();
+	}
+	var coupontype=$('#couponType').val();
+	if(coupontype=="1"){
+		if($('#couponMoney').val()>=1||$('#couponMoney').val()<=0){
+			$('#del_btn').click();
+			$('.del_msg').text("抵用额应大于0小于1！");
+			return;
+		}
+	}else if(coupontype=="2"){
+		var realFee=$('#couponMoney').val();
+		var changeFee=Math.floor(realFee);
+		if(realFee>changeFee||realFee<=0){
+			$('#del_btn').click();
+			$('.del_msg').text("抵用额应为正整数！");
+			return;
+		}
+	}
+	var data={
+			'operatorID':cookieval,
+			'couponModel':$('#couponModel').val(),
+			'couponName':$('#couponName').val(),
+			'couponType':$('#couponType').val(),
+			'appointCompany':cookievals,
+			'couponMoney':$('#couponMoney').val(),
+			'limitMoney':$('#limitMoney').val(),
+			'remark':$('#remark').val(),	
+			'reachTime':reachTime,
+			'reachEndTime':reachEndTime,
+			'regBegin':regBegin,
+			'regEnd':regEnd,
+			'userAuth':userAuth,
+			'hasOrder':hasOrder,
+			'hasOrderDays':hasOrderDays,
+			'newUser':newUser,
+			'couponNum':couponNum,
+			'users':users,			
+			'validateType':validateType,
+			'validateDays':validateDays,
+			'validateBegin':validateBegin,
+			'validateEnd':validateEnd			
+	};	
+	$.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "../../run/addCoupon.do",
+        traditional:true,
+        data:data,
+        success: function (data) {
+            if(data.status==0){
+            	$('#del_btn').click();
+				$('.del_msg').text("新增成功！");
+                search();
+                ss();
+            }else if(data.status==102){
+            	$('#del_btn').click();
+				$('.del_msg').text("指定会员的手机号码或格式有误！");
+            }else{
+            	$('#del_btn').click();
+				$('.del_msg').text("新增失败！");
+            }
+        },
+        error: function(){
+        	$('#del_btn').click();
+			$('.del_msg').text("服务异常！");
+        }
+    });  
+}
+//优惠券类别切换
+function sel_div(t){
+		for(var i=1;i<t.length;i++){
+			document.getElementById(t.options[i].value).style.display="none";	
+		}
+		if(t.value!="请选择"){
+				document.getElementById(t.value).style.display="block";
+		}
+}
+//上传数据
+function importData() {
+    $('#importForm').form({
+        url: '',
+        onSubmit: function () {
+            parent.$.messager.progress({
+                title: '提示',
+                text: '数据处理中，请稍后....'
+            });
+            var isValid = $(this).form('validate');
+            if (!isValid) {
+                parent.$.messager.progress('close');
+            }
+            return isValid;
+        },
+        success: function (result) {
+            result = $.parseJSON(result);
+            parent.$.messager.progress('close');
+            if (result.success) {
+                var data = result['obj'];
+/*                    var total = data['total'];
+                var rows = data['rows'];*/
+//                $('#customers').html(rows);
+                console.log(data);
+                $("#filePath").val(data.redis_coupon_userid);
+                parent.$.messager.alert('提示', '会员账号上传成功', 'info');
+            } else {
+                var msg = result['msg'];
+                parent.$.messager.alert('错误', msg, 'error');
+            }
+        }
+    });
+    $('#importForm').submit();
+}
+					

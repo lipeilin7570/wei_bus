@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>违章信息</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/tableExport.js"></script>
+<script src="../../js/jquery.base64.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.fr.js"></script>
+<script src="../../js/common2.js"></script>
+<script src="../../js/script/Order/illegal.js"></script>
+<style>
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+}
+.form-group>label{
+	text-align:center;
+	font-size:14px;	
+}
+.illegalTable{
+	margin-top:30px;
+}
+</style>
+</head>
+<body>
+	<div class="container"style="width: 100%; border: 0px; border-style: solid;">
+		<div class="panel center-block">
+			<h4 align="center">违章信息</h4>
+			<div id="custom-toolbar" style="padding-top: 10px;">
+				<form class="form-horizontal" role="form">					
+					<div class="form-group">						
+						<label for="illegalType" class="col-sm-2 control-label">未处理违章订单</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="illegalType">
+								<option value="1"  selected="selected">是</option>
+								<option value="2">否</option>
+							</select>
+						</div>
+						<label for="illegalStatus" class="col-sm-2 control-label">逾期未处理违章订单</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="illegalStatus">
+								<option value="2" selected="selected">否</option>
+								<option value="1">是</option>																
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<button type="button" class="btn btn-info" onclick="ss();">查询</button>
+							<button type="button" onclick="$('#tab').tableExport({ type:'excel',separator:';', escape:'false'});"class="btn btn-danger">
+								<i class="glyphicon glyphicon-search">导出Excel</i>
+							</button>
+						</div>
+					</div>					
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-height="400" data-id="row.LeaseID" data-show-refresh="true"  data-search="true"></table>
+			</div>
+		</div>
+	</div>
+	<!-- 按钮触发模态框 -->
+	<button id="del_btn" style="display: none;"class="btn btn-primary btn-lg" data-toggle="modal"data-target="#delModal"></button>
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog"aria-labelledby="delModalLabel" aria-hidden="true" style="top:10%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="del_msg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm"data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<!--违章详情-->
+	<button id="violationDetail" style="display:none"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#impModal"></button>
+	<div class="modal fade" id="impModal" tabindex="-1" role="dialog"
+		aria-labelledby="impModalLabel" aria-hidden="true" style="top:10%">
+		<div class="modal-dialog" style="width:70%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="impModalLabel">违章详情</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:400px;overflow:auto" id="tableBox">
+					<table class="table table-bordered" id="violation-table">
+						<tr>
+							<td class="title">缩略图</td>
+							<td><img src="" id="thumbnail" style="width:200px;height:150px;"></td>
+						</tr>																													
+						<tr>
+							<td class="title">订单号</td>
+							<td><input type="text" id="leaseNo"></td>
+							<td class="title">车牌号</td>
+							<td><input type="text" id="leaseCarNo"></td>						
+						</tr>						
+						<tr>
+							<td class="title">订单时间</td>
+							<td><input type="text" id="leaseTime"></td>	
+							<td class="title">车型</td>
+							<td><input type="text" id="carType"></td>
+						</tr>
+						<tr>
+							<td class="title">提车时间</td>
+							<td><input type="text" id="pickTime"></td>	
+							<td class="title">还车时间</td>
+							<td><input type="text" id="backTime"></td>
+						</tr>
+						<tr>
+							<td class="title">提车地点</td>
+							<td><textarea id="pickAddress"></textarea></td>	
+							<td class="title">还车地点</td>
+							<td><textarea id="backAddress"></textarea></td>
+						</tr>
+						<tr>
+							<td class="title">会员名</td>
+							<td><input type="text" id="memberName"></td>
+							<td class="title">会员电话</td>
+							<td><input type="text" id="memberTel"></td>						
+						</tr>						
+						<tr>
+							<td class="title">已缴纳保证金总额</td>
+							<td><input type="text" id="alreadyPaid"></td>							
+						</tr>
+					</table>													
+				</div>
+				<div class="modal-footer">
+					<button id="impbutton" class="btn btn-primary btn-sm" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>			
+</body>
+</html>

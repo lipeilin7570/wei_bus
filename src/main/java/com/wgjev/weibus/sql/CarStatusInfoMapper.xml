@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.CarStatusInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.CarStatusInfo" >
+    <id column="CarID" property="carid" jdbcType="INTEGER" />
+    <result column="Electricity" property="electricity" jdbcType="INTEGER" />
+    <result column="ElectricityStatus" property="electricitystatus" jdbcType="INTEGER" />
+    <result column="RemainKON" property="remainkon" jdbcType="DECIMAL" />
+    <result column="Mileages" property="mileages" jdbcType="DECIMAL" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="LastTime" property="lasttime" jdbcType="TIMESTAMP" />
+    <result column="Longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="Latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="Speed" property="speed" jdbcType="DECIMAL" />
+    <result column="Dire" property="dire" jdbcType="INTEGER" />
+    <result column="SiteID" property="siteid" jdbcType="INTEGER" />
+    <result column="Location" property="location" jdbcType="VARCHAR" />
+    <result column="CentralLock" property="centrallock" jdbcType="INTEGER" />
+    <result column="TrunkStatus" property="trunkstatus" jdbcType="INTEGER" />
+    <result column="ChargeLid" property="chargelid" jdbcType="INTEGER" />
+    <result column="BatteryDoor" property="batterydoor" jdbcType="INTEGER" />
+    <result column="LFWindow" property="lfwindow" jdbcType="INTEGER" />
+    <result column="RLWindow" property="rlwindow" jdbcType="INTEGER" />
+    <result column="LBWindow" property="lbwindow" jdbcType="INTEGER" />
+    <result column="RBWindow" property="rbwindow" jdbcType="INTEGER" />
+    <result column="Window5Control" property="window5control" jdbcType="INTEGER" />
+    <result column="Window6Control" property="window6control" jdbcType="INTEGER" />
+    <result column="Skylight" property="skylight" jdbcType="INTEGER" />
+    <result column="Headlight" property="headlight" jdbcType="INTEGER" />
+    <result column="DoubleLamp" property="doublelamp" jdbcType="INTEGER" />
+    <result column="FfogLamp" property="ffoglamp" jdbcType="INTEGER" />
+    <result column="BfogLamp" property="bfoglamp" jdbcType="INTEGER" />
+    <result column="LittleLight" property="littlelight" jdbcType="INTEGER" />
+    <result column="BackLight" property="backlight" jdbcType="INTEGER" />
+    <result column="LTurnLight" property="lturnlight" jdbcType="INTEGER" />
+    <result column="RturnLight" property="rturnlight" jdbcType="INTEGER" />
+    <result column="CarHorn" property="carhorn" jdbcType="INTEGER" />
+    <result column="DoorTheft" property="doortheft" jdbcType="INTEGER" />
+    <result column="Collision" property="collision" jdbcType="INTEGER" />
+    <result column="AirCondition" property="aircondition" jdbcType="INTEGER" />
+    <result column="AC" property="ac" jdbcType="INTEGER" />
+    <result column="PTC" property="ptc" jdbcType="INTEGER" />
+    <result column="Cycle" property="cycle" jdbcType="INTEGER" />
+    <result column="WindType" property="windtype" jdbcType="INTEGER" />
+    <result column="Temperature" property="temperature" jdbcType="INTEGER" />
+    <result column="WindSpeed" property="windspeed" jdbcType="INTEGER" />
+    <result column="AirConditionStatus" property="airconditionstatus" jdbcType="INTEGER" />
+    <result column="IndoorTemperature" property="indoortemperature" jdbcType="INTEGER" />
+    <result column="GPSValid" property="gpsvalid" jdbcType="INTEGER" />
+    <result column="Acc" property="acc" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CarID, Electricity, ElectricityStatus, RemainKON, Mileages, Remark, LastTime, Longitude, 
+    Latitude, Speed, Dire, SiteID, Location, CentralLock, TrunkStatus, ChargeLid, BatteryDoor, 
+    LFWindow, RLWindow, LBWindow, RBWindow, Window5Control, Window6Control, Skylight, 
+    Headlight, DoubleLamp, FfogLamp, BfogLamp, LittleLight, BackLight, LTurnLight, RturnLight, 
+    CarHorn, DoorTheft, Collision, AirCondition, AC, PTC, Cycle, WindType, Temperature, 
+    WindSpeed, AirConditionStatus, IndoorTemperature, GPSValid, Acc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_carstatus
+    where CarID = #{carid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_carstatus
+    where CarID = #{carid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.CarStatusInfo" >
+    insert into t_info_carstatus (CarID, Electricity, ElectricityStatus, 
+      RemainKON, Mileages, Remark, 
+      LastTime, Longitude, Latitude, 
+      Speed, Dire, SiteID, 
+      Location, CentralLock, TrunkStatus, 
+      ChargeLid, BatteryDoor, LFWindow, 
+      RLWindow, LBWindow, RBWindow, 
+      Window5Control, Window6Control, Skylight, 
+      Headlight, DoubleLamp, FfogLamp, 
+      BfogLamp, LittleLight, BackLight, 
+      LTurnLight, RturnLight, CarHorn, 
+      DoorTheft, Collision, AirCondition, 
+      AC, PTC, Cycle, WindType, 
+      Temperature, WindSpeed, AirConditionStatus, 
+      IndoorTemperature, GPSValid, Acc
+      )
+    values (#{carid,jdbcType=INTEGER}, #{electricity,jdbcType=INTEGER}, #{electricitystatus,jdbcType=INTEGER}, 
+      #{remainkon,jdbcType=DECIMAL}, #{mileages,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{lasttime,jdbcType=TIMESTAMP}, #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, 
+      #{speed,jdbcType=DECIMAL}, #{dire,jdbcType=INTEGER}, #{siteid,jdbcType=INTEGER}, 
+      #{location,jdbcType=VARCHAR}, #{centrallock,jdbcType=INTEGER}, #{trunkstatus,jdbcType=INTEGER}, 
+      #{chargelid,jdbcType=INTEGER}, #{batterydoor,jdbcType=INTEGER}, #{lfwindow,jdbcType=INTEGER}, 
+      #{rlwindow,jdbcType=INTEGER}, #{lbwindow,jdbcType=INTEGER}, #{rbwindow,jdbcType=INTEGER}, 
+      #{window5control,jdbcType=INTEGER}, #{window6control,jdbcType=INTEGER}, #{skylight,jdbcType=INTEGER}, 
+      #{headlight,jdbcType=INTEGER}, #{doublelamp,jdbcType=INTEGER}, #{ffoglamp,jdbcType=INTEGER}, 
+      #{bfoglamp,jdbcType=INTEGER}, #{littlelight,jdbcType=INTEGER}, #{backlight,jdbcType=INTEGER}, 
+      #{lturnlight,jdbcType=INTEGER}, #{rturnlight,jdbcType=INTEGER}, #{carhorn,jdbcType=INTEGER}, 
+      #{doortheft,jdbcType=INTEGER}, #{collision,jdbcType=INTEGER}, #{aircondition,jdbcType=INTEGER}, 
+      #{ac,jdbcType=INTEGER}, #{ptc,jdbcType=INTEGER}, #{cycle,jdbcType=INTEGER}, #{windtype,jdbcType=INTEGER}, 
+      #{temperature,jdbcType=INTEGER}, #{windspeed,jdbcType=INTEGER}, #{airconditionstatus,jdbcType=INTEGER}, 
+      #{indoortemperature,jdbcType=INTEGER}, #{gpsvalid,jdbcType=INTEGER}, #{acc,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.CarStatusInfo" >
+    insert into t_info_carstatus
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carid != null" >
+        CarID,
+      </if>
+      <if test="electricity != null" >
+        Electricity,
+      </if>
+      <if test="electricitystatus != null" >
+        ElectricityStatus,
+      </if>
+      <if test="remainkon != null" >
+        RemainKON,
+      </if>
+      <if test="mileages != null" >
+        Mileages,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="lasttime != null" >
+        LastTime,
+      </if>
+      <if test="longitude != null" >
+        Longitude,
+      </if>
+      <if test="latitude != null" >
+        Latitude,
+      </if>
+      <if test="speed != null" >
+        Speed,
+      </if>
+      <if test="dire != null" >
+        Dire,
+      </if>
+      <if test="siteid != null" >
+        SiteID,
+      </if>
+      <if test="location != null" >
+        Location,
+      </if>
+      <if test="centrallock != null" >
+        CentralLock,
+      </if>
+      <if test="trunkstatus != null" >
+        TrunkStatus,
+      </if>
+      <if test="chargelid != null" >
+        ChargeLid,
+      </if>
+      <if test="batterydoor != null" >
+        BatteryDoor,
+      </if>
+      <if test="lfwindow != null" >
+        LFWindow,
+      </if>
+      <if test="rlwindow != null" >
+        RLWindow,
+      </if>
+      <if test="lbwindow != null" >
+        LBWindow,
+      </if>
+      <if test="rbwindow != null" >
+        RBWindow,
+      </if>
+      <if test="window5control != null" >
+        Window5Control,
+      </if>
+      <if test="window6control != null" >
+        Window6Control,
+      </if>
+      <if test="skylight != null" >
+        Skylight,
+      </if>
+      <if test="headlight != null" >
+        Headlight,
+      </if>
+      <if test="doublelamp != null" >
+        DoubleLamp,
+      </if>
+      <if test="ffoglamp != null" >
+        FfogLamp,
+      </if>
+      <if test="bfoglamp != null" >
+        BfogLamp,
+      </if>
+      <if test="littlelight != null" >
+        LittleLight,
+      </if>
+      <if test="backlight != null" >
+        BackLight,
+      </if>
+      <if test="lturnlight != null" >
+        LTurnLight,
+      </if>
+      <if test="rturnlight != null" >
+        RturnLight,
+      </if>
+      <if test="carhorn != null" >
+        CarHorn,
+      </if>
+      <if test="doortheft != null" >
+        DoorTheft,
+      </if>
+      <if test="collision != null" >
+        Collision,
+      </if>
+      <if test="aircondition != null" >
+        AirCondition,
+      </if>
+      <if test="ac != null" >
+        AC,
+      </if>
+      <if test="ptc != null" >
+        PTC,
+      </if>
+      <if test="cycle != null" >
+        Cycle,
+      </if>
+      <if test="windtype != null" >
+        WindType,
+      </if>
+      <if test="temperature != null" >
+        Temperature,
+      </if>
+      <if test="windspeed != null" >
+        WindSpeed,
+      </if>
+      <if test="airconditionstatus != null" >
+        AirConditionStatus,
+      </if>
+      <if test="indoortemperature != null" >
+        IndoorTemperature,
+      </if>
+      <if test="gpsvalid != null" >
+        GPSValid,
+      </if>
+      <if test="acc != null" >
+        Acc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carid != null" >
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="electricity != null" >
+        #{electricity,jdbcType=INTEGER},
+      </if>
+      <if test="electricitystatus != null" >
+        #{electricitystatus,jdbcType=INTEGER},
+      </if>
+      <if test="remainkon != null" >
+        #{remainkon,jdbcType=DECIMAL},
+      </if>
+      <if test="mileages != null" >
+        #{mileages,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="lasttime != null" >
+        #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="speed != null" >
+        #{speed,jdbcType=DECIMAL},
+      </if>
+      <if test="dire != null" >
+        #{dire,jdbcType=INTEGER},
+      </if>
+      <if test="siteid != null" >
+        #{siteid,jdbcType=INTEGER},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="centrallock != null" >
+        #{centrallock,jdbcType=INTEGER},
+      </if>
+      <if test="trunkstatus != null" >
+        #{trunkstatus,jdbcType=INTEGER},
+      </if>
+      <if test="chargelid != null" >
+        #{chargelid,jdbcType=INTEGER},
+      </if>
+      <if test="batterydoor != null" >
+        #{batterydoor,jdbcType=INTEGER},
+      </if>
+      <if test="lfwindow != null" >
+        #{lfwindow,jdbcType=INTEGER},
+      </if>
+      <if test="rlwindow != null" >
+        #{rlwindow,jdbcType=INTEGER},
+      </if>
+      <if test="lbwindow != null" >
+        #{lbwindow,jdbcType=INTEGER},
+      </if>
+      <if test="rbwindow != null" >
+        #{rbwindow,jdbcType=INTEGER},
+      </if>
+      <if test="window5control != null" >
+        #{window5control,jdbcType=INTEGER},
+      </if>
+      <if test="window6control != null" >
+        #{window6control,jdbcType=INTEGER},
+      </if>
+      <if test="skylight != null" >
+        #{skylight,jdbcType=INTEGER},
+      </if>
+      <if test="headlight != null" >
+        #{headlight,jdbcType=INTEGER},
+      </if>
+      <if test="doublelamp != null" >
+        #{doublelamp,jdbcType=INTEGER},
+      </if>
+      <if test="ffoglamp != null" >
+        #{ffoglamp,jdbcType=INTEGER},
+      </if>
+      <if test="bfoglamp != null" >
+        #{bfoglamp,jdbcType=INTEGER},
+      </if>
+      <if test="littlelight != null" >
+        #{littlelight,jdbcType=INTEGER},
+      </if>
+      <if test="backlight != null" >
+        #{backlight,jdbcType=INTEGER},
+      </if>
+      <if test="lturnlight != null" >
+        #{lturnlight,jdbcType=INTEGER},
+      </if>
+      <if test="rturnlight != null" >
+        #{rturnlight,jdbcType=INTEGER},
+      </if>
+      <if test="carhorn != null" >
+        #{carhorn,jdbcType=INTEGER},
+      </if>
+      <if test="doortheft != null" >
+        #{doortheft,jdbcType=INTEGER},
+      </if>
+      <if test="collision != null" >
+        #{collision,jdbcType=INTEGER},
+      </if>
+      <if test="aircondition != null" >
+        #{aircondition,jdbcType=INTEGER},
+      </if>
+      <if test="ac != null" >
+        #{ac,jdbcType=INTEGER},
+      </if>
+      <if test="ptc != null" >
+        #{ptc,jdbcType=INTEGER},
+      </if>
+      <if test="cycle != null" >
+        #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="windtype != null" >
+        #{windtype,jdbcType=INTEGER},
+      </if>
+      <if test="temperature != null" >
+        #{temperature,jdbcType=INTEGER},
+      </if>
+      <if test="windspeed != null" >
+        #{windspeed,jdbcType=INTEGER},
+      </if>
+      <if test="airconditionstatus != null" >
+        #{airconditionstatus,jdbcType=INTEGER},
+      </if>
+      <if test="indoortemperature != null" >
+        #{indoortemperature,jdbcType=INTEGER},
+      </if>
+      <if test="gpsvalid != null" >
+        #{gpsvalid,jdbcType=INTEGER},
+      </if>
+      <if test="acc != null" >
+        #{acc,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.CarStatusInfo" >
+    update t_info_carstatus
+    <set >
+      <if test="electricity != null" >
+        Electricity = #{electricity,jdbcType=INTEGER},
+      </if>
+      <if test="electricitystatus != null" >
+        ElectricityStatus = #{electricitystatus,jdbcType=INTEGER},
+      </if>
+      <if test="remainkon != null" >
+        RemainKON = #{remainkon,jdbcType=DECIMAL},
+      </if>
+      <if test="mileages != null" >
+        Mileages = #{mileages,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="lasttime != null" >
+        LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="longitude != null" >
+        Longitude = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        Latitude = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="speed != null" >
+        Speed = #{speed,jdbcType=DECIMAL},
+      </if>
+      <if test="dire != null" >
+        Dire = #{dire,jdbcType=INTEGER},
+      </if>
+      <if test="siteid != null" >
+        SiteID = #{siteid,jdbcType=INTEGER},
+      </if>
+      <if test="location != null" >
+        Location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="centrallock != null" >
+        CentralLock = #{centrallock,jdbcType=INTEGER},
+      </if>
+      <if test="trunkstatus != null" >
+        TrunkStatus = #{trunkstatus,jdbcType=INTEGER},
+      </if>
+      <if test="chargelid != null" >
+        ChargeLid = #{chargelid,jdbcType=INTEGER},
+      </if>
+      <if test="batterydoor != null" >
+        BatteryDoor = #{batterydoor,jdbcType=INTEGER},
+      </if>
+      <if test="lfwindow != null" >
+        LFWindow = #{lfwindow,jdbcType=INTEGER},
+      </if>
+      <if test="rlwindow != null" >
+        RLWindow = #{rlwindow,jdbcType=INTEGER},
+      </if>
+      <if test="lbwindow != null" >
+        LBWindow = #{lbwindow,jdbcType=INTEGER},
+      </if>
+      <if test="rbwindow != null" >
+        RBWindow = #{rbwindow,jdbcType=INTEGER},
+      </if>
+      <if test="window5control != null" >
+        Window5Control = #{window5control,jdbcType=INTEGER},
+      </if>
+      <if test="window6control != null" >
+        Window6Control = #{window6control,jdbcType=INTEGER},
+      </if>
+      <if test="skylight != null" >
+        Skylight = #{skylight,jdbcType=INTEGER},
+      </if>
+      <if test="headlight != null" >
+        Headlight = #{headlight,jdbcType=INTEGER},
+      </if>
+      <if test="doublelamp != null" >
+        DoubleLamp = #{doublelamp,jdbcType=INTEGER},
+      </if>
+      <if test="ffoglamp != null" >
+        FfogLamp = #{ffoglamp,jdbcType=INTEGER},
+      </if>
+      <if test="bfoglamp != null" >
+        BfogLamp = #{bfoglamp,jdbcType=INTEGER},
+      </if>
+      <if test="littlelight != null" >
+        LittleLight = #{littlelight,jdbcType=INTEGER},
+      </if>
+      <if test="backlight != null" >
+        BackLight = #{backlight,jdbcType=INTEGER},
+      </if>
+      <if test="lturnlight != null" >
+        LTurnLight = #{lturnlight,jdbcType=INTEGER},
+      </if>
+      <if test="rturnlight != null" >
+        RturnLight = #{rturnlight,jdbcType=INTEGER},
+      </if>
+      <if test="carhorn != null" >
+        CarHorn = #{carhorn,jdbcType=INTEGER},
+      </if>
+      <if test="doortheft != null" >
+        DoorTheft = #{doortheft,jdbcType=INTEGER},
+      </if>
+      <if test="collision != null" >
+        Collision = #{collision,jdbcType=INTEGER},
+      </if>
+      <if test="aircondition != null" >
+        AirCondition = #{aircondition,jdbcType=INTEGER},
+      </if>
+      <if test="ac != null" >
+        AC = #{ac,jdbcType=INTEGER},
+      </if>
+      <if test="ptc != null" >
+        PTC = #{ptc,jdbcType=INTEGER},
+      </if>
+      <if test="cycle != null" >
+        Cycle = #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="windtype != null" >
+        WindType = #{windtype,jdbcType=INTEGER},
+      </if>
+      <if test="temperature != null" >
+        Temperature = #{temperature,jdbcType=INTEGER},
+      </if>
+      <if test="windspeed != null" >
+        WindSpeed = #{windspeed,jdbcType=INTEGER},
+      </if>
+      <if test="airconditionstatus != null" >
+        AirConditionStatus = #{airconditionstatus,jdbcType=INTEGER},
+      </if>
+      <if test="indoortemperature != null" >
+        IndoorTemperature = #{indoortemperature,jdbcType=INTEGER},
+      </if>
+      <if test="gpsvalid != null" >
+        GPSValid = #{gpsvalid,jdbcType=INTEGER},
+      </if>
+      <if test="acc != null" >
+        Acc = #{acc,jdbcType=INTEGER},
+      </if>
+    </set>
+    where CarID = #{carid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.CarStatusInfo" >
+    update t_info_carstatus
+    set Electricity = #{electricity,jdbcType=INTEGER},
+      ElectricityStatus = #{electricitystatus,jdbcType=INTEGER},
+      RemainKON = #{remainkon,jdbcType=DECIMAL},
+      Mileages = #{mileages,jdbcType=DECIMAL},
+      Remark = #{remark,jdbcType=VARCHAR},
+      LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      Longitude = #{longitude,jdbcType=DECIMAL},
+      Latitude = #{latitude,jdbcType=DECIMAL},
+      Speed = #{speed,jdbcType=DECIMAL},
+      Dire = #{dire,jdbcType=INTEGER},
+      SiteID = #{siteid,jdbcType=INTEGER},
+      Location = #{location,jdbcType=VARCHAR},
+      CentralLock = #{centrallock,jdbcType=INTEGER},
+      TrunkStatus = #{trunkstatus,jdbcType=INTEGER},
+      ChargeLid = #{chargelid,jdbcType=INTEGER},
+      BatteryDoor = #{batterydoor,jdbcType=INTEGER},
+      LFWindow = #{lfwindow,jdbcType=INTEGER},
+      RLWindow = #{rlwindow,jdbcType=INTEGER},
+      LBWindow = #{lbwindow,jdbcType=INTEGER},
+      RBWindow = #{rbwindow,jdbcType=INTEGER},
+      Window5Control = #{window5control,jdbcType=INTEGER},
+      Window6Control = #{window6control,jdbcType=INTEGER},
+      Skylight = #{skylight,jdbcType=INTEGER},
+      Headlight = #{headlight,jdbcType=INTEGER},
+      DoubleLamp = #{doublelamp,jdbcType=INTEGER},
+      FfogLamp = #{ffoglamp,jdbcType=INTEGER},
+      BfogLamp = #{bfoglamp,jdbcType=INTEGER},
+      LittleLight = #{littlelight,jdbcType=INTEGER},
+      BackLight = #{backlight,jdbcType=INTEGER},
+      LTurnLight = #{lturnlight,jdbcType=INTEGER},
+      RturnLight = #{rturnlight,jdbcType=INTEGER},
+      CarHorn = #{carhorn,jdbcType=INTEGER},
+      DoorTheft = #{doortheft,jdbcType=INTEGER},
+      Collision = #{collision,jdbcType=INTEGER},
+      AirCondition = #{aircondition,jdbcType=INTEGER},
+      AC = #{ac,jdbcType=INTEGER},
+      PTC = #{ptc,jdbcType=INTEGER},
+      Cycle = #{cycle,jdbcType=INTEGER},
+      WindType = #{windtype,jdbcType=INTEGER},
+      Temperature = #{temperature,jdbcType=INTEGER},
+      WindSpeed = #{windspeed,jdbcType=INTEGER},
+      AirConditionStatus = #{airconditionstatus,jdbcType=INTEGER},
+      IndoorTemperature = #{indoortemperature,jdbcType=INTEGER},
+      GPSValid = #{gpsvalid,jdbcType=INTEGER},
+      Acc = #{acc,jdbcType=INTEGER}
+    where CarID = #{carid,jdbcType=INTEGER}
+  </update>
+  <!-- 加载所有车辆状态 -->
+  <select id="loadCarStatus" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_carstatus
+  </select>
+  
+  
+</mapper>

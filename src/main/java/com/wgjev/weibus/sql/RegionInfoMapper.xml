@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.RegionInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.RegionInfo" >
+    <id column="RegionID" property="regionid" jdbcType="INTEGER" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="RegionNo" property="regionno" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Zcode" property="zcode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RegionID, Name, RegionNo, Status, Remark, Zcode
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_region
+    where RegionID = #{regionid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_region
+    where RegionID = #{regionid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.RegionInfo" >
+    insert into t_info_region (RegionID, Name, RegionNo, 
+      Status, Remark, Zcode
+      )
+    values (#{regionid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{regionno,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{zcode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.RegionInfo" >
+    insert into t_info_region
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="regionid != null" >
+        RegionID,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="regionno != null" >
+        RegionNo,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="zcode != null" >
+        Zcode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="regionid != null" >
+        #{regionid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="regionno != null" >
+        #{regionno,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="zcode != null" >
+        #{zcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.RegionInfo" >
+    update t_info_region
+    <set >
+      <if test="name != null" >
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="regionno != null" >
+        RegionNo = #{regionno,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="zcode != null" >
+        Zcode = #{zcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RegionID = #{regionid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.RegionInfo" >
+    update t_info_region
+    set Name = #{name,jdbcType=VARCHAR},
+      RegionNo = #{regionno,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      Zcode = #{zcode,jdbcType=VARCHAR}
+    where RegionID = #{regionid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询运营区域列表 -->
+  <select id="loadRegionInfo" resultMap="BaseResultMap">
+  	SELECT * FROM t_info_region 
+  </select>
+  
+  
+</mapper>

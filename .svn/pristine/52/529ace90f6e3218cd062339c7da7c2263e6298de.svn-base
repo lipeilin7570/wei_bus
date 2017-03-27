@@ -1,0 +1,407 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>车辆信息</title>
+	<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+	<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+	<link rel="stylesheet" href="../../css/roles.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../css/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../../css/easyui/themes/demo.css">
+	<script src="../../js/jquery.min.js" type="text/javascript"></script>
+	<script src="../../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+	<script src="../../js/bootstrap/bootstrap-table.js" type="text/javascript"></script>
+	<script src="../../js/bootstrap/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+	<script src="../../js/bootstrap/bootstrap-datetimepicker.js" type="text/javascript"></script>
+	<script src="../../js/bootstrap/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+	<script src="../../js/bootstrap/DateFormat.js" type="text/javascript"></script>
+	<script src="../../js/script/Info/car.js"  type="text/javascript"></script>
+	<script src="../../js/common2.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../js/easyui/jquery.easyui.min.js"></script>
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+			font-family: "Microsoft YaHei";
+			font-size: 12px;
+		}
+		.title{
+			background-color:#F6F6F6;
+		}
+		button.one{
+			background-color:green;
+		}
+		.panel{height:80%;}
+	</style>	
+</head>
+<body>
+	<div class="container" style="width:100%; border:0px; border-style:solid;">
+		<div class="panel center-block">
+			<h4>车辆信息</h4>
+			<div id="custom-toolbar" style="padding-top:10px;">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="carRentStatus" class="col-sm-2 control-label">车辆状态</label>
+						<div class="col-sm-2">
+							<select id="carRentStatus" class="form-control">
+								<option value="">请选择</option>
+								<option value="1">空闲</option>
+								<option value="2">预约</option>
+								<option value="3">使用中</option>
+							</select>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-info" onclick="ss();">
+								<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>查询
+							</button>
+						</div>											
+						<div class="col-sm-2">							
+							<button type="button" class="btn btn-primary" onclick="add();">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+							</button>
+						</div>
+						<div class="col-sm-4">
+							<input class="btn" id="excel_file" type="file" name="excel" accept="xls"/>	
+							<button type="button" class="btn btn-danger"  onclick="import_excel();">
+								<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>批量导入
+							</button>	
+						</div>																		
+					</div>																				
+				</form>
+			</div>
+		<div class="table-responsive">
+			<table id="tab" data-height="" data-id="row.carID" data-url="" data-side-pagination="server" data-pagination="true" data-show-refresh="true" data-search="true" data-show-columns="true"></table>
+		</div>
+	</div>
+</div>
+	<!-- 新增车辆 -->
+	<button id="impload" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#impModal"></button>
+	<div class="modal fade" id="impModal" tabindex="-1" role="dialog"
+		aria-labelledby="impModalLabel" aria-hidden="true" style="top:5%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="impModalLabel">新增车辆信息</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:300px;overflow:auto" class="easyui-panel" >
+					<div id="uploadForm">
+					<table class="table table-bordered" id="myTab">
+						<tr>
+							<td class="title">车辆型号</td>
+        					<td colspan="3">
+        						<select id="carModel" class="textbox" 
+        								data-options="required:true,novalidate:true"
+        								name="" style="width:110px;height:30px;
+        								margin-left:16px;text-align: left; size: 3; color: #505050;">
+        							<option value="-1">--请选择--</option>						
+        						</select>
+        					</td>
+     					</tr>
+     					<tr>
+        					<td class="title">车身颜色</td>  
+        					<td colspan="3">
+        						<select id="carColor" class="textbox" data-options="required:true,novalidate:true">
+        							<option value="">请选择</option>
+        							<option value="1">白色</option>
+        							<option value="2">珍珠白</option>
+        							<option value="3">白套绿</option>
+        						</select>
+        					</td>     					
+     					</tr>
+     					<tr>
+        					<td class="title">车牌号</td>  
+        					<td><input type="text" id="carno" value="" class="textbox" data-options="required:true,novalidate:true"></td>  
+        					<td class="title">车辆VIN</td>  
+        					<td><input type="text" id="carvin" value="" class="textbox" data-options="required:true,novalidate:true"></td> 
+     					</tr>
+     					<tr>
+        					<td class="title">乘坐人数</td>  
+        					<td><input type="text" id="people" value=""class="easyui-numberbox textbox" data-options="required:true,novalidate:true"></td>  
+        					<td class="title">终端号</td> 
+        					<td><input type="text" id="terminalNo" value="" class="textbox" data-options="required:true,novalidate:true"></td>   
+     					</tr>
+     					<tr>
+        					<td class="title">SIM卡号</td>  
+        					<td><input type="text" id="SIMNo" value="" class="easyui-numberbox textbox" data-options="required:true,novalidate:true"></td>
+        					<td class="title">蓝牙编号</td>  
+        					<td><input type="text" id="bluetoothNo" value="" class="easyui-numberbox textbox" data-options="required:true,novalidate:true"></td>
+        				</tr>
+        				<tr>        					
+        					<td class="title">备注</td>  
+        					<td><input type="text" id="remark" value=""></td>
+        				</tr>
+        				<tr>
+        					<td class="title">行驶证照片</td>
+        					<td colspan="3">
+        						<input type="file" name="file"  id="carLicense">
+        					</td>        					
+        				</tr>
+        				<tr>
+        					<td class="title">车辆缩略图</td>
+        					<td colspan="3">
+        						<input type="file" name="file1"  id="carIcon">
+        					</td>
+        				</tr>        				     				      				
+					</table>
+				</div>
+				</div>
+				<div class="modal-footer">
+					<button id="impbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="urlAdd();">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>		
+	<!-- 车辆控制-->		
+		<button id="vip" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#vipModal">
+		</button>
+		<div class="modal fade" id="vipModal" tabindex="-1" role="dialog" aria-labelledby="vipModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:700px; padding-top:5%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" id="vipModalLabel">选择控制状态</h5>
+					</div>
+					<div class="modal-body" style="padding-left:10px; padding-top:30px;">
+						<table class="table table-bordered" id="control_table">
+						<tr>
+							<td class="title">车门状态</td>
+							<td>								
+    							<button class="btn btn-sm btn-warning one" id="openDoor" value="1">开门</button>	
+    							<button class="btn btn-sm btn-warning one" id="closeDoor" value="2">关门</button>							
+							</td>
+							<td class="title">车窗状态</td>
+							<td>
+								<button class="btn btn-sm btn-warning one" id="openWin" value="3">开窗</button>	
+    							<button class="btn btn-sm btn-warning one" id="closeWin" value="4">关门</button>
+							</td>										
+						</tr>
+						<tr>
+							<td class="title">鸣笛</td>					
+							<td>
+								<button class="btn btn-sm btn-warning one" id="blow" value="9">鸣笛</button>	    							
+							</td>
+							<td class="title">锁车</td>
+							<td>
+								<button class="btn btn-sm btn-warning one" id="closeCar" value="7">中控锁车</button>
+								<button class="btn btn-sm btn-warning one" id="openCar" value="8">中控解锁</button>
+							</td>
+						</tr>	
+						<tr>
+							<td class="title">双跳状态</td>					
+							<td>
+								<button class="btn btn-sm btn-warning one" id="openDou" value="10">打开双跳</button>	
+    							<button class="btn btn-sm btn-warning one" id="closeDou" value="11">关闭双跳</button>
+							</td>
+							<td class="title">小灯状态</td>
+							<td>
+								<button class="btn btn-sm btn-warning one" id="openLamp" value="12">打开小灯</button>
+								<button class="btn btn-sm btn-warning one" id="closeLamp" value="13">关闭小灯</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="title">近灯状态</td>					
+							<td>
+								<button class="btn btn-sm btn-warning one" id="openlowBeam" value="15">打开近光</button>	    							
+							</td>
+							<td class="title">大灯状态</td>
+							<td>
+								<button class="btn btn-sm btn-warning one" id="openBigBean" value="16">关闭大灯</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="title">后备箱状态</td>					
+							<td>
+								<button class="btn btn-sm btn-warning one" id="openTrunk" value="17">打开后备箱</button>	    							
+							</td>			
+						</tr>												
+					</table>			
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+					</div>
+				</div>			
+			</div>
+		</div>	
+		<!-- 车辆详情-->
+		<button id="Modal" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal"
+			data-target="#memberModal"></button>
+		<div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:700px; padding-top:5%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" id="memberModalLabel">车辆详细信息</h5>
+					</div>
+					<div class="modal-body" style="padding-left:10px; padding-top:30px;height:400px;overflow:auto;">
+					<table class="table table-bordered" id="reviseTab">
+						<tr>
+							<td class="title">车牌号</td>
+							<td><input type="text" value="" name="carNo" id="car_No"></td>
+							<td class="title">车型</td>					
+							<td><input type="text" value="" name="model_Name" id="model_Name"></td>									
+						</tr>
+						<tr>
+							<td class="title">车名</td>
+							<td><input type="text" value="" name="alias" id="Alias"></td>			
+							<td class="title">所属站点</td>
+							<td><input type="text" value="" name="site_Name" id="site_Name"></td>															
+						</tr>						
+						<tr>							
+							<td class="title">终端号</td>
+							<td><input type="text" value="" name="terminalno" id="terminal_No"></td>
+							<td class="title">SIM卡号</td>
+							<td><input type="text" value="" name="SIMNo" id="SIM_No"></td>							
+						</tr>
+						<tr>
+							<td class="title">蓝牙编号</td>
+							<td><input type="text" value="" name="bluetoothNo" id="bluetooth_No"></td>
+							<td class="title">剩余里程(KM)</td>
+							<td><input type="text" value="" name="remainKON" id="remain_KON" disabled="true"></td>
+						</tr>
+						<tr>
+							<td class="title">充电状态</td>
+							<td><input type="text" value="" name="electricityStatus" id="electricity_Status" disabled="true"></td>
+							<td class="title">车辆状态</td>
+							<td><input type="text" value="" name="carRentStatus" id="carRent_Status"></td>
+						</tr>	
+						<tr>
+							<td class="title">剩余电量(%)</td>
+							<td><input type="text" value="" name="electricity" id="electri_city" disabled="true"></td>			
+							<td class="title">创建时间</td>
+							<td><input type="text" value="" name="createTime" id="create_Time" disabled="true"></td>															
+						</tr>
+						<tr>
+							<td class="title">车辆VIN</td>
+							<td><input type="text" value="" name="carVin" id="car_Vin"></td>							
+						</tr>												
+						<tr>
+							<td class="title">行驶证照片</td>
+							<td colspan="3"><img src="" id="car_License" name="" style="width:200px;height:150px;"></td>
+						</tr>						
+						<tr>
+							<td class="title">缩略图</td>
+							<td colspan="3"><img src="" id="car_Icon" name="" style="width:200px;height:150px;"></td>
+						</tr> 
+					</table>											
+				</div>
+				<div class="modal-footer" style="text-align:center;">
+					<button id="yes" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">保存</button>
+				</div>
+			</div>			
+		</div>
+	</div>			
+	<!-- 按钮触发模态框 -->
+	<button id="cat" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#catModal">
+	</button>
+	<div class="modal fade" id="catModal" tabindex="-1" role="dialog"
+		aria-labelledby="catModalLabel" aria-hidden="true" style="top:10%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="catModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="catmsg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			get_carModal();
+		})
+		//车型下拉
+	function get_carModal(){
+		var cookieval=readCookie("companyID");
+		data={'companyID':cookieval}
+		$.ajax({
+			type:'post',
+			dataType:'json',
+			data:data,
+			url:'../../car/loadAllCarModel.do',
+			success:function(data){
+				var d=data.data;
+				for(var i=0;i<d.length;i++){
+					var id=d[i].carModelID;
+					var name=d[i].detailName;
+					var opt="<option value='" + id + "'>" + name + "</option>";
+					$('#carModel').append(opt);
+				}
+			},
+			error:function(){
+				alert('服务异常！');
+			}
+		})
+	}
+	$(document).ready(function(){
+		$('input.textbox').validatebox().bind('blur', function(){
+			$(this).validatebox('enableValidation').validatebox('validate');
+		});
+	})
+	//格式校验
+		$("#impBut").click(function(){
+    	var submit = true;//默认可以提交数据
+    	var td = $("#tab :input[type='text']");
+    		for(var i =0;i<td.length;i++){
+        		if($(td[i]).val() == ''){
+            		submit = false;
+            		alert('输入框不能为空');
+            		$(td[i]).focus();
+            		return;
+        		}
+    		}
+    		if(i == td.length && submit){   
+        		alert('可以提交数据');
+        	//提交数据         
+    		}
+		});
+	</script>
+	<script type="text/javascript">			
+	var now =new Date();
+	//查询时间
+	$('#nameplateTime').datetimepicker({
+		language: 'zh-CN',
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		minView : '2',
+		endDate:now
+	});
+	$('#registrationTime').datetimepicker({
+		language: 'zh-CN',
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		minView:'2',
+		endDate:now
+	});
+	//修改时间
+	$('#nameplate_Time').datetimepicker({
+		language:'zh-CN',
+		format:'yyyy-mm-dd',
+		autoclose:true,
+		minView:'2',
+		endDate:now
+	});
+	$('#registration_Time').datetimepicker({
+		language: 'zh-CN',
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		minView : '2',
+		endDate:now
+	});
+	</script>
+</body>
+</html>

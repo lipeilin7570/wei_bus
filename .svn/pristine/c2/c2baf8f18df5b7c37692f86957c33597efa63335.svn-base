@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.OperatorSysMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.OperatorSys" >
+    <id column="SysOperatorID" property="sysoperatorid" jdbcType="INTEGER" />
+    <result column="SysUseName" property="sysusename" jdbcType="VARCHAR" />
+    <result column="SysLoginName" property="sysloginname" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="RoleID" property="roleid" jdbcType="INTEGER" />
+    <result column="DeptType" property="depttype" jdbcType="INTEGER" />
+    <result column="DutyType" property="dutytype" jdbcType="INTEGER" />
+    <result column="TelPhone" property="telphone" jdbcType="VARCHAR" />
+    <result column="WorkAlarm" property="workalarm" jdbcType="VARCHAR" />
+    <result column="LoginTime" property="logintime" jdbcType="TIMESTAMP" />
+    <result column="LoginIP" property="loginip" jdbcType="VARCHAR" />
+    <result column="LasterTime" property="lastertime" jdbcType="TIMESTAMP" />
+    <result column="LasterIP" property="lasterip" jdbcType="VARCHAR" />
+    <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="LoginCounts" property="logincounts" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+    <result column="Nationality" property="nationality" jdbcType="VARCHAR" />
+    <result column="DrivingType" property="drivingtype" jdbcType="VARCHAR" />
+    <result column="EffectDate" property="effectdate" jdbcType="DATE" />
+    <result column="ExpireDate" property="expiredate" jdbcType="DATE" />
+    <result column="IssuingAgency" property="issuingagency" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SysOperatorID, SysUseName, SysLoginName, CreateTime, RoleID, DeptType, 
+    DutyType, TelPhone, WorkAlarm, LoginTime, LoginIP, LasterTime, LasterIP, UpdateTime, 
+    LoginCounts, Status, Remark, CompanyID, Nationality, DrivingType, EffectDate, ExpireDate, 
+    IssuingAgency
+  </sql>
+  
+  <!-- 根据telPhone查找用户 -->
+  <select id="findByTelPhone"  parameterType="string" resultType="com.wgjev.weibus.entity.OperatorSys">
+  	SELECT * FROM t_system_operators WHERE TelPhone=#{telPhone}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_system_operators
+    where SysOperatorID = #{sysoperatorid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_system_operators
+    where SysOperatorID = #{sysoperatorid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.OperatorSys" >
+    insert into t_system_operators (SysOperatorID, SysUseName, SysPassword, 
+      SysLoginName, CreateTime, RoleID, 
+      DeptType, DutyType, TelPhone, 
+      WorkAlarm, LoginTime, LoginIP, 
+      LasterTime, LasterIP, UpdateTime, 
+      LoginCounts, Status, Remark, 
+      CompanyID, Nationality, DrivingType, 
+      EffectDate, ExpireDate, IssuingAgency
+      )
+    values (#{sysoperatorid,jdbcType=INTEGER}, #{sysusename,jdbcType=VARCHAR}, #{syspassword,jdbcType=VARCHAR}, 
+      #{sysloginname,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{roleid,jdbcType=INTEGER}, 
+      #{depttype,jdbcType=INTEGER}, #{dutytype,jdbcType=INTEGER}, #{telphone,jdbcType=VARCHAR}, 
+      #{workalarm,jdbcType=VARCHAR}, #{logintime,jdbcType=TIMESTAMP}, #{loginip,jdbcType=VARCHAR}, 
+      #{lastertime,jdbcType=TIMESTAMP}, #{lasterip,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{logincounts,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{companyid,jdbcType=INTEGER}, #{nationality,jdbcType=VARCHAR}, #{drivingtype,jdbcType=VARCHAR}, 
+      #{effectdate,jdbcType=DATE}, #{expiredate,jdbcType=DATE}, #{issuingagency,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.OperatorSys" >
+    insert into t_system_operators
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysoperatorid != null" >
+        SysOperatorID,
+      </if>
+      <if test="sysusename != null" >
+        SysUseName,
+      </if>
+      <if test="syspassword != null" >
+        SysPassword,
+      </if>
+      <if test="sysloginname != null" >
+        SysLoginName,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="roleid != null" >
+        RoleID,
+      </if>
+      <if test="depttype != null" >
+        DeptType,
+      </if>
+      <if test="dutytype != null" >
+        DutyType,
+      </if>
+      <if test="telphone != null" >
+        TelPhone,
+      </if>
+      <if test="workalarm != null" >
+        WorkAlarm,
+      </if>
+      <if test="logintime != null" >
+        LoginTime,
+      </if>
+      <if test="loginip != null" >
+        LoginIP,
+      </if>
+      <if test="lastertime != null" >
+        LasterTime,
+      </if>
+      <if test="lasterip != null" >
+        LasterIP,
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime,
+      </if>
+      <if test="logincounts != null" >
+        LoginCounts,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+      <if test="nationality != null" >
+        Nationality,
+      </if>
+      <if test="drivingtype != null" >
+        DrivingType,
+      </if>
+      <if test="effectdate != null" >
+        EffectDate,
+      </if>
+      <if test="expiredate != null" >
+        ExpireDate,
+      </if>
+      <if test="issuingagency != null" >
+        IssuingAgency,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysoperatorid != null" >
+        #{sysoperatorid,jdbcType=INTEGER},
+      </if>
+      <if test="sysusename != null" >
+        #{sysusename,jdbcType=VARCHAR},
+      </if>
+      <if test="syspassword != null" >
+        #{syspassword,jdbcType=VARCHAR},
+      </if>
+      <if test="sysloginname != null" >
+        #{sysloginname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="depttype != null" >
+        #{depttype,jdbcType=INTEGER},
+      </if>
+      <if test="dutytype != null" >
+        #{dutytype,jdbcType=INTEGER},
+      </if>
+      <if test="telphone != null" >
+        #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="workalarm != null" >
+        #{workalarm,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null" >
+        #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginip != null" >
+        #{loginip,jdbcType=VARCHAR},
+      </if>
+      <if test="lastertime != null" >
+        #{lastertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lasterip != null" >
+        #{lasterip,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logincounts != null" >
+        #{logincounts,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="nationality != null" >
+        #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="drivingtype != null" >
+        #{drivingtype,jdbcType=VARCHAR},
+      </if>
+      <if test="effectdate != null" >
+        #{effectdate,jdbcType=DATE},
+      </if>
+      <if test="expiredate != null" >
+        #{expiredate,jdbcType=DATE},
+      </if>
+      <if test="issuingagency != null" >
+        #{issuingagency,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.OperatorSys" >
+    update t_system_operators
+    <set >
+      <if test="sysusename != null" >
+        SysUseName = #{sysusename,jdbcType=VARCHAR},
+      </if>
+      <if test="syspassword != null" >
+        SysPassword = #{syspassword,jdbcType=VARCHAR},
+      </if>
+      <if test="sysloginname != null" >
+        SysLoginName = #{sysloginname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleid != null" >
+        RoleID = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="depttype != null" >
+        DeptType = #{depttype,jdbcType=INTEGER},
+      </if>
+      <if test="dutytype != null" >
+        DutyType = #{dutytype,jdbcType=INTEGER},
+      </if>
+      <if test="telphone != null" >
+        TelPhone = #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="workalarm != null" >
+        WorkAlarm = #{workalarm,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null" >
+        LoginTime = #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginip != null" >
+        LoginIP = #{loginip,jdbcType=VARCHAR},
+      </if>
+      <if test="lastertime != null" >
+        LasterTime = #{lastertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lasterip != null" >
+        LasterIP = #{lasterip,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logincounts != null" >
+        LoginCounts = #{logincounts,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="nationality != null" >
+        Nationality = #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="drivingtype != null" >
+        DrivingType = #{drivingtype,jdbcType=VARCHAR},
+      </if>
+      <if test="effectdate != null" >
+        EffectDate = #{effectdate,jdbcType=DATE},
+      </if>
+      <if test="expiredate != null" >
+        ExpireDate = #{expiredate,jdbcType=DATE},
+      </if>
+      <if test="issuingagency != null" >
+        IssuingAgency = #{issuingagency,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SysOperatorID = #{sysoperatorid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.OperatorSys" >
+    update t_system_operators
+    set SysUseName = #{sysusename,jdbcType=VARCHAR},
+      SysPassword = #{syspassword,jdbcType=VARCHAR},
+      SysLoginName = #{sysloginname,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      RoleID = #{roleid,jdbcType=INTEGER},
+      DeptType = #{depttype,jdbcType=INTEGER},
+      DutyType = #{dutytype,jdbcType=INTEGER},
+      TelPhone = #{telphone,jdbcType=VARCHAR},
+      WorkAlarm = #{workalarm,jdbcType=VARCHAR},
+      LoginTime = #{logintime,jdbcType=TIMESTAMP},
+      LoginIP = #{loginip,jdbcType=VARCHAR},
+      LasterTime = #{lastertime,jdbcType=TIMESTAMP},
+      LasterIP = #{lasterip,jdbcType=VARCHAR},
+      UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      LoginCounts = #{logincounts,jdbcType=INTEGER},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CompanyID = #{companyid,jdbcType=INTEGER},
+      Nationality = #{nationality,jdbcType=VARCHAR},
+      DrivingType = #{drivingtype,jdbcType=VARCHAR},
+      EffectDate = #{effectdate,jdbcType=DATE},
+      ExpireDate = #{expiredate,jdbcType=DATE},
+      IssuingAgency = #{issuingagency,jdbcType=VARCHAR}
+    where SysOperatorID = #{sysoperatorid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 根据loginName查找用户 -->
+  <select id="findByLoginName"  parameterType="string" resultType="com.wgjev.weibus.entity.OperatorSys">
+  	SELECT * FROM t_system_operators WHERE SysLoginName=#{loginname}
+  </select>
+  
+  <!-- 根据status查找用户列表 -->
+  <select id="findByStatus"  parameterType="int" resultType="com.wgjev.weibus.entity.OperatorSys">
+  	SELECT * FROM t_system_operators WHERE Status=#{status}
+  </select>
+  
+  <!-- 加载所有操作员的信息 -->
+  <select id="findAllOperators" resultMap="BaseResultMap">
+  	SELECT * FROM t_system_operators 
+  </select>
+  
+  <!-- 模糊查询 -->
+  <select id="dimFindOperator"  parameterType="map" resultMap="BaseResultMap">
+  	SELECT * FROM t_system_operators 
+  	<trim prefix="WHERE" prefixOverrides="AND|OR">
+  		<if test="userName != null and userName !=''">
+  			SysUseName LIKE CONCAT(CONCAT('%', #{userName}), '%')
+  		</if>
+  		<if test="loginName != null and loginName !=''">
+  			AND SysLoginName LIKE CONCAT(CONCAT('%', #{loginName}), '%')
+  		</if>
+  		<if test="telPhone != null and telPhone !=0">
+  			AND TelPhone LIKE CONCAT(CONCAT('%', #{telPhone}), '%')
+  		</if>
+  		<if test="deptType != null and deptType !='0'">
+  			AND DeptType=#{deptType}
+  		</if>
+  		<if test="status != null and status !=0">
+  			AND Status=#{status}
+  		</if>
+  		<if test="companyID != null and companyID !=0">
+  			AND CompanyID=#{companyID}
+  		</if>
+  	</trim>
+  </select>
+  
+  
+  
+  
+</mapper>

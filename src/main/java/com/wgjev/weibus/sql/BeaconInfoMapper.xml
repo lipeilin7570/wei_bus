@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.BeaconInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.BeaconInfo" >
+    <id column="BeaconID" property="beaconid" jdbcType="INTEGER" />
+    <result column="BeaconNo" property="beaconno" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UUID" property="uuid" jdbcType="VARCHAR" />
+    <result column="Major" property="major" jdbcType="VARCHAR" />
+    <result column="Minor" property="minor" jdbcType="VARCHAR" />
+    <result column="MAC" property="mac" jdbcType="VARCHAR" />
+    <result column="Position" property="position" jdbcType="VARCHAR" />
+    <result column="FixTime" property="fixtime" jdbcType="TIMESTAMP" />
+    <result column="SiteID" property="siteid" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="OptID" property="optid" jdbcType="INTEGER" />
+    <result column="OptName" property="optname" jdbcType="VARCHAR" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    BeaconID, BeaconNo, CreateTime, UUID, Major, Minor, MAC, Position, FixTime, SiteID, 
+    Status, Remark, OptID, OptName, CompanyID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_beacon
+    where BeaconID = #{beaconid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_beacon
+    where BeaconID = #{beaconid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.BeaconInfo" >
+    insert into t_info_beacon (BeaconID, BeaconNo, CreateTime, 
+      UUID, Major, Minor, 
+      MAC, Position, FixTime, 
+      SiteID, Status, Remark, 
+      OptID, OptName, CompanyID
+      )
+    values (#{beaconid,jdbcType=INTEGER}, #{beaconno,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{uuid,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{minor,jdbcType=VARCHAR}, 
+      #{mac,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{fixtime,jdbcType=TIMESTAMP}, 
+      #{siteid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{optid,jdbcType=INTEGER}, #{optname,jdbcType=VARCHAR}, #{companyid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.BeaconInfo" >
+    insert into t_info_beacon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="beaconid != null" >
+        BeaconID,
+      </if>
+      <if test="beaconno != null" >
+        BeaconNo,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="uuid != null" >
+        UUID,
+      </if>
+      <if test="major != null" >
+        Major,
+      </if>
+      <if test="minor != null" >
+        Minor,
+      </if>
+      <if test="mac != null" >
+        MAC,
+      </if>
+      <if test="position != null" >
+        Position,
+      </if>
+      <if test="fixtime != null" >
+        FixTime,
+      </if>
+      <if test="siteid != null" >
+        SiteID,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="optid != null" >
+        OptID,
+      </if>
+      <if test="optname != null" >
+        OptName,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="beaconid != null" >
+        #{beaconid,jdbcType=INTEGER},
+      </if>
+      <if test="beaconno != null" >
+        #{beaconno,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="minor != null" >
+        #{minor,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null" >
+        #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="fixtime != null" >
+        #{fixtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="siteid != null" >
+        #{siteid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="optid != null" >
+        #{optid,jdbcType=INTEGER},
+      </if>
+      <if test="optname != null" >
+        #{optname,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.BeaconInfo" >
+    update t_info_beacon
+    <set >
+      <if test="beaconno != null" >
+        BeaconNo = #{beaconno,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uuid != null" >
+        UUID = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        Major = #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="minor != null" >
+        Minor = #{minor,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null" >
+        MAC = #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        Position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="fixtime != null" >
+        FixTime = #{fixtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="siteid != null" >
+        SiteID = #{siteid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="optid != null" >
+        OptID = #{optid,jdbcType=INTEGER},
+      </if>
+      <if test="optname != null" >
+        OptName = #{optname,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where BeaconID = #{beaconid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.BeaconInfo" >
+    update t_info_beacon
+    set BeaconNo = #{beaconno,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      UUID = #{uuid,jdbcType=VARCHAR},
+      Major = #{major,jdbcType=VARCHAR},
+      Minor = #{minor,jdbcType=VARCHAR},
+      MAC = #{mac,jdbcType=VARCHAR},
+      Position = #{position,jdbcType=VARCHAR},
+      FixTime = #{fixtime,jdbcType=TIMESTAMP},
+      SiteID = #{siteid,jdbcType=INTEGER},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      OptID = #{optid,jdbcType=INTEGER},
+      OptName = #{optname,jdbcType=VARCHAR},
+      CompanyID = #{companyid,jdbcType=INTEGER}
+    where BeaconID = #{beaconid,jdbcType=INTEGER}
+  </update>
+</mapper>

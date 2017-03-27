@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.CarModelJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.CarModelJson" >
+    <id column="ModelDetailID" property="carModelID" jdbcType="INTEGER" />
+    <result column="DetailName" property="detailName" jdbcType="VARCHAR" />
+    <result column="Seats" property="people" jdbcType="INTEGER" />
+    <result column="CarIcon" property="carModelIcon" jdbcType="VARCHAR" />
+    <result column="Alias" property="alias" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="loadAllCarModelJsonByCompanyID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+	md.ModelDetailID,md.DetailName,md.CarIcon,md.Seats,cm.Alias
+	FROM t_info_modeldetail md
+	LEFT JOIN t_info_carmodel cm ON cm.CarModelID=md.CarModelID
+	WHERE md.CompanyID=#{companyID,jdbcType=INTEGER}
+  </select>
+
+</mapper>

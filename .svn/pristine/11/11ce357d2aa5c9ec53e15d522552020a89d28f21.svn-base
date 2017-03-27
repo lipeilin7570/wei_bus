@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.DictTypeSysMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.DictTypeSys" >
+    <id column="SysDictTypeID" property="sysdicttypeid" jdbcType="INTEGER" />
+    <result column="SysDictTypeName" property="sysdicttypename" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SysDictTypeID, SysDictTypeName, Status, Remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_system_dict_type
+    where SysDictTypeID = #{sysdicttypeid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_system_dict_type
+    where SysDictTypeID = #{sysdicttypeid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.DictTypeSys" >
+    insert into t_system_dict_type (SysDictTypeID, SysDictTypeName, Status, 
+      Remark)
+    values (#{sysdicttypeid,jdbcType=INTEGER}, #{sysdicttypename,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.DictTypeSys" >
+    insert into t_system_dict_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysdicttypeid != null" >
+        SysDictTypeID,
+      </if>
+      <if test="sysdicttypename != null" >
+        SysDictTypeName,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysdicttypeid != null" >
+        #{sysdicttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="sysdicttypename != null" >
+        #{sysdicttypename,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.DictTypeSys" >
+    update t_system_dict_type
+    <set >
+      <if test="sysdicttypename != null" >
+        SysDictTypeName = #{sysdicttypename,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SysDictTypeID = #{sysdicttypeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.DictTypeSys" >
+    update t_system_dict_type
+    set SysDictTypeName = #{sysdicttypename,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR}
+    where SysDictTypeID = #{sysdicttypeid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="loadAllDictTypes" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_system_dict_type
+  </select>
+  
+  
+  
+  
+</mapper>

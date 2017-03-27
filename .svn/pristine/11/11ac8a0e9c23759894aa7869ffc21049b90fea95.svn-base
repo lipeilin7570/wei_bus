@@ -1,0 +1,179 @@
+$(document).ready(function(){
+    search();
+})
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){
+    return res;
+}
+function search() {
+    $('#tab').bootstrapTable({
+        method:'post',
+        url:'',
+        cache:false,
+        height:"auto",
+        striped:true,
+        pagination:true,
+        pageList:[ 10, 20 ],
+        pageSize:10,
+        pageNumber:1,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:queryParams,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"siteid",
+        sortOrder:"desc",
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                checkbox:true
+            }, {
+                field:'orderAccount',
+                title:'订单账号',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'orderCode',
+                title:'订单编号',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'carNum',
+                title:'车牌号',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'startTime',
+                title:'开始时间',
+                align:'center',
+                valign:'middle',
+                formatter:dateFormatter,
+                sortable:true
+            }, {
+                field:'endTime',
+                title:'结束时间',
+                align:'center',
+                valign:'middle',
+                formatter:dateFormatter,
+                sortable:true            
+            }, {
+                field:'status',
+                title:'站点状态',
+                align:'center',
+                valign:'middle',
+                formatter:statusFormatter
+            }, {
+                field:'adminMan',
+                title:'操作人员',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'reason',
+                title:'更改原因',
+                align:'center',
+                valign:'middle',
+                width:'100px'
+            }
+        ],
+        onLoadSuccess:function(data){
+            //alert("success");
+        	console.log(data);
+        },
+        onLoadError:function(){
+            //location.reload();
+        }
+    });
+};
+//得到查询的参数
+var sn;
+var so;
+function queryParams(params){
+    sn=params.sortName;
+    so=params.sortOrder;
+    return{
+        pageSize:params.pageSize,
+        pageNumber:params.pageNumber,
+        sortName:params.sortName,
+        sortOrder:params.sortOrder,
+        orderAccount:$('#orderAccount').val(),
+        orderCode:$('#orderCode').val(),
+        status:$('#status').val(),
+        carNum:$('#carNum').val(),
+        startTime:$('#startTime').val(),
+        endTime:$('#endTime').val()
+    };
+};
+function dateFormatter(value, row, index){
+    var myDate=new  Date();
+    myDate.setTime(row.createTime);
+    return myDate.formatter('yy-MM-dd')
+}
+//站点状态
+function statusFormatter(value,row,index){
+	var status;
+	switch(value){
+		case 1:
+			status='已预约';
+			break;
+		case 2:
+			status="已取消";
+			break;
+		case 3:
+			status='已提车';
+			break;
+		case 4:
+			status="已还车";
+			break;
+		case 5:
+			status='已支付';
+			break;
+		case 6:
+			status="已完成";
+			break;
+		default :
+			status='';
+			break;
+	}
+	return status;
+}
+
+//新增
+function add(){
+    $('#impload').click();
+}
+var now =new Date();
+$('#startTime').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+$('#endTime').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+function doreset(){
+    $("#startTime").datetimepicker('setEndDate', now);
+    $("#endTime").datetimepicker('setStartDate', null);
+}
+$(function(){
+    $("#startTime").on("changeDate", function (e) {
+        var start = new Date(Date.parse($("#startTime").val()));
+        $('#endTime').datetimepicker('setStartDate', start);
+    });
+    $("#endTime").on("changeDate", function (e) {
+        var end = new Date(Date.parse($("#endTime").val()));
+        $('#startTime').datetimepicker('setEndDate', end);
+    });
+})

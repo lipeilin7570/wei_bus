@@ -1,0 +1,173 @@
+$(document).ready(function(){
+    search();
+})
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){
+    return res;
+}
+function search() {
+    $('#tab').bootstrapTable({
+        method:'post',
+        url:'',
+        cache:false,
+        height:"auto",
+        striped:true,
+        pagination:true,
+        pageList:[ 10, 20 ],
+        pageSize:10,
+        pageNumber:1,
+        //search : true,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:queryParams,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"accidentNum",
+        sortOrder:"desc",
+        //showColumns : true,
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                width:'30px',
+                checkbox:true
+            }, {
+                field:'accidentNum',
+                title:'事故编号',
+                align:'center',
+                valign:'middle',
+                width:'50px',
+                sortable:true            
+            }, {
+                field:'carNum',
+                title:'车牌号',
+                align:'center',
+                valign:'middle',
+                width:'50px',                                
+            }, {
+                field:'accidentStatus',
+                title:'故障状态',
+                align:'center',
+                valign:'middle',
+                formatter:accidentStatusFormatter,
+                width:'50px'
+            }, {
+                field:'handing',
+                title:'处理方式',
+                align:'center',
+                valign:'middle',
+                width:'50px'
+            }, {
+                field:'accidentTime',
+                title:'发生时间',
+                align:'center',
+                valign:'middle',
+                formatter:dateFormatter,
+                width:'50px'
+            }, {
+                field:'completeTime',
+                title:'处理时间',
+                align:'center',
+                valign:'middle',
+                formatter:dateFormatter,
+                width:'50px'
+            }, {
+                field:'createTime',
+                title:'创建时间',
+                align:'center',
+                valign:'middle',
+                formatter:dateFormatter,
+                width:'50px'            
+            }, {
+                field:'operator',
+                title:'操作员',
+                align:'center',
+                valign:'middle',
+                width:'50px'            
+            }, {
+                field: 'auditMan',
+                title: '审核人',
+                align: 'center',
+                valign: 'middle',
+                width: '50px'
+            }
+        ],
+        onLoadSuccess:function(){
+            //alert("success");
+        },
+        onLoadError:function(){
+            location.reload();
+        }
+    });
+};
+var sn;
+var so;
+function queryParams(params) {
+    sn = params.sortName;
+    so = params.sortOrder;
+    return {
+        pageSize: params.pageSize,
+        pageNumber: params.pageNumber,
+        sortName: params.sortName,
+        sortOrder: params.sortOrder,
+        accidentNum: $('#accidentNum').val(),
+        carNum: $('#carNum').val(),
+        userId: $('#userId').val(),
+        carID: $('#carID').val(),
+        accidentTime: $('#accidentTime').val(),
+        handing: $('#handing').val(),
+        accidentStatus: $('#accidentStatus').val(),
+        completeTime: $('#completeTime').val()
+    };
+}
+function dateFormatter(value, row, index){
+    var myDate=new  Date();
+    myDate.setTime(row.createTime);
+    return myDate.formatter('yy-MM-dd')
+}
+function accidentStatusFormatter(value,row,index){
+    var accidentStatus;
+    switch(value)
+    {
+        case 1:
+            accidentStatus='未处理';
+            break;
+        case 2:
+            accidentStatus='已处理';
+            break;
+        case 3:
+            accidentStatus='已撤销';
+            break;
+        default :
+            accidentStatus='';
+            break
+    }
+    return accidentStatus;
+}
+var now =new Date();
+$('#accidentTime').datetimepicker({
+    language:'zh',
+    format:'yyyy-mm-dd',
+    autoclose:true,
+    minView:2,
+    endDate:now
+});
+$('#completeTime').datetimepicker({
+    language:'zh',
+    format:'yyyy-mm-dd',
+    autoclose:true,
+    minView:2,
+    endDate:now
+});
+$(function(){
+    $("#accidentTime").on("changeDate", function (e) {
+        var accident = new Date(Date.parse($("#accidentTime").val()));
+        $('#completeTime').datetimepicker('setStartDate', accident);
+    });
+    $("#completeTime").on("changeDate", function (e) {
+        var complete = new Date(Date.parse($("#completeTime").val()));
+        $('#accidentTime').datetimepicker('setEndDate', complete);
+    });
+})

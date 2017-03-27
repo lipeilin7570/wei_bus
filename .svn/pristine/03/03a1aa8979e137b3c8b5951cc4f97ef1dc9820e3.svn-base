@@ -1,0 +1,306 @@
+$(document).ready(function(){
+    search();
+})
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){
+    return res;
+}
+//加载所有区域信息
+function search() {
+	var cookieval=readCookie("companyID");
+	var data={
+			'companyID':cookieval
+	}
+    $('#tab').bootstrapTable({
+        method:'POST',
+        processData :true,
+        dataType:"json",   
+        url:'../../price/loadCompanyPrice.do',
+        cache:false,
+        height:"auto",
+        striped:true,
+        pagination:true,
+        pageList:[ 10, 20 ],
+        pageSize:8,
+        pageNumber:1,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:data,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"priceID",
+        sortOrder:"desc",
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                checkbox:true
+            }, {
+                field:'priceName',
+                title:'价格名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'priceVersion',
+                title:'版本',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'carModelName',
+                title:'车型',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'hourPrice',
+                title:'单价/元',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'startPrice',
+                title:'起步价/元',
+                align:'center',
+                valign:'middle'            
+            }, {
+                field:'freeTime',
+                title:'优惠时长/分钟',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'weekPrice',
+                title:'周租/元',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'dayBeginTime',
+                title:'白天开始时间',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'dayEndTime',
+                title:'白天结束时间',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'dayPrice',
+                title:'日租/元',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'nightPrice',
+                title:'夜租/元',
+                align:'center',
+                valign:'middle'            
+            }, {
+                field:'companyName',
+                title:'所属公司',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'status',
+                title:'状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+                formatter:statusFormatter
+            }, {
+                field:'createMan',
+                title:'创建人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',         
+                valign:'middle'                      
+            }, {
+            	 field: 'operation',
+                 title: '操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                 valign:'middle',
+                 formatter:operationFormatter,
+                 events:operateEvents
+            }
+        ],
+        onLoadSuccess:function(data){
+        	//alert("success");
+        },
+        onLoadError:function(data){
+            //location.reload();
+        }
+    });
+};
+function operationFormatter(value, row, index){
+    return [
+        '<a class="edit" href="javascript:void(0)" title="Like">价格修改</a>',                         
+    ].join('');
+}
+window.operateEvents = {
+	    'click .edit': function (e, value, row, index) {	    	
+	    	 $('#price_table').attr('data-id',row.priceID);
+//       	 	var priceid=row.priceID;
+       	 	var priceversion=row.priceVersion;
+       	 	var pricename=row.priceName;
+       	 	var carmodel=row.carModel;
+       	 	var hourprice=row.hourPrice;
+       	 	var startprice=row.startPrice;
+       	 	var dayprice=row.dayPrice;
+       	 	var freetime=row.freeTime;
+       	 	var nightprice=row.nightPrice;
+       	 	var weekprice=row.weekPrice;
+       	 	var dayBegintime=row.dayBeginTime;      	
+       	 	var dayEndtime=row.dayEndTime;
+       	 	var startcharge=row.startCharge;     	 
+       	 	$('#PriceVersion').val(priceversion);
+       	 	$('#PriceName').val(pricename);
+       	 	$('#CarModel').val(carmodel);
+       	 	$('#HourPrice').val(hourprice);
+       	 	$('#FreeTime').val(freetime);
+       	 	$('#StartPrice').val(startprice);
+       	 	$('#DayPrice').val(dayprice);
+       	 	$('#NightPrice').val(nightprice);
+       	 	$('#WeekPrice').val(weekprice);
+       	 	$('#DayBeginTime').val(dayBegintime);
+       	 	$('#DayEndTime').val(dayEndtime);
+       	 	$('#StartCharge').val(startcharge);
+       	 	$('#editLoad').click();
+	    } 
+	};
+//价格表修改
+$(function(){
+	$('#editbut').click(function(){	 
+		var cookieval=readCookie("operateID");
+	        data={
+	        	'operatorID':cookieval,
+	        	'priceID':$('#price_table').attr('data-id'),
+	        	'priceVersion':$('#PriceVersion').val(),
+	        	'priceName':$('#PriceName').val(),
+	        	'carModel':$('#CarModel').val(),
+	        	'hourPrice':$('#HourPrice').val(),
+	        	'startPrice':$('#StartPrice').val(),
+	        	'dayPrice':$('#DayPrice').val(),
+	        	'nightPrice':$('#NightPrice').val(),
+	        	'weekPrice':$('#WeekPrice').val(),	 	        	
+	        	'dayBeginTime':$('#DayBeginTime').val(),
+	        	'dayEndTime':$('#DayEndTime').val(),
+	        	'startCharge':$('#StartCharge').val(),
+	        	'freeTime':$('#FreeTime').val(),
+	        	'hourMileage':0,
+	        	'dayMileage':0,	 	        	
+	        	'nightMileage':0,
+	        	'weekMileage':0,
+	        	'superPrice':0,
+	        };
+	        $.ajax({		
+				   type:"post",
+				   dataType:"json",
+				   url: "../../price/changeCompanyPrice.do",    	    
+				   data:data,
+				   success: function (data) {	       					   
+					   if(data.status==0){ 
+						    $('#del_btn').click();
+		        			$('.del_msg').text("修改成功！");
+						     search();
+						     ss();
+				    	}else if(data.status==101){
+				    		$('#del_btn').click();
+		        			$('.del_msg').text("调价版本不能低于旧版本！");
+				    	}else{
+				    		$('#del_btn').click();
+		        			$('.del_msg').text("系统错误！");
+				    	}     				    	     				    		 	    				    		
+				    },
+				    error: function (data){	
+				    	$('#del_btn').click();
+	        			$('.del_msg').text("服务异常！");	
+				    }
+			})		
+	    	    
+    })
+})
+//新增价格表
+function add(){
+	$('#impload').click();
+}
+function urlSubmit(){
+	var cookieval=readCookie("operateID");
+	var cookievalS=readCookie("companyID");
+	var data={
+			'operatorID':cookieval, 
+			'companyID':cookievalS,
+			'priceName':$('#pricename').val(), 
+			'carModel':$('#carModel').val(),
+			'hourPrice':$('#hourPrice').val(),
+			'startPrice':$('#startPrice').val(),
+			'freeTime':$('#freeTime').val(),				
+			'dayPrice':$('#dayPrice').val(),
+			'nightPrice':$('#nightPrice').val(),
+			'weekPrice':$('#weekPrice').val(),
+			'superPrice':$('#superPrice').val(),
+			'dayBeginTime':$('#dayBeginTime').val(),
+			'dayEndTime':$('#dayEndTime').val(),
+			'startCharge':$('#startCharge').val()
+//			'hourMileage':0.0,
+//	        'dayMileage':0.0,	 	        	
+//	        'nightMileage':0.0,
+//	        'weekMileage':0.0
+	        
+	};			         				
+	$.ajax({		
+		type:"post",
+		dataType:"json",
+		url: "../../price/addPrice.do",    	    
+		data:data,
+		success: function (data){	
+			if(data.status==0){  
+				$('#del_btn').click();
+    			$('.del_msg').text("保存成功！");
+		    		search();
+			    	ss();
+		    	} else {
+		    		$('#del_btn').click();
+        			$('.del_msg').text("保存失败！");
+		    	}        				         					   				    	     				    		 	    				    		
+		},
+		error: function (result){	   	    	
+//				alert("1");	
+		}
+	})	  
+ 
+}
+//得到查询的参数
+var sn;
+var so;
+function queryParams(params){
+    sn=params.sortName;
+    so=params.sortOrder;
+    return{
+        pageSize:params.pageSize,
+        pageNumber:params.pageNumber,
+        sortName:params.sortName,
+        sortOrder:params.sortOrder,
+        name:$('#name').val(),
+        regionNo:$('#regionNo').val(),
+        regionid:$('#regionid').val(),
+        zcode:$('#zcode').val(),       
+    };
+};
+//价格表状态
+function statusFormatter(value,row,index){
+	var status;
+	switch(value){
+		case 1:
+			status='正常';
+			break;
+		case 2:
+			status="已调价";
+			break;
+		case 3:
+			status="作废";
+			break;
+		default :
+			status='';
+			break;
+	}
+	return status;
+}

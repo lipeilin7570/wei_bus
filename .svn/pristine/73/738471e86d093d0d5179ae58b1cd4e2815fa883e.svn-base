@@ -1,0 +1,142 @@
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+}
+body{overflow:auto;}
+/***************************head*********************************/
+#header {
+	background-color: #3E78C1;
+	height:10%;
+}
+#header img {
+	margin-left:15px;
+}
+table p {
+	font-size: 18px;
+	color: #fff;
+}
+/***********************************aside**********************************/
+#aside {
+	width:20%;
+	height:85%;
+	position:fixed;
+	overflow:auto;
+	overflow-y:auto;	
+	background-color:#262D37;
+}
+.aside-main img {
+	padding-left:25px;
+	padding-right:10px;
+}
+.aside-waistband {
+	width:20%;
+	height:50px;
+	background-color: #6FBA2C;
+}
+.waistband {
+	padding-top:15px;
+}
+.waistband img {
+	float:right;
+	margin-right:10px;
+}
+.open a {
+	font-size: 14px;
+	color: #B4B9BF;
+}
+.line {
+	border-top: 1px solid #222933;
+}
+.hide_line {
+	border-top: 1px solid #273750;
+}
+.derect {
+	color: #fff;
+	font-size: 16px;
+	valign: middle;
+}
+#li-1 {
+	padding-top: 20px;
+}
+.aside-main>li {
+	margin-bottom: 20px;
+	list-style: none;
+}
+.aside-main ul {
+	background-color: #2F405C;
+}
+.aside-main li span {
+	padding-left: 20px;
+	cursor: pointer;
+}
+.show {
+	background-color: #2F405C;
+}
+.show>li {
+	font-size: 14px;
+	padding-left: 80px;
+	padding-top: 5px;
+	margin-top: 15px;
+	list-style-type: none;
+}
+.show>li a {
+	text-decoration: none;
+	color: #B4B9BF;
+}
+.open {
+	background: url("../imgs/inco/jiantou_down.png") no-repeat;
+	margin-left: 75px;
+}
+.closed {
+	background: url("../imgs/inco/jiantou2.png") no-repeat;
+	margin-left: 75px;
+}
+.yuan {
+	background: url('../imgs/inco/yuan.png') no-repeat
+}
+.show {
+	display: block;
+}
+.hide {
+	display: none;
+}
+.body {
+	position:absolute;
+	width:75%;
+	height:80%;
+	left:21%;
+	top:12%;
+	background-color: #F5F6FA;
+}
+/****************************************modal****************************/
+.modal-header {
+	background-color: #1b6d85;
+}
+#impbut {
+	margin-right: 45%;
+}
+.modal-form input {
+	margin-bottom: 10px;
+}
+.title{
+	background-color:#F6F6F6;
+}
+/*************************************footer********************************/
+#table01 {
+	background-color: #DDF3FF;
+	bottom: 10px;
+	left: 0px;
+	heigh: 133px;
+}
+.td01, .td02 {
+	font-family: Microsoft YaHei;
+	font-size: 12px;
+	font-weight: bold;
+}
+#footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	margin-left: 0;
+}

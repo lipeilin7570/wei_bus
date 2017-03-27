@@ -1,0 +1,420 @@
+<!doctype html>
+<html>
+	<head>
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="css/roles.css" />
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/bootstrap-table.min.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />		
+		<script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+		<script src="js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+		<script src="js/bootstrap/bootstrap-table.js" type="text/javascript"></script>
+		<script src="js/bootstrap/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+		<script src="js/bootstrap/bootstrap-datetimepicker.js" type="text/javascript"></script>
+		<script src="js/bootstrap/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+		<script src="js/bootstrap/bootstrap-datetimepicker.fr.js" type="text/javascript"></script>
+		<script src="js/bootbox.js" type="text/javascript"></script>
+		<script src="js/common2.js" type="text/javascript"></script>
+		<script src="js/homePage.js" type="text/javascript"></script>
+		<style>
+			#search{
+				width:1000px;height:30%;								
+			}
+			#view{				
+				width:1000px;height:70%;
+				background-color:#F6F6F6;
+				position:relative;
+				float:left;
+			}
+			#view li{margin-left:13px;}
+			table{
+				 margin-top:15px;padding-left:20px; display:inline-block
+			}			
+			.member,.order,.cars,
+			.abnormal,.coupon,.finance{
+				float:left;
+				width:310px;height:290px;
+				border:1px solid #ddd;	
+				margin:8px 8px;			
+			}
+			#btns{margin-left:8%;}
+			.img_size{width:50px;height:50px;}
+			.totle{color:red;}
+			.single{color:green;}
+			.member_li{margin-top:20px;}
+			.li_rank{float:left;list-style-type:none;text-align:center;}
+			.rank_li li{list-style-type:none;}
+			hr{clear:both;color:#F5F6FA;padding-top:10px;}						
+		</style>		
+	</head>
+	<body>
+		<div id="search">
+			<div class="panel center-block">				
+				<div id="custom-toolbar"><br/>
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="startTime" class="col-sm-2 control-label">起始日期</label>
+							<div class="col-sm-2">
+								<input type="text" id="startTime" class="form-control" value=""/>
+							</div>
+							<label for="endTime" class="col-sm-2 control-label">结束日期</label>
+							<div class="col-sm-2">
+								<input type="text" id="endTime" class="form-control" value=""/>
+							</div>
+							<div class="col-sm-4">
+								<button type="button" class="btn btn-info" onclick="ss();">搜索</button>
+								<button type="button" class="btn btn-danger" onclick="doreset();">重置</button>
+							</div>
+						</div>
+						<div class="form-group" id="btns">						
+							<button type="button" id="today" class="btn btn-success">今&nbsp;&nbsp;天</button>&nbsp;&nbsp;&nbsp;&nbsp;
+							<button type="button" id="yesterday" class="btn btn-warning">昨&nbsp;&nbsp;天</button>&nbsp;&nbsp;&nbsp;&nbsp;	
+							<button type="button" id="dayBefore" class="btn btn-warning">前&nbsp;&nbsp;天</button>&nbsp;&nbsp;&nbsp;&nbsp;
+							<button type="button" id="thisWeek" class="btn btn-warning">本&nbsp;&nbsp;周</button>&nbsp;&nbsp;&nbsp;&nbsp;	
+							<button type="button" id="lastWeek" class="btn btn-warning">上&nbsp;&nbsp;周</button>&nbsp;&nbsp;&nbsp;&nbsp;
+							<button type="button" id="thisMonth" class="btn btn-warning">本&nbsp;&nbsp;月</button>&nbsp;&nbsp;&nbsp;&nbsp;	
+							<button type="button" id="lastMonth" class="btn btn-warning">上&nbsp;&nbsp;月</button>&nbsp;&nbsp;&nbsp;&nbsp;						
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div id="view">		
+			<div class="member"><!-- 会员 -->
+				<ul class="member_li">
+					<li class="li_rank">
+						<img src="imgs/inco/inco1.jpg" class="img_size">
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="UserAll" class="totle"></span></li>
+							<li>全部已注册</li>
+						</ul>						
+					</li>					
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="UserReged" class="single"></span></li>
+							<li>已认证</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="UserReging" class="single"></span></li>
+							<li>认证中</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<ul>					
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="UserAdd" class="totle"></span></li>
+							<li>新增已注册</li>
+						</ul>						
+					</li>					
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="UserAddReged" class="single"></span></li>
+							<li>已认证</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="UserAddReging" class="single"></span></li>
+							<li>认证中</li>
+						</ul>
+					</li>
+				</ul>																	
+			</div>
+			<div class="order"><!-- 订单 -->								
+					<ul class="order_li" style="margin-top:20px;">
+						<li class="li_rank">
+							<img src="imgs/inco/inco2.jpg" class="img_size">
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseReserve" class="totle"></span></li>
+								<li>已预约</li>
+							</ul>
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseGet" class="single"></span></li>
+								<li>已提车</li>
+							</ul>
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseCancel" class="single"></span></li>
+								<li>已取消</li>
+							</ul>
+						</li>
+					</ul>	
+					<hr/>			
+					<ul>			
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseFee" class="totle"></span></li>
+								<li>费用总额</li>																
+							</ul>
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseCoupon" class="single"></span></li>
+								<li>优惠金额</li>																
+							</ul>
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeasePay" class="single"></span></li>
+								<li>实付金额</li>																
+							</ul>
+						</li>
+					</ul>
+					<hr/>
+					<ul>						
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseAddReserve" class="totle"></span></li>
+								<li>新增已预约</li>
+							</ul>
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseAddGet" class="single"></span></li>
+								<li>已提车</li>
+							</ul>
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseAddCancel" class="single"></span></li>
+								<li>已取消</li>
+							</ul>
+						</li>
+					</ul>
+					<hr/>	
+					<ul>			
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseAddFee" class="totle"></span></li>
+								<li>新增总额</li>																
+							</ul>
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseAddCoupon" class="single"></span></li>
+								<li>优惠金额</li>																
+							</ul>
+						</li>
+						<li class="li_rank">
+							<ul class="rank_li">
+								<li><span id="LeaseAddPay" class="single"></span></li>
+								<li>实付金额</li>																
+							</ul>
+						</li>
+					</ul>								
+			</div>
+			<div class="cars"><!-- 车辆 -->
+				<ul class="cars_li" style="margin-top:20px;">
+					<li class="li_rank">
+						<img src="imgs/inco/inco3.jpg" class="img_size">
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CarAll" class="totle"></span></li>
+							<li>车辆总数</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CarActive" class="single"></span></li>
+							<li>启用数</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CarUnActive" class="single"></span></li>
+							<li>停用数</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<ul>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CarOnline" class="single"></span></li>
+							<li>在线数</li>														
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CarOffline" class="single"></span></li>
+							<li>离线数</li>														
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<ul>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CarCharging" class="single"></span></li>
+							<li>充电中</li>
+						</ul>
+					</li>
+					<!-- <li class="li_rank">
+						<ul class="rank_li">							
+							<li><span id="" class="single"></span></li>
+							<li>待充电</li>
+						</ul>
+					</li> -->
+				</ul>				
+			</div>
+			<div class="abnormal"><!-- 异常-->
+				<ul class="abnormal_li" style="margin-top:20px;">
+					<li class="li_rank">
+						<img src="imgs/inco/inco4.jpg" class="img_size">
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="IllegalCheck" class="totle"></span></li>
+							<li>违章核查中</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="IllegalDealing" class="single"></span></li>
+							<li>待处理</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="IllegalDealed" class="single"></span></li>
+							<li>已处理</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<ul>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="AccidentAll" class="single"></span></li>
+							<li>事故核查中</li>														
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="AccidentDealing" class="single"></span></li>
+							<li>待处理</li>														
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="AccidentDealed" class="single"></span></li>
+							<li>已处理</li>														
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<ul>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="FaultAll" class="single"></span></li>
+							<li>故障核查中</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">							
+							<li><span id="FaultDealing" class="single"></span></li>
+							<li>待处理</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">							
+							<li><span id="FaultDealed" class="single"></span></li>
+							<li>已处理</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<ul>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="IllegalAdd" class="single"></span></li>
+							<li>新增违章</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">							
+							<li><span id="FaultAdd" class="single"></span></li>
+							<li>新增故障</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">							
+							<li><span id="AccidentAdd" class="single"></span></li>
+							<li>新增事故</li>
+						</ul>
+					</li>
+				</ul>									
+			</div>
+			<div class="coupon"><!-- 优惠券 -->
+				<ul class="coupon_li" style="margin-top:20px;">
+					<li class="li_rank">
+						<img src="imgs/inco/inco5.jpg" class="img_size">
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CouponCount" class="totle"></span></li>
+							<li>全部派发数</li>
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CouponFee" class="single"></span></li>
+							<li>派发金额(元)</li>
+						</ul>
+					</li>						
+				</ul>	
+				<hr/>
+				<ul>						
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CouponAddCount" class="totle"></span></li>
+							<li>新增派发数</li>														
+						</ul>
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="CouponAddFee" class="single"></span></li>
+							<li>派发金额(元)</li>														
+						</ul>
+					</li>						
+				</ul>				
+			</div>
+			<div class="finance"><!-- 财务 -->
+				<ul class="coupon_li" style="margin-top:20px;">
+					<li class="li_rank">
+						<img src="imgs/inco/inco6.jpg" class="img_size">
+					</li>
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="AccountAllBalance" class="totle"></span></li>
+							<li>当前账户总额(元)</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<ul>					
+					<li class="li_rank">
+						<ul class="rank_li">
+							<li><span id="AccountAllBail" class="single"></span></li>
+							<li>当前冻结保证金总额(元)</li>
+						</ul>
+					</li>
+				</ul>				
+			</div>			
+		</div>						
+	</body>
+</html>

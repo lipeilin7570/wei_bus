@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.LeaseOrderJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.LeaseOrderJson" >
+    <id column="LeaseID" property="leaseID" jdbcType="INTEGER" />
+    <result column="LeaseNo" property="leaseNo" jdbcType="VARCHAR" />
+    <result column="RentalUserID" property="userID" jdbcType="INTEGER" />
+    <result column="RentalUserName" property="userName" jdbcType="VARCHAR" />
+    <result column="CarNo" property="carNo" jdbcType="VARCHAR" />
+    <result column="LeaseType" property="leaseType" jdbcType="INTEGER" />
+    <result column="leaseCreateTime" property="leaseCreateTime" jdbcType="TIMESTAMP" />
+    
+	<result column="takeTime" property="takeTime" jdbcType="TIMESTAMP" />
+	<result column="takeSiteID" property="takeSiteID" jdbcType="INTEGER" />
+	
+	<result column="backTime" property="backTime" jdbcType="TIMESTAMP" />
+	<result column="backSiteID" property="backSiteID" jdbcType="INTEGER" />
+	<result column="FeeMoney" property="feeMoney" jdbcType="DECIMAL" />
+	<result column="DeuctMoney" property="deuctMoney" jdbcType="DECIMAL" />
+	<result column="PayMoney" property="payMoney" jdbcType="DECIMAL" />
+	
+	<result column="leaseStatus" property="leaseStatus" jdbcType="INTEGER" />
+	<result column="leaseFeeStatus" property="leaseFeeStatus" jdbcType="INTEGER" />
+	
+	<result column="IllagalStatus" property="illagalStatus" jdbcType="INTEGER" />
+    <result column="FaultStatus" property="faultStatus" jdbcType="INTEGER" />
+    <result column="AccidentStatus" property="accidentStatus" jdbcType="INTEGER" />
+    <result column="BreachStatus" property="breachStatus" jdbcType="INTEGER" />
+	
+	<result column="RentalUserNo" property="userNo" jdbcType="DECIMAL" />
+	<result column="TelPhone" property="telPhone" jdbcType="DECIMAL" />
+	<result column="CancelTime" property="cancelTimeStr" jdbcType="DECIMAL" />
+	<result column="CheckTime" property="checkTimeStr" jdbcType="DECIMAL" />
+	
+	<result column="takeSite" property="takeSite" jdbcType="DECIMAL" />
+	<result column="backSite" property="backSite" jdbcType="DECIMAL" />
+	
+	<result column="CouponNo" property="couponNo" jdbcType="DECIMAL" />
+	
+  </resultMap>
+  
+  <select id="loadAllLeaseOrderJson" resultMap="BaseResultMap" >
+	SELECT l.LeaseID,l.LeaseNo,l.RentalUserID,l.RentalUserName,l.CarNo,l.IllagalStatus,l.FaultStatus,l.AccidentStatus,l.BreachStatus,
+				l.LeaseType,l.CreateTime leaseCreateTime,l.`Status` leaseStatus,
+				u.RentalUserNo,u.TelPhone,
+				r.CancelTime,
+				t.CreateTime takeTime,t.SiteID takeSiteID,
+				st.SiteName takeSite,
+				b.CreateTime backTime,b.SiteID backSiteID,
+				sb.SiteName backSite,
+				c.CheckTime,
+				lf.FeeMoney,lf.DeuctMoney,lf.PayMoney,lf.`Status` leaseFeeStatus,
+				co.CouponNo
+	FROM t_order_lease l
+	LEFT JOIN t_rental_user u ON u.RentalUserID=l.RentalUserID
+	LEFT JOIN t_order_reserve r ON r.LeaseID =l.LeaseID
+	LEFT JOIN t_order_take t ON t.LeaseID =l.LeaseID
+	LEFT JOIN t_info_site st ON st.SiteID=t.SiteID
+	LEFT JOIN t_order_back b ON b.LeaseID =l.LeaseID
+	LEFT JOIN t_info_site sb ON sb.SiteID=b.SiteID
+	LEFT JOIN t_order_check c ON c.LeaseID=l.LeaseID
+	LEFT JOIN t_finance_leasefee lf ON lf.LeaseID =l.LeaseID
+	LEFT JOIN t_run_coupon co ON co.CouponID=lf.UserCouponID
+	ORDER BY l.LeaseID DESC
+  </select>
+  
+  
+</mapper>

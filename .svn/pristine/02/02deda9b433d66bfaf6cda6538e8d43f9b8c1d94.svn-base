@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.CarStatusInfoJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.CarStatusInfoJson" >
+    <id column="CarID" property="carID" jdbcType="INTEGER" />
+    <result column="Electricity" property="electricity" jdbcType="INTEGER" />
+    <result column="ElectricityStatus" property="electricityStatus" jdbcType="INTEGER" />
+    <result column="RemainKON" property="remainKon" jdbcType="DECIMAL" />
+    <result column="Longitude" property="lng" jdbcType="DECIMAL" />
+    <result column="Latitude" property="lat" jdbcType="DECIMAL" />
+    <result column="Location" property="location" jdbcType="VARCHAR" />
+    
+    <result column="CarNo" property="carNo" jdbcType="VARCHAR" />
+    <result column="carStatus" property="carStatus" jdbcType="INTEGER" />
+    
+    <result column="carServiceStatus" property="carServiceStatus" jdbcType="INTEGER" />
+    
+    <result column="ModelName" property="modelName" jdbcType="VARCHAR" />
+    <result column="Alias" property="alias" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <!-- 加载所有车辆状态 -->
+  <select id="loadAllCarStatus" resultMap="BaseResultMap" >
+    SELECT 
+	cs.CarID,cs.Longitude,cs.Latitude,cs.Location,cs.RemainKON,cs.Electricity,cs.ElectricityStatus,
+	c.CarNo,c.CarStatus carStatus,
+	cse.`Status` carServiceStatus,
+	cm.ModelName,cm.Alias
+	FROM t_info_carstatus cs
+	LEFT JOIN t_info_car c ON c.CarID = cs.CarID
+	LEFT JOIN t_info_carservice cse ON cse.CarID=cs.CarID
+	LEFT JOIN t_info_carmodel cm ON cm.CarModelID=c.CarModelID
+  </select>
+  
+  
+</mapper>

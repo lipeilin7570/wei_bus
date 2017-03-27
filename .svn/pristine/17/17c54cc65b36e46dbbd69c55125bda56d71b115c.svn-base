@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.UserJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.UserInfoJson" >
+    <id column="RentalUserID" property="userID" jdbcType="INTEGER" />
+    <result column="RentalUserName" property="userName" jdbcType="VARCHAR" />
+    <result column="RentalUserNo" property="userNo" jdbcType="VARCHAR" />
+    <result column="TelPhone" property="telPhone" jdbcType="VARCHAR" />
+    <result column="Authentication" property="authentication" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ApproveTime" property="approveTime" jdbcType="TIMESTAMP" />
+    <result column="Sex" property="sex" jdbcType="INTEGER" />
+    <result column="Age" property="age" jdbcType="INTEGER" />
+    <result column="RentalStatusInt" property="rentalStatusInt" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="License" property="license" jdbcType="VARCHAR" />
+    <result column="Identity" property="identity" jdbcType="VARCHAR" />
+    
+    <result column="RentalUserImg" property="headerImg" jdbcType="VARCHAR" />
+    <result column="Nationality" property="nationality" jdbcType="VARCHAR" />
+    <result column="Birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="UploadTime" property="uploadTime" jdbcType="TIMESTAMP" />
+    
+    <result column="IdentityFrontPic" property="idPicA" jdbcType="VARCHAR" />
+    <result column="IdentityBackPic" property="idPicB" jdbcType="VARCHAR" />
+    <result column="LicenseFrontPic" property="liPicA" jdbcType="VARCHAR" />
+    <result column="LicenseBackPic" property="liPicB" jdbcType="VARCHAR" />
+    
+    <result column="IntegralID" property="integralID" jdbcType="INTEGER" />
+    <result column="Amount" property="amount" jdbcType="INTEGER" />
+    <result column="Level" property="level" jdbcType="INTEGER" />
+    
+  </resultMap>
+  
+  <!-- 加载所有用户信息 -->
+  <select id="loadAllUserInfoJson" resultMap="BaseResultMap">
+    SELECT 
+	u.RentalUserID,u.RentalUserName,u.RentalUserNo,u.TelPhone,u.RentalUserImg,u.Sex,u.Nationality,u.CreateTime,
+	u.Age,u.Birthday,u.License,u.Identity,u.Authentication,u.ApproveTime,u.RentalStatusInt,u.`Status`,
+	ud.UploadTime,ud.IdentityFrontPic,ud.IdentityBackPic,ud.LicenseBackPic,ud.LicenseFrontPic,
+	i.IntegralID,i.Amount,i.`Level`
+	FROM t_rental_user u
+	LEFT JOIN t_rental_userdata ud ON ud.RentalUserID = u.RentalUserID
+	LEFT JOIN t_rental_integral i ON i.RentalUserID=u.RentalUserID
+  </select>
+  
+   <!-- 查看某用户信息 -->
+  <select id="findUserInfoJsonByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT 
+	u.RentalUserID,u.RentalUserName,u.RentalUserNo,u.TelPhone,u.RentalUserImg,u.Sex,u.Nationality,u.CreateTime,
+	u.Age,u.Birthday,u.License,u.Identity,u.Authentication,u.ApproveTime,u.RentalStatusInt,u.`Status`,
+	ud.UploadTime,ud.IdentityFrontPic,ud.IdentityBackPic,ud.LicenseBackPic,ud.LicenseFrontPic,
+	i.IntegralID,i.Amount,i.`Level`
+	FROM t_rental_user u
+	LEFT JOIN t_rental_userdata ud ON ud.RentalUserID = u.RentalUserID
+	LEFT JOIN t_rental_integral i ON i.RentalUserID=u.RentalUserID
+	WHERE u.RentalUserID = #{userID,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  
+</mapper>

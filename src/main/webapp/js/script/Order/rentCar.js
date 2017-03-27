@@ -1,0 +1,674 @@
+if(!sessionStorage.getItem("operateID")){
+	window.location.href = "../../operationFailure.html"
+}
+$(document).ready(function(){
+    search();
+})
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){	
+	return res; 
+}
+
+
+function search() {
+    $('#tab').bootstrapTable({
+        method:'post',
+        url:'../../order/loadAllLeaseOrders.do',
+        cache:false,
+        height:"auto",
+        striped:true,
+        pagination:true,
+        pageSize:5,
+        pageNumber:1,
+        showColumns:true,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:queryParams,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"leaseCreateTimeStr",
+        sortOrder:"desc",
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                width:'30px',
+                checkbox:true            
+            }, {
+                field:'leaseNo',
+                title:'订单编号',
+                valign:'middle',
+                sortable:true 
+            }, {
+                field:'carNo',
+                title:'车牌号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle'
+            }, {
+                field:'userName',
+                title:'用户名称',
+                valign:'middle'    	
+            }, {
+                field:'telPhone',
+                title:'手机号',
+                valign:'middle'                                   
+            }, {
+                field:'leaseCreateTimeStr',
+                title:'预约时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle' ,
+                sortable:true
+            }, {
+                field:'takeTimeStr',
+                title:'取车时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+               // formatter:dateFormatter,
+                sortable:true
+            }, {
+                field:'backTimeStr',
+                title:'还车时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+               // formatter:dateFormatter, 
+                sortable:true
+            }, {
+                field:'feeMoney',
+                title:'总费用/元',
+                valign:'middle'
+            }, {
+                field:'',
+                title:'不计免赔',
+                valign:'middle'
+            }, {
+                field:'',
+                title:'清洁费/元',
+                valign:'middle'
+            }, {
+                field:'deuctMoney',
+                title:'优惠费用/元',
+                valign:'middle'
+            }, {
+                field:'payMoney',
+                title:'支付费用/元',
+                valign:'middle'                                      
+            }, {
+                field:'leaseStatus',
+                title:'订单状态',
+                valign:'middle',
+                formatter:leaseStatusFormatter
+            }, {
+                field:'illagalStatus',
+                title:'违章状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+                formatter:illagalStatusFormatter             
+            }, {
+                field:'accidentStatus',
+                title:'事故状态',
+                valign:'middle',
+                formatter:accidentStatusFormatter
+            }, {
+                field:'faultStatus',
+                title:'故障状态',
+                valign:'middle',
+                formatter:faultStatusFormatter                      
+            }, {
+                field:'operate',
+                title:'操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+                formatter:operateFormatter,
+                events:operateEvents 
+            }
+        ],
+        onLoadSuccess:function(data){
+            //alert("success");
+        	console.log(data.data)
+        },
+        onLoadError:function(){
+            //location.reload();
+        }
+    });
+};
+function operateFormatter(value, row, index){
+    return [
+        '<a class="detail" href="javascript:void(0)" title="like">验车详情</a>&nbsp;|',
+        '<a class="status" href="javascript:void(0)" title="like">还车</a>&nbsp;|',
+        '<a class="end" href="javascript:void(0)" title="like">结束订单</a>&nbsp;|',
+        '<a class="pay" href="javascript:void(0)" title="like">缴费</a>|', 
+        '<a class="accident" href="javascript:void(0)" title="like">事故</a>&nbsp;|',
+        '<a class="fault" href="javascript:void(0)" title="like">故障</a>&nbsp;|',
+        '<a class="illegal" href="javascript:void(0)" title="like">违章</a>'
+    ].join('');
+}
+window.operateEvents={//验车
+    'click .detail': function (e, value, row, index){  	    	    	  	
+    	$('#impload').click();          	
+   		var data={   			
+   			'leaseID':row.leaseID,   			
+   			};
+   			$.ajax({		
+   				   type:"post",
+   				   dataType:"json",
+   				   url: "../../order/showCheckOrder.do",    	    
+   				   data:data,
+   				   success: function (data){
+   					   var result=data.data;
+   					   if(data.status==0){ 
+   						   $('#checkNo').val(result.checkNo);
+   						   $("#CarNo").val(result.carNo);    				    		    				    	   				    		        				    	        				    	
+   						   $('#checkTime').val(result.checkTime);       				    	        				    	       				    	
+   						   $('#reMark').val(result.remark);				    	
+				    	
+   						   $("#frontImg").attr("src",result.frontImg);
+   						   $("#leftImg").attr("src",result.leftImg);
+   						   $("#backImg").attr("src",result.backImg);
+   						   $("#rightImg").attr("src",result.rightImg);
+   				    	}else if(data.status==101){
+   				    		alert("该订单没有验车信息");
+   				    	}   				    	     				    		 	    				    		
+   				    },
+   				    error: function (data){	   	    	
+   				    	alert("服务异常！");	
+   				    }
+   			})				     		   	    	
+     },
+     //还车
+     'click .status': function (e, value, row, index){ 	
+      	$('#overload').click();  
+      	$('#over_table').attr('data-id',row.leaseID);
+     },
+   //结束订单
+     'click .end': function (e, value, row, index){ 	
+      	$('#Vips').click();  
+      	$('#Vips_table').attr('data-id',row.leaseID);
+     },
+     //缴费
+    'click .pay': function (e, value, row, index){ 	
+     	$('#vips').click();  
+     	$('#vips_table').attr('data-carid',row.carID);	
+    },
+    //违章
+    'click .illegal': function (e, value, row, index){ 
+    	$('#carNo').text(row.carNo)
+     	$('#vip').click();     	
+     	$('#vip_table').attr('data-carNo',row.carNo);  
+     	$('#vip_table').attr('data-id',row.leaseID)
+    },
+    //故障
+   'click .fault': function (e, value, row, index){ 
+	   console.dir(row)
+    	$('#vipAcc').click();  
+    	$('#vipACC_table').attr('data-id',row.leaseID);
+    	$('#vipACC_table').attr('data-carid',row.carID);
+    	$('#vipACC_table').attr('data-userid',row.userID);    	
+    // 判断是否是车辆自身故障
+    	if($("#faultDuty").val() == "1"){
+    		$("#car_Self_fault").css("display","block")
+    	}
+    	$("#faultDuty").change(function(){
+    		console.log($("#faultDuty").val())
+    		if($("#faultDuty").val() == "1"){
+    			$("#car_Self_fault").css("display","block")
+    		}else{
+    			$("#car_Self_fault").css("display","none")
+    		}
+    	})
+    	
+    //判断是否优惠计费
+    	if($("#cancleFee").val() != 3){
+    		$(".couponFee_hide_show").css("display","none")
+    	}
+    	$("#cancleFee").change(function(){
+    		if($("#cancleFee").val()!= 3){
+    			$(".couponFee_hide_show").css("display","none")
+        	}else{
+        		$(".couponFee_hide_show").css("display","block")
+        	}
+    	})
+    		//判断是否缴纳保证金
+    	if($("#payBail").val() == 2){
+    		$(".bailFee_hide_show").css("display","none")
+    	}
+    	$("#payBail").change(function(){
+    		if($("#payBail").val()== 2){
+    			$(".bailFee_hide_show").css("display","none")
+        	}else{
+        		$(".bailFee_hide_show").css("display","block")
+        	}
+    	})
+    	
+    	
+    	
+   },
+   
+   //事故
+  'click .accident': function (e, value, row, index){ 	
+   	$('#accidentBtn').click();  
+   	$('#accident_table').attr('data-id',row.leaseID);   			
+ }
+}	
+//还车提交
+$(function(){
+	$("#overbut").click(function(){							 	
+		var cookieval=readCookie("operateID");		 	
+	 	var data={
+	 			'operatorID':cookieval,
+	 			'leaseID':$('#over_table').attr('data-id'),
+	 			// 'siteID':$('#site').val(),
+	 			'backTime':$('#backTime').val(),
+	 			'remark':$('#remark').val()
+	 	};
+	 	$.ajax({		
+	 		type:"post",
+	 		dataType:"json",
+	 		url: "../../order/backCar.do",    	    
+	 		data:data,
+	 		success: function (data) {	
+	 			if(data.status==0){ 
+	 				alert('还车成功！') 
+	 				search();
+	 				ss();
+	 			}else if (data.status==101) {
+                    alert('订单不存在');
+                } else if (data.status==102) {
+                    alert('订单不在租车状态，无法结束订单');
+                } else if (data.status==202) {
+                    alert('还时间不能早于提车时间');
+                } 				    	     				    		 	    				    		
+	 		},
+	 		error: function (data){	   	    	
+	 			alert("服务异常！");	
+	 		}
+	 	})     	
+	})				
+})
+//结束订单提交
+$(function(){
+	$("#Vipsbut").click(function(){							 	
+		var cookieval=readCookie("operateID");		 	
+	 	var data={
+	 			'operatorID':cookieval,
+	 			'leaseID':$('#over_table').attr('data-id'),
+	 			'finishType':$('#finishType').val(),
+	 			'cancelFee':$('#cancelFee').val(),
+	 			'couponFee':$('#couponFee').val(),
+	 			'finishTime':$('#finishTime').val(),
+	 			'remark':$('#remark').val()
+	 	};
+	 	$.ajax({		
+	 		type:"post",
+	 		dataType:"json",
+	 		url: "../../order/finishLease.do",    	    
+	 		data:data,
+	 		success: function (data) {	
+	 			if(data.status==0){ 
+	 				alert('结束订单成功！'); 
+	 				search();
+	 				ss();
+	 			}else if(data.status==101){
+	 				alert('订单不存在！');
+	 			}else if(data.status==102){
+	 				alert('订单不在租车状态，无法结束订单！');
+	 			}  				    	     				    		 	    				    		
+	 		},
+	 		error: function (data){	   	    	
+	 			alert("服务异常！");	
+	 		}
+	 	})     	
+	})				
+})
+//缴费提交
+$(function(){
+	$("#vipsbut").click(function(){					
+	 	var cookieval=readCookie("operateID");
+	 	var data={
+ 			'operatorID':cookieval,
+ 			'carID':$('#vips_table').attr('data-carid'),
+ 			'controlType':$(this).val()
+	 	};
+	 	$.ajax({		
+	 		type:"post",
+	 		dataType:"json",
+	 		url: "",    	    
+	 		data:data,
+	 		success: function (data) {	
+	 			if(data.status==0){ 
+	 				alert('成功！') 
+	 				search();
+	 				ss();
+	 			}   				    	     				    		 	    				    		
+	 		},
+	 		error: function (data){	   	    	
+	 			alert("服务异常！");	
+	 		}
+	 	})     	
+	})			
+})
+//违章提交
+$(function(){
+	$("#illegalBut").click(function(){					
+	 	var cookieval=readCookie("operateID");
+	 	var data={
+ 			'operatorID':cookieval, 			
+ 			'leaseID':$('#vip_table').attr('data-id'),
+ 			'description':$('#description').val(),
+ 			'address':$('#address').val(),
+ 			'collectionUnit':$('#collectionUnit').val(),
+ 			'illegalTime':$('#illegalTime').val(),
+ 			'points':$('#points').val(),
+ 			'fine':$('#fine').val(),
+ 			'remark':$('#Remark').val(),
+	 	};
+	 	$.ajax({		
+	 		type:"post",
+	 		dataType:"json",
+	 		url: "../../order/addIllegal.do",    	    
+	 		data:data,
+	 		success: function (data) {	
+	 			if(data.status==0){ 
+	 				alert('成功！') 
+	 				search();
+	 				ss();	 	
+	 				console.log(data)
+	 			}   				    	     				    		 	    				    		
+	 		},
+	 		error: function (data){		 			
+	 			alert("服务异常");	
+	 		}
+	 	})     	
+ 	})			
+})
+
+//故障提交
+$(function(){
+	$("#faultBut").click(function(){					
+	 	var operatorID=readCookie("operateID");
+	 	if(!$("#couponFee").val()){
+	 		$("#couponFee").val("0");
+	 	}
+	 	var datas={
+ 			'operatorID':operatorID,
+ 			'userID':$('#vipACC_table').attr('data-userid'),
+ 			'carID':$('#vipACC_table').attr('data-carid'),
+ 			'leaseID':$('#vipACC_table').attr('data-id'),
+ 			'faultTime':$('#faultTime').val(),
+ 			'userFault':$('#faultDuty').val(),
+ 			'faultBrief':$('#faultBrief').val(),
+ 			'cancelFee':$("#cancleFee").val(),
+ 			'couponFee':$("#couponFee").val(),
+ 			'addInFault':$("#addFault").val(),
+ 			'payBail':$("#payBail").val(),
+ 			'bailFee':$("#bailFee").val(),
+ 			'remark':$('#faultRemark').val()	 			
+	 	};	 	
+	 	$.ajax({		
+	 		type:"post",
+	 		dataType:"json",
+	 		url: "../../order/addFault.do",    	    
+	 		data:datas,
+	 		success: function (data) {	
+	 			console.dir(data)
+	 			if(data.status==0){	 				
+	 				alert('成功！'); 
+	 				search();
+	 				ss();
+	 			}else if(data.status==101){
+	 				alert('订单还没提车或已还车');
+	 			}else if(data.status==102){
+	 				alert("故障发生时间早于提车时间");
+	 			}else if(data.status==103){
+	 				alert("该订单已有故障")
+	 			}else{
+	 				alert("服务器错误")
+	 			}				    	     				    		 	    				    		
+	 		},
+	 		error: function (data){
+	 			 alert("服务异常");	
+	 		}
+	 	})     	
+	})			
+})
+//事故提交
+$(function(){
+	$("#accidentBut").click(function(){					
+		var cookieval=readCookie("operateID");
+	 	var data={
+	 			'operatorID':cookieval,
+	 			'leaseID':$('#vipAcc_table').attr('data-id'),
+	 			'accidentTime':$('#accidentTime').val(),
+	 			'accidentDuty':$('#accidentDuty').val(),
+	 			'description':$('#description').val(),
+	 			'remark':$('#remark').val(),	 			
+	 	};
+	 	$.ajax({		
+	 		type:"post",
+	 		dataType:"json",
+	 		url: "../../order/addAccident.do",    	    
+	 		data:data,
+	 		success: function (data) {	
+	 			if(data.status==0){ 
+	 				alert('成功！') 
+	 				search();
+	 				ss();
+	 			}   				    	     				    		 	    				    		
+	 		},
+	 		error: function (data){	   	    	
+	 			alert("服务异常");	
+	 		}
+	 	})     	
+	})		
+})
+//得到查询参数
+var sn;
+var so;
+function queryParams(params) {
+    sn = params.sortName;
+    so = params.sortOrder;
+    return {
+        pageSize: params.pageSize,
+        pageNumber: params.pageNumber,
+        sortName: params.sortName,
+        sortOrder: params.sortOrder,
+        leaseNo: $('#leaseNo').val(),
+        userName: $('#userName').val(),
+        leaseType: $('#leaseType').val(),
+        couponType: $('#couponType').val(),
+        leaseStatus: $('#leaseStatus').val()
+    };
+}
+/*function dateFormatter(value, row, index){
+    var myDate=new  Date();
+    myDate.setTime(row.createTime);
+    return myDate.format('yy-MM-dd')
+}*/
+//订单状态
+function leaseStatusFormatter(value,row,index){
+    var leaseStatus;
+    switch(value)
+    {
+        case 0:
+        	leaseStatus='订单完成';
+            break;
+        case 1:
+        	leaseStatus='预约中';
+            break;
+        case 2:
+        	leaseStatus='已取消';
+            break;
+        case 3:
+        	leaseStatus='已提车';
+            break;
+        case 4:
+        	leaseStatus='未支付';
+            break;
+        case 5:
+//        	leaseStatus='未支付';
+            break;
+        case 6:
+        	leaseStatus='已支付';
+            break;
+        default :
+        	leaseStatus='';
+        	break;
+    }
+    return leaseStatus;
+}
+//优惠类型
+function couponTypeFormatter(value,row,index){
+    var couponType;
+    switch(value)
+    {
+        case 1:
+        	couponType='折扣';
+            break;
+        case 2:
+        	couponType='抵扣';
+            break;
+        default :
+        	couponType='';
+        	break;
+    }
+    return couponType;
+}
+//订单类型
+function leaseTypeFormatter(value,row,index){
+    var leaseType;
+    switch(value)
+    {
+        case 1:
+        	leaseType='时租';
+            break;
+        case 2:
+        	leaseType='周租';
+            break;
+        default :
+        	leaseType='';
+        	break;
+    }
+    return leaseType;
+}
+//违章状态
+function illagalStatusFormatter(value,row,index){
+    var illagalStatus;
+    switch(value)
+    {
+        case 1:
+        	illagalStatus='违章查询中';
+            break;
+        case 2:
+        	illagalStatus='违章未处理';
+            break;
+        case 3:
+        	illagalStatus='违章已处理';
+        case 4:
+        	illagalStatus='无违章';
+            break;
+        default :
+        	illagalStatus='';
+        	break;
+    }
+    return illagalStatus;
+}
+//事故状态
+function accidentStatusFormatter(value,row,index){
+    var accidentStatus;
+    switch(value)
+    {
+        case 1:
+        	accidentStatus='无事故';
+            break;
+        case 2:
+        	accidentStatus='事故未缴纳保证金';
+            break;
+        case 3:
+        	accidentStatus='事故待结算';
+        case 4:
+        	accidentStatus='事故已处理';
+            break;
+        default :
+        	accidentStatus='';
+        	break;
+    }
+    return accidentStatus;
+}
+//故障状态
+function faultStatusFormatter(value,row,index){
+    var faultStatus;
+    switch(value)
+    {
+        case 1:
+        	faultStatus='无故障';
+            break;
+        case 2:
+        	faultStatus='故障未缴纳保证金';
+            break;
+        case 3:
+        	faultStatus='故障待结算';
+        case 4:
+        	faultStatus='故障已处理';
+            break;
+        default :
+        	faultStatus='';
+        	break;
+    }
+    return faultStatus;
+}
+//违约状态
+function breachStatusFormatter(value,row,index){
+	var breachStatus;
+    switch(value)
+    {
+        case 1:
+        	breachStatus='无违约';
+            break;
+//        case 2:
+//        	breachStatus='违约未处理';
+//            break;
+        case 2:
+        	breachStatus='违约已处理';
+        	break;
+        default :
+        	breachStatus='';
+        	break;
+    }
+    return breachStatus;
+}
+//缴费切换
+function sel_table(t){
+	for(var i=1;i<t.length;i++){
+		document.getElementById(t.options[i].value).style.display="none";
+	}
+	if(t.value!="请选择"){
+		document.getElementById(t.value).style.display="block";
+	}
+}
+var now =new Date();
+$('#leaseCreateTimeStr').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+$('#pickTimeStr').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+$('#backTimeStr').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+$(function(){
+    $("#pickTimeStr").on("changeDate", function (e) {
+        var pick = new Date(Date.parse($("#pickTimeStr").val()));
+        $('#backTimeStr').datetimepicker('setStartDate', pick);
+    });
+    $("#backTimeStr").on("changeDate", function (e) {
+        var back = new Date(Date.parse($("#backTimeStr").val()));
+        $('#pickTimeStr').datetimepicker('setEndDate',back );
+    });
+})

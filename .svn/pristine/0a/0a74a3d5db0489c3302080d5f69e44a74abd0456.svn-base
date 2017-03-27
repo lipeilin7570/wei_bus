@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>交易查询</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/tableExport.js"></script>
+<script src="../../js/jquery.base64.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootbox.js"></script>
+<script src="../../js/common2.js"></script>
+<script src="../../js/script/Finance/dealSearch.js"></script>
+<style>
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+}
+form div{
+	margin:10px 0;
+}
+form label{
+	margin:10px 0;
+}
+#tradeSearch{
+	margin-left:70%
+}
+</style>
+</head>
+<body>
+	<div class="container" style="width:100%; border:0px; border-style:solid;">
+		<div class="panel center-block">
+			<div id="custom-toolbar" style="padding-top:10px;">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="costNum" class="col-sm-2 control-label">开始时间</label>
+						<div class="col-sm-2">
+							<input type="text" id="beginTime" class="form-control" />
+						</div>						
+						<label for="memberName" class="col-sm-2 control-label">结束时间</label>
+						<div class="col-sm-2">
+							<input type="text" id="endTime" class="form-control" />
+						</div>
+						<label for="costNum" class="col-sm-2 control-label">交易类型</label>
+						<div class="col-sm-2">
+							<select id="dealType" class="form-control">
+								<option value="0">所有</option>
+								<option value="1">充值</option>
+								<option value="2">提现</option>
+								<option value="3">支付</option>
+								<option value="4">提现失败退款</option>
+								<option value="5">保证金扣款</option>
+								<option value="6">违约金扣款</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="costNum" class="col-sm-2 control-label">资金流向</label>
+						<div class="col-sm-2">
+							<select id="tradeType" class="form-control">
+								<option value="0">所有</option>
+								<option value="1">收入</option>
+								<option value="2">支出</option>								
+							</select>
+						</div>
+						<label for="costNum" class="col-sm-2 control-label">支付方式</label>
+						<div class="col-sm-2">
+							<select id="tradeAccount" class="form-control">
+								<option value="0">所有</option>
+								<option value="1">支付宝</option>
+								<option value="2">微信</option>
+								<option value="3">余额</option>							
+							</select>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-info" id="tradeSearch" onclick="ss();">
+								<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>查询
+							</button>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" onclick="$('#tab').tableExport({ type:'excel',separator:';', escape:'false'});"class="btn btn-danger">
+								<i class="glyphicon glyphicon-search">导出Excel</i>
+							</button>					
+						</div>
+					</div>										
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-side-pagination="server" data-pagination="true"></table>
+			</div>
+		</div>
+	</div>
+	<!-- 按钮触发模态框 -->
+	<button id="btn" style="display: none;"class="btn btn-primary btn-lg" data-toggle="modal"data-target="#delModal"></button>
+	<div class="modal fade" id="Modal" tabindex="-1" role="dialog"aria-labelledby="ModalLabel" aria-hidden="true" style="top: 25%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="ModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="msg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm"data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+</body>
+</html>

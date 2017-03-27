@@ -1,0 +1,30 @@
+package com.wgjev.weibus.controller.change;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.wgjev.weibus.entity.BusResult;
+import com.wgjev.weibus.service.ChangeService;
+
+@Controller
+@RequestMapping("/change")
+public class QueryChangesController {
+
+	@Resource
+	private ChangeService changeService;
+	
+	@RequestMapping("/queryChanges.do")
+	@ResponseBody
+	public BusResult execute(Integer operatorID, Integer changeManID, String beginTime, String endTime, 
+			Integer status, Integer changeID, String carNo, Integer order,
+			HttpServletRequest request, HttpServletResponse response){
+		String loginIP = request.getRemoteHost();
+		return changeService.queryChanges(operatorID, changeManID, beginTime, endTime, status, changeID, carNo, order, loginIP);
+	}
+	
+}

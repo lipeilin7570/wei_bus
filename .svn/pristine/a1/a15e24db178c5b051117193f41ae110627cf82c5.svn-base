@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.ExtractJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.ExtractJson" >
+    <id column="ExtractID" property="extractID" jdbcType="INTEGER" />
+    <result column="ExtractNo" property="extractNo" jdbcType="VARCHAR" />
+    <result column="RentalUserID" property="userID" jdbcType="INTEGER" />
+    <result column="RentalUserName" property="userName" jdbcType="VARCHAR" />
+    <result column="RentalUserNo" property="userNo" jdbcType="VARCHAR" />
+    <result column="TelPhone" property="telPhone" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="FeeMoney" property="feeMoney" jdbcType="DECIMAL" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="AccountType" property="accountType" jdbcType="INTEGER" />
+    <result column="AccountNo" property="accountNo" jdbcType="VARCHAR" />
+    
+    <result column="AuditMan" property="auditMan" jdbcType="VARCHAR" />
+    <result column="AuditStatus" property="auditStatus" jdbcType="INTEGER" />
+    <result column="AuditTime" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="Reason" property="reason" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="loadExtract" resultMap="BaseResultMap" >
+    SELECT 
+	ex.ExtractID,ex.ExtractNo,ex.RentalUserID,ex.RentalUserName,ex.RentalUserNo,
+	ex.TelPhone,ex.CreateTime,ex.FeeMoney,ex.`Status`,ex.AuditMan,ex.AuditStatus,ex.AuditTime,ex.Reason,
+	es.AccountType,es.AccountNo
+	FROM t_finance_extract ex
+	LEFT JOIN t_finance_escrowtrade es ON es.EscrowTradeID=ex.EscrowTradeID
+  </select>
+ 
+</mapper>

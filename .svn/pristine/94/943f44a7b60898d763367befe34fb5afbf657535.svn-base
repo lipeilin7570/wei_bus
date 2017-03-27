@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>故障信息</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/tableExport.js"></script>
+<script src="../../js/jquery.base64.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.fr.js"></script>
+<script src="../../js/common2.js"></script>
+<script src="../../js/script/Order/fault.js"></script>
+<style>
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+}
+</style>
+</head>
+<body>
+	<div class="container"style="width: 100%; border:0px; border-style:solid;">
+		<div class="panel center-block">
+			<h4 align="center">故障信息</h4>
+			<div id="custom-toolbar" style="padding-top: 10px;">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="faultNum" class="col-sm-2 control-label">最近几天的故障</label>
+						<div class="col-sm-2">
+							<input type="text" id="faultDays" class="form-control" />
+						</div>
+						<label for="carNum" class="col-sm-2 control-label">故障状态</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="faultStatus">
+								<option value="0">所有</option>
+								<option value="1">已录入</option>
+								<option value="2">已缴纳保证金</option>
+								<option value="3">已维修</option>
+								<option value="5">已完成</option>
+								<option value="6">撤销</option>								
+							</select>
+						</div>	
+						<label for="completeTime" class="col-sm-2 control-label">车牌号</label>
+						<div class="col-sm-2">
+							<input type="text" id="carNum" class="form-control" />
+						</div>					
+					</div>																						
+					<div style="margin-left:5%;">
+						<button type="button" class="btn btn-info" onclick="ss()">查询</button>
+						<button type="button" onclick="$('#tab').tableExport({ type:'excel',separator:';', escape:'false'});"class="btn btn-danger">
+							<i class="glyphicon glyphicon-search">导出Excel</i>
+						</button>							
+					</div>					
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-height="400" data-show-refresh="true" data-search="true"></table>
+			</div>
+		</div>
+	</div>
+	<!-- 按钮触发模态框 -->
+	<button id="del_btn" style="display: none;"class="btn btn-primary btn-lg" data-toggle="modal"data-target="#delModal"></button>
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+		aria-labelledby="delModalLabel" aria-hidden="true" style="top: 25%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="del_msg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm"data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--维修录入-->
+	<button id="repaireRecord" style="display:none"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#impModal"></button>
+	<div class="modal fade" id="impModal" tabindex="-1" role="dialog"
+		aria-labelledby="impModalLabel" aria-hidden="true" style="top:10%">
+		<div class="modal-dialog" style="width:50%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="impModalLabel">维修录入</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:250px;overflow:auto">
+					<table class="table table-bordered" id="fault_repaire">
+							<tr>
+								<td class="title">维修完毕时间</td>
+								<td>
+									<input type="text" id="repairTime"/>
+								</td>
+								<td class="title">维修费用</td>
+								<td>
+									<input type="text" id="repairFee"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="title">需客户承担费用</td>
+								<td>
+									<input type="text" id="userPayFee"/>
+								</td>
+								<td class="title"><span class="bailFee_hide_show">维修详情</span></td>
+								<td><textarea id="repairDetail"></textarea></td>
+							</tr>	
+							<tr>					
+								<td class="title">备注</td>
+								<td>
+									<textarea id="remark"></textarea>
+								</td>
+							</tr>														
+						</table>							
+				</div>
+				<div class="modal-footer">
+					<button id="repaire_impbut" onclick="repaireClick()" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">提交</button>
+				</div>
+			</div>
+		</div>
+	</div>			
+	
+	<script type="text/javascript">
+		var now =new Date();
+		$('#repairTime').datetimepicker({
+	    	language: 'zh-CN',
+	    	format:'yyyy-mm-dd hh:mm:ss',
+	    	autoclose:true,
+	    	endDate:now
+		});
+	</script>
+</body>
+</html>

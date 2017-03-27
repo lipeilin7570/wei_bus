@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.CouponJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.CouponJson" >
+    <id column="CouponID" property="couponID" jdbcType="INTEGER" />
+    <result column="CouponNo" property="couponNo" jdbcType="VARCHAR" />
+    <result column="CouponName" property="couponName" jdbcType="VARCHAR" />
+    <result column="CouponModel" property="couponModel" jdbcType="INTEGER" />
+    <result column="Coupontype" property="couponType" jdbcType="INTEGER" />
+    <result column="SendType" property="sendType" jdbcType="INTEGER" />
+    <result column="SendModel" property="sendModel" jdbcType="INTEGER" />
+    <result column="SendDate" property="sendDate" jdbcType="DATE" />
+    <result column="AppointCompany" property="appointCompany" jdbcType="VARCHAR" />
+    <result column="ValidateBegin" property="beginDate" jdbcType="DATE" />
+    <result column="ValidateEnd" property="endDate" jdbcType="DATE" />
+    <result column="CreateMan" property="createMan" jdbcType="VARCHAR" />
+    <result column="CouponMoney" property="couponMoney" jdbcType="DECIMAL" />
+    <result column="LimitMoney" property="limitMoney" jdbcType="DECIMAL" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="AuditStatus" property="auditStatus" jdbcType="INTEGER" />
+    
+  </resultMap>
+  <!-- 根据公司ID加载优惠券信息 -->
+  <select id="loadCouponsByCompanyID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+	c.CouponID,c.CouponNo,c.CouponName,c.CouponModel,c.Coupontype,c.SendType,c.SendModel,c.SendDate,c.AuditStatus,
+	c.AppointCompany,c.ValidateBegin,c.ValidateEnd,c.CreateMan,c.CouponMoney,c.LimitMoney,c.`Status`
+	from t_run_coupon c
+	where c.AppointCompany=0 or INSTR(CONCAT(c.AppointCompany,','),CONCAT(#{companyID,jdbcType=INTEGER},',')) >0
+    
+  </select>
+  
+  <!-- 加载优惠券信息 -->
+  <select id="loadCoupons" resultMap="BaseResultMap" >
+    select 
+	c.CouponID,c.CouponNo,c.CouponName,c.CouponModel,c.Coupontype,c.SendType,c.SendModel,c.SendDate,c.AuditStatus,
+	c.AppointCompany,c.ValidateBegin,c.ValidateEnd,c.CreateMan,c.CouponMoney,c.LimitMoney,c.`Status`
+	from t_run_coupon c
+  </select>
+  
+</mapper>

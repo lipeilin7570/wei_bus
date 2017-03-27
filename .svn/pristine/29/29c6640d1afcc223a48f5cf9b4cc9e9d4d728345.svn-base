@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.CarInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.CarInfo" >
+    <id column="CarID" property="carid" jdbcType="INTEGER" />
+    <result column="CarNo" property="carno" jdbcType="VARCHAR" />
+    <result column="CarModelID" property="carmodelid" jdbcType="INTEGER" />
+    <result column="ModelDetailID" property="modeldetailid" jdbcType="INTEGER" />
+    <result column="CarBrand" property="carbrand" jdbcType="INTEGER" />
+    <result column="CarModel" property="carmodel" jdbcType="INTEGER" />
+    <result column="CarColor" property="carcolor" jdbcType="INTEGER" />
+    <result column="CarInerior" property="carinerior" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="People" property="people" jdbcType="INTEGER" />
+    <result column="CarStatus" property="carstatus" jdbcType="INTEGER" />
+    <result column="TerminalNo" property="terminalno" jdbcType="VARCHAR" />
+    <result column="SIMNo" property="simno" jdbcType="VARCHAR" />
+    <result column="BluetoothNo" property="bluetoothno" jdbcType="VARCHAR" />
+    <result column="LastTime" property="lasttime" jdbcType="TIMESTAMP" />
+    <result column="CreateManID" property="createmanid" jdbcType="INTEGER" />
+    <result column="CreateMan" property="createman" jdbcType="VARCHAR" />
+    <result column="UpdateManID" property="updatemanid" jdbcType="INTEGER" />
+    <result column="UpdateMan" property="updateman" jdbcType="VARCHAR" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+    <result column="CarVin" property="carvin" jdbcType="VARCHAR" />
+    <result column="CarIcon" property="caricon" jdbcType="VARCHAR" />
+    <result column="CarPhoto" property="carphoto" jdbcType="VARCHAR" />
+    <result column="CarLicense" property="carlicense" jdbcType="VARCHAR" />
+    <result column="NameplateTime" property="nameplatetime" jdbcType="DATE" />
+    <result column="RegistrationTime" property="registrationtime" jdbcType="DATE" />
+    <result column="MachineNo" property="machineno" jdbcType="VARCHAR" />
+    <result column="BatteryCode" property="batterycode" jdbcType="VARCHAR" />
+    <result column="ChargingGun" property="charginggun" jdbcType="INTEGER" />
+    <result column="Extinguisher" property="extinguisher" jdbcType="INTEGER" />
+    <result column="Tools" property="tools" jdbcType="INTEGER" />
+    <result column="Sign" property="sign" jdbcType="INTEGER" />
+    <result column="SpareTire" property="sparetire" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CarID, CarNo, CarModelID, ModelDetailID, CarBrand, CarModel, CarColor, CarInerior, 
+    CreateTime, People, CarStatus, TerminalNo, SIMNo, BluetoothNo, LastTime, CreateManID, 
+    CreateMan, UpdateManID, UpdateMan, Remark, CompanyID, CarVin, CarIcon, CarPhoto, 
+    CarLicense, NameplateTime, RegistrationTime, MachineNo, BatteryCode, ChargingGun, 
+    Extinguisher, Tools, Sign, SpareTire
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_car
+    where CarID = #{carid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_car
+    where CarID = #{carid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.CarInfo" >
+    insert into t_info_car (CarID, CarNo, CarModelID, 
+      ModelDetailID, CarBrand, CarModel, 
+      CarColor, CarInerior, CreateTime, 
+      People, CarStatus, TerminalNo, 
+      SIMNo, BluetoothNo, LastTime, 
+      CreateManID, CreateMan, UpdateManID, 
+      UpdateMan, Remark, CompanyID, 
+      CarVin, CarIcon, CarPhoto, 
+      CarLicense, NameplateTime, RegistrationTime, 
+      MachineNo, BatteryCode, ChargingGun, 
+      Extinguisher, Tools, Sign, 
+      SpareTire)
+    values (#{carid,jdbcType=INTEGER}, #{carno,jdbcType=VARCHAR}, #{carmodelid,jdbcType=INTEGER}, 
+      #{modeldetailid,jdbcType=INTEGER}, #{carbrand,jdbcType=INTEGER}, #{carmodel,jdbcType=INTEGER}, 
+      #{carcolor,jdbcType=INTEGER}, #{carinerior,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{people,jdbcType=INTEGER}, #{carstatus,jdbcType=INTEGER}, #{terminalno,jdbcType=VARCHAR}, 
+      #{simno,jdbcType=VARCHAR}, #{bluetoothno,jdbcType=VARCHAR}, #{lasttime,jdbcType=TIMESTAMP}, 
+      #{createmanid,jdbcType=INTEGER}, #{createman,jdbcType=VARCHAR}, #{updatemanid,jdbcType=INTEGER}, 
+      #{updateman,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{companyid,jdbcType=INTEGER}, 
+      #{carvin,jdbcType=VARCHAR}, #{caricon,jdbcType=VARCHAR}, #{carphoto,jdbcType=VARCHAR}, 
+      #{carlicense,jdbcType=VARCHAR}, #{nameplatetime,jdbcType=DATE}, #{registrationtime,jdbcType=DATE}, 
+      #{machineno,jdbcType=VARCHAR}, #{batterycode,jdbcType=VARCHAR}, #{charginggun,jdbcType=INTEGER}, 
+      #{extinguisher,jdbcType=INTEGER}, #{tools,jdbcType=INTEGER}, #{sign,jdbcType=INTEGER}, 
+      #{sparetire,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.CarInfo" >
+    insert into t_info_car
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carid != null" >
+        CarID,
+      </if>
+      <if test="carno != null" >
+        CarNo,
+      </if>
+      <if test="carmodelid != null" >
+        CarModelID,
+      </if>
+      <if test="modeldetailid != null" >
+        ModelDetailID,
+      </if>
+      <if test="carbrand != null" >
+        CarBrand,
+      </if>
+      <if test="carmodel != null" >
+        CarModel,
+      </if>
+      <if test="carcolor != null" >
+        CarColor,
+      </if>
+      <if test="carinerior != null" >
+        CarInerior,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="people != null" >
+        People,
+      </if>
+      <if test="carstatus != null" >
+        CarStatus,
+      </if>
+      <if test="terminalno != null" >
+        TerminalNo,
+      </if>
+      <if test="simno != null" >
+        SIMNo,
+      </if>
+      <if test="bluetoothno != null" >
+        BluetoothNo,
+      </if>
+      <if test="lasttime != null" >
+        LastTime,
+      </if>
+      <if test="createmanid != null" >
+        CreateManID,
+      </if>
+      <if test="createman != null" >
+        CreateMan,
+      </if>
+      <if test="updatemanid != null" >
+        UpdateManID,
+      </if>
+      <if test="updateman != null" >
+        UpdateMan,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+      <if test="carvin != null" >
+        CarVin,
+      </if>
+      <if test="caricon != null" >
+        CarIcon,
+      </if>
+      <if test="carphoto != null" >
+        CarPhoto,
+      </if>
+      <if test="carlicense != null" >
+        CarLicense,
+      </if>
+      <if test="nameplatetime != null" >
+        NameplateTime,
+      </if>
+      <if test="registrationtime != null" >
+        RegistrationTime,
+      </if>
+      <if test="machineno != null" >
+        MachineNo,
+      </if>
+      <if test="batterycode != null" >
+        BatteryCode,
+      </if>
+      <if test="charginggun != null" >
+        ChargingGun,
+      </if>
+      <if test="extinguisher != null" >
+        Extinguisher,
+      </if>
+      <if test="tools != null" >
+        Tools,
+      </if>
+      <if test="sign != null" >
+        Sign,
+      </if>
+      <if test="sparetire != null" >
+        SpareTire,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carid != null" >
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="carmodelid != null" >
+        #{carmodelid,jdbcType=INTEGER},
+      </if>
+      <if test="modeldetailid != null" >
+        #{modeldetailid,jdbcType=INTEGER},
+      </if>
+      <if test="carbrand != null" >
+        #{carbrand,jdbcType=INTEGER},
+      </if>
+      <if test="carmodel != null" >
+        #{carmodel,jdbcType=INTEGER},
+      </if>
+      <if test="carcolor != null" >
+        #{carcolor,jdbcType=INTEGER},
+      </if>
+      <if test="carinerior != null" >
+        #{carinerior,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="people != null" >
+        #{people,jdbcType=INTEGER},
+      </if>
+      <if test="carstatus != null" >
+        #{carstatus,jdbcType=INTEGER},
+      </if>
+      <if test="terminalno != null" >
+        #{terminalno,jdbcType=VARCHAR},
+      </if>
+      <if test="simno != null" >
+        #{simno,jdbcType=VARCHAR},
+      </if>
+      <if test="bluetoothno != null" >
+        #{bluetoothno,jdbcType=VARCHAR},
+      </if>
+      <if test="lasttime != null" >
+        #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createmanid != null" >
+        #{createmanid,jdbcType=INTEGER},
+      </if>
+      <if test="createman != null" >
+        #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="updatemanid != null" >
+        #{updatemanid,jdbcType=INTEGER},
+      </if>
+      <if test="updateman != null" >
+        #{updateman,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="carvin != null" >
+        #{carvin,jdbcType=VARCHAR},
+      </if>
+      <if test="caricon != null" >
+        #{caricon,jdbcType=VARCHAR},
+      </if>
+      <if test="carphoto != null" >
+        #{carphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="carlicense != null" >
+        #{carlicense,jdbcType=VARCHAR},
+      </if>
+      <if test="nameplatetime != null" >
+        #{nameplatetime,jdbcType=DATE},
+      </if>
+      <if test="registrationtime != null" >
+        #{registrationtime,jdbcType=DATE},
+      </if>
+      <if test="machineno != null" >
+        #{machineno,jdbcType=VARCHAR},
+      </if>
+      <if test="batterycode != null" >
+        #{batterycode,jdbcType=VARCHAR},
+      </if>
+      <if test="charginggun != null" >
+        #{charginggun,jdbcType=INTEGER},
+      </if>
+      <if test="extinguisher != null" >
+        #{extinguisher,jdbcType=INTEGER},
+      </if>
+      <if test="tools != null" >
+        #{tools,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null" >
+        #{sign,jdbcType=INTEGER},
+      </if>
+      <if test="sparetire != null" >
+        #{sparetire,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.CarInfo" >
+    update t_info_car
+    <set >
+      <if test="carno != null" >
+        CarNo = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="carmodelid != null" >
+        CarModelID = #{carmodelid,jdbcType=INTEGER},
+      </if>
+      <if test="modeldetailid != null" >
+        ModelDetailID = #{modeldetailid,jdbcType=INTEGER},
+      </if>
+      <if test="carbrand != null" >
+        CarBrand = #{carbrand,jdbcType=INTEGER},
+      </if>
+      <if test="carmodel != null" >
+        CarModel = #{carmodel,jdbcType=INTEGER},
+      </if>
+      <if test="carcolor != null" >
+        CarColor = #{carcolor,jdbcType=INTEGER},
+      </if>
+      <if test="carinerior != null" >
+        CarInerior = #{carinerior,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="people != null" >
+        People = #{people,jdbcType=INTEGER},
+      </if>
+      <if test="carstatus != null" >
+        CarStatus = #{carstatus,jdbcType=INTEGER},
+      </if>
+      <if test="terminalno != null" >
+        TerminalNo = #{terminalno,jdbcType=VARCHAR},
+      </if>
+      <if test="simno != null" >
+        SIMNo = #{simno,jdbcType=VARCHAR},
+      </if>
+      <if test="bluetoothno != null" >
+        BluetoothNo = #{bluetoothno,jdbcType=VARCHAR},
+      </if>
+      <if test="lasttime != null" >
+        LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createmanid != null" >
+        CreateManID = #{createmanid,jdbcType=INTEGER},
+      </if>
+      <if test="createman != null" >
+        CreateMan = #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="updatemanid != null" >
+        UpdateManID = #{updatemanid,jdbcType=INTEGER},
+      </if>
+      <if test="updateman != null" >
+        UpdateMan = #{updateman,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="carvin != null" >
+        CarVin = #{carvin,jdbcType=VARCHAR},
+      </if>
+      <if test="caricon != null" >
+        CarIcon = #{caricon,jdbcType=VARCHAR},
+      </if>
+      <if test="carphoto != null" >
+        CarPhoto = #{carphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="carlicense != null" >
+        CarLicense = #{carlicense,jdbcType=VARCHAR},
+      </if>
+      <if test="nameplatetime != null" >
+        NameplateTime = #{nameplatetime,jdbcType=DATE},
+      </if>
+      <if test="registrationtime != null" >
+        RegistrationTime = #{registrationtime,jdbcType=DATE},
+      </if>
+      <if test="machineno != null" >
+        MachineNo = #{machineno,jdbcType=VARCHAR},
+      </if>
+      <if test="batterycode != null" >
+        BatteryCode = #{batterycode,jdbcType=VARCHAR},
+      </if>
+      <if test="charginggun != null" >
+        ChargingGun = #{charginggun,jdbcType=INTEGER},
+      </if>
+      <if test="extinguisher != null" >
+        Extinguisher = #{extinguisher,jdbcType=INTEGER},
+      </if>
+      <if test="tools != null" >
+        Tools = #{tools,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null" >
+        Sign = #{sign,jdbcType=INTEGER},
+      </if>
+      <if test="sparetire != null" >
+        SpareTire = #{sparetire,jdbcType=INTEGER},
+      </if>
+    </set>
+    where CarID = #{carid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.CarInfo" >
+    update t_info_car
+    set CarNo = #{carno,jdbcType=VARCHAR},
+      CarModelID = #{carmodelid,jdbcType=INTEGER},
+      ModelDetailID = #{modeldetailid,jdbcType=INTEGER},
+      CarBrand = #{carbrand,jdbcType=INTEGER},
+      CarModel = #{carmodel,jdbcType=INTEGER},
+      CarColor = #{carcolor,jdbcType=INTEGER},
+      CarInerior = #{carinerior,jdbcType=INTEGER},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      People = #{people,jdbcType=INTEGER},
+      CarStatus = #{carstatus,jdbcType=INTEGER},
+      TerminalNo = #{terminalno,jdbcType=VARCHAR},
+      SIMNo = #{simno,jdbcType=VARCHAR},
+      BluetoothNo = #{bluetoothno,jdbcType=VARCHAR},
+      LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      CreateManID = #{createmanid,jdbcType=INTEGER},
+      CreateMan = #{createman,jdbcType=VARCHAR},
+      UpdateManID = #{updatemanid,jdbcType=INTEGER},
+      UpdateMan = #{updateman,jdbcType=VARCHAR},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CompanyID = #{companyid,jdbcType=INTEGER},
+      CarVin = #{carvin,jdbcType=VARCHAR},
+      CarIcon = #{caricon,jdbcType=VARCHAR},
+      CarPhoto = #{carphoto,jdbcType=VARCHAR},
+      CarLicense = #{carlicense,jdbcType=VARCHAR},
+      NameplateTime = #{nameplatetime,jdbcType=DATE},
+      RegistrationTime = #{registrationtime,jdbcType=DATE},
+      MachineNo = #{machineno,jdbcType=VARCHAR},
+      BatteryCode = #{batterycode,jdbcType=VARCHAR},
+      ChargingGun = #{charginggun,jdbcType=INTEGER},
+      Extinguisher = #{extinguisher,jdbcType=INTEGER},
+      Tools = #{tools,jdbcType=INTEGER},
+      Sign = #{sign,jdbcType=INTEGER},
+      SpareTire = #{sparetire,jdbcType=INTEGER}
+    where CarID = #{carid,jdbcType=INTEGER}
+  </update>
+</mapper>

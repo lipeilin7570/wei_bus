@@ -1,0 +1,23 @@
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+}
+/***********************************aside**********************************/
+/*modal*/
+.modal-header {
+	background-color: #1b6d85;
+}
+
+.modal-title {
+	text-align: left;
+	color: #ffffff;
+}
+
+.modal-form input {
+	margin-bottom: 10px;
+}
+
+#impbut, #submit {
+	margin-right: 45%;
+}

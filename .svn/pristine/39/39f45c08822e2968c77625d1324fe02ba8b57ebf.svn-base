@@ -1,0 +1,303 @@
+$(document).ready(function(){
+    search();
+})
+function ss(){	
+	$('#tab').bootstrapTable('refresh'); 
+}
+function checkData(res){
+    return res;
+}
+//加载所有操作员信息
+function search() {
+    $('#tab').bootstrapTable({
+        method:'post',
+        url:'../../operator/findoperator.do',
+        cache:false,
+        height:"auto",
+        striped:true,
+        pagination:true,
+        pageList:[ 10, 20 ],
+        pageSize:10,
+        pageNumber:1,
+        //search : true,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:queryParams,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"sysloginname",
+        sortOrder:"desc",
+        //showColumns : true,
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                align:'center',
+                checkbox:true           
+            }, {
+                field:'sysusename',
+                title:'用户名称',
+                align:'center',
+                valign:'middle',
+                sortable:true          
+            }, {
+                field:'sysloginname',
+                title:'登陆账号',
+                align:'center',
+                valign:'middle',                
+                sortable:true
+            }, {
+                field:'createtime',
+                title:'创建时间',
+                align:'center',
+                valign:'middle',
+          //      formatter:dateFormatter,
+                sortable:true
+            }, {
+                field:'logintime',
+                title:'登陆时间',
+                align:'center',
+                valign:'middle',
+         //       formatter:logintimeFormatter  
+            }, {
+                field:'roleid',
+                title:'所属角色名称',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'depttype',
+                title:'部门',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'dutytype',
+                title:'职务',
+                align:'center',
+                valign:'middle',
+            }, {
+                field:'telphone',
+                title:'电话',
+                align:'center',
+                valign:'middle',                                                     
+            }, {
+                field:'status',
+                title:'状态',
+                align:'center',
+                valign:'middle',
+                formatter:statusFormatter           
+            }, {
+                field:'remark',
+                title:'备注',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'operate',
+                title:'操作',
+                align:'center',
+                valign:'middle',
+                formatter:operateFormatter,
+                events:operateEvents
+            }
+        ],
+        onLoadSuccess:function(){
+            //alert("success");
+        },
+        onLoadError:function(){
+           // location.reload();
+        }
+    });
+};
+var sn;
+var so;
+function queryParams(params){
+    sn=params.sortName;
+    so=params.sortOrder;
+    return{
+        pageSize:params.pageSize,
+        pageNumber:params.pageNumber,
+        sortName:params.sortName,
+        sortOrder:params.sortOrder,
+        userName:$('#userName').val(),
+        loginName:$('#loginName').val(),
+        companyID:$('#companyID').val(),
+        roleID:$('#roleID').val(),
+        status:$('#status').val(),
+        telPhone:$('#telPhone').val()
+    };
+};
+/*function dateFormatter(value, row, index){
+    var myDate=new  Date();
+    myDate.setTime(row.createTime);
+    return myDate.formatter('yy-MM-dd')
+}*/
+function statusFormatter(value,row,index){
+    var status;
+    switch(value)
+    {
+        case 1:
+            status='正常';
+            break;
+        case 2:
+            status='暂停';
+            break;
+        case 3:
+            status='销户';
+            break;
+        default :
+            status='';
+            break;
+    }
+    return status;
+}
+function operateFormatter(value, row, index){
+    return [
+        '<a class="edit" href="javascript:void(0)" title="Like" >编辑</a>&nbsp;&nbsp;',
+        '<a class="empower" href="javascript:void(0)" title="status" >授权</a>'
+    ].join('');
+}
+window.operateEvents={
+    'click .edit': function (e, value, row, index){
+    	var userName=row.sysusename;
+    	var pwd=row.syspassword;
+    	var loginName=row.sysloginname;
+    	var roleID=row.roleid;
+    	var deptType=row.depttype;
+    	var telPhone=row.telphone;
+    	var companyID=row.companyid;
+    	var remark=row.remark;
+    	$('#user_Name').val(userName);
+    	$('#Pwd').val(pwd);
+    	$('#login_Name').val(loginName);
+    	$('#role_ID').val(roleID);
+    	$('#dept_Type').val(deptType);
+    	$('#tel_Phone').val(telPhone);
+    	$('#company_ID').val(companyID);
+    	$('#Remark').val(remark);
+        $('#revise').click();              	
+    },
+    'click .empower': function (e, value, row, index){
+    	$('#statusBtn').click();
+    }
+} 
+//编辑提交
+$(function(){
+	$('#submit').click(function(){  
+		var cookieval=readCookie("operateID")
+    	var data={
+    			'operatorID':cookieval,
+    			'userName':$('#user_Name').val(),
+				'pwd':$('#Pwd').val(),
+				'loginName':$('#login_Name').val(),
+				'roleID':$('#role_ID').val(),
+				'deptType':$('#dept_Type').val(),
+				'telPhone':$('#tel_Phone').val(),
+				'companyID':$('#company_ID').val(),
+				'remark':$('#Remark').val()
+    	};
+    	$.ajax({
+    		   type:"post",
+			   dataType:"json",
+			   url: "../../operator/changeInfo.do",    	    
+			   data:data,
+			   success:function(data){
+				   if(data.status==0){
+					   alert("编辑成功！");
+					   search();
+					   ss();
+				   }
+			   },
+			   error:function(data){				   
+				   alert("编辑失败！");
+			   }
+    	})
+   })
+})
+//新增
+function addOpr(){
+	$('#impload').click();			
+}
+function urlSubmit(){	
+	var data={
+			//'operatorID':row.sysoperatorid,
+			'userName':$('#userName').val(),
+			'pwd':$('#pwd').val(),
+			'loginName':$('#loginName').val(),
+			'roleID':$('#roleId').val(),
+			'deptType':$('#deptType').val(),
+			'telPhone':$('#telPhone').val(),
+			'companyID':$('#company').val(),
+			'remark':$('#remark').val()
+	}
+	$.ajax({
+		type: "POST",
+        url: "../../operator/addOperator.do",        
+        dataType: "json",
+        async:true,
+        data:data,
+        success:function(data){	        	
+        	if(data.status==0){
+        		alert('新增成功！');
+        		search();
+        		ss();
+        	}
+        },
+        error:function(){
+        	alert('新增失败！');
+        }
+	})	
+}
+//角色授权
+
+$(document).ready(function() {
+    /**
+     * 下面是进行插件初始化
+     * 你只需传入相应的键值对
+     * */
+    $('#impTB').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {/*验证*/
+            	userName: {/*键名username和input name值对应*/
+                    message: 'The username is not valid',
+                    validators: {
+                        notEmpty: {/*非空提示*/
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {/*长度提示*/
+                            min: 6,
+                            max: 30,
+                            message: '用户名长度必须在6到30之间'
+                        }/*最后一个没有逗号*/
+                    }
+                },
+                pwd: {
+                    message:'密码无效',
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '用户名长度必须在6到30之间'
+                        }
+                    }
+                },
+                loginName: {
+                    validators: {
+                        notEmpty: {
+                            message: 'The email address is required and can\'t be empty'
+                        },
+                        emailAddress: {
+                            message: 'The input is not a valid email address'
+                        }
+                    }
+                }
+            }
+        });
+});

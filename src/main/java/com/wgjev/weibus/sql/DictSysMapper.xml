@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.DictSysMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.DictSys" >
+    <id column="SysDictTypeID" property="sysdicttypeid" jdbcType="INTEGER" />
+    <id column="SysDictID" property="sysdictid" jdbcType="INTEGER" />
+    <result column="SysDictName" property="sysdictname" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SysDictTypeID, SysDictID, SysDictName, Status, Remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.wgjev.weibus.entity.DictSysKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_system_dict
+    where SysDictTypeID = #{sysdicttypeid,jdbcType=INTEGER}
+      and SysDictID = #{sysdictid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.wgjev.weibus.entity.DictSysKey" >
+    delete from t_system_dict
+    where SysDictTypeID = #{sysdicttypeid,jdbcType=INTEGER}
+      and SysDictID = #{sysdictid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.DictSys" >
+    insert into t_system_dict (SysDictTypeID, SysDictID, SysDictName, 
+      Status, Remark)
+    values (#{sysdicttypeid,jdbcType=INTEGER}, #{sysdictid,jdbcType=INTEGER}, #{sysdictname,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.DictSys" >
+    insert into t_system_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysdicttypeid != null" >
+        SysDictTypeID,
+      </if>
+      <if test="sysdictid != null" >
+        SysDictID,
+      </if>
+      <if test="sysdictname != null" >
+        SysDictName,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysdicttypeid != null" >
+        #{sysdicttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="sysdictid != null" >
+        #{sysdictid,jdbcType=INTEGER},
+      </if>
+      <if test="sysdictname != null" >
+        #{sysdictname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.DictSys" >
+    update t_system_dict
+    <set >
+      <if test="sysdictname != null" >
+        SysDictName = #{sysdictname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SysDictTypeID = #{sysdicttypeid,jdbcType=INTEGER}
+      and SysDictID = #{sysdictid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.DictSys" >
+    update t_system_dict
+    set SysDictName = #{sysdictname,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR}
+    where SysDictTypeID = #{sysdicttypeid,jdbcType=INTEGER}
+      and SysDictID = #{sysdictid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询已定义的数据字典 -->
+  <select id="findDictByTypeID" resultMap="BaseResultMap" parameterType="int" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_system_dict
+    where SysDictTypeID = #{typeID}
+  </select>
+  
+  
+</mapper>

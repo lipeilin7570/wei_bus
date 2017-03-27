@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>故障信息</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.fr.js"></script>
+<script src="../../js/common2.js"></script>
+<script src="../../js/script/Order/fault.js"></script>
+<style>
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+}
+.double_select{
+	text-align:center;
+}
+.title_box>label{margin-right:10px;}
+.title_box>label:first-of-type{margin-left:20px}
+.title_box>select,.title_box>input{
+	height:25px;
+	width:15%;
+	margin-right:30px;
+	border-radius:4px;
+	-moz-border-radius:4px; 
+	-webkit-border-radius:4px; 
+	border-style:solid;
+	border-color:#ccc;
+	border-width:1px
+}
+.title_box>button{
+	margin-right:30px;
+}
+</style>
+</head>
+<body>
+	<div class="container"style="width: 100%; border:0px; border-style:solid;">
+		<div class="panel center-block">			
+			<div id="custom-toolbar" style="padding-top: 10px;">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<div class="title_box">
+							<label for="faultNum">最近几天的故障</label>
+							<input type="text" id="faultDays"/>
+							<label for="carNum">故障状态</label>
+							<select id="faultStatus">
+								<option value="0">所有</option>
+								<option value="1">已录入</option>
+								<option value="2">已缴纳保证金</option>
+								<option value="3">已维修</option>
+								<option value="5">已完成</option>
+								<option value="6">撤销</option>								
+							</select>	
+							<!-- <label for="faultTime" class="col-sm-2 control-label">订单ID</label>
+							<input type="text" id="faultLeaseID" class="form-control" /> -->
+							<label for="completeTime">车牌号</label>
+							<input type="text" id="carNum"/>
+							<button type="button" class="btn btn-info" onclick="ss()">查询</button>	
+						</div>					
+					</div>
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-page-list="[10, 25, 50, 100, ALL]" data-show-refresh="true" data-search="true"></table>
+			</div>
+		</div>
+	</div>
+	<!-- 按钮触发模态框 -->
+	<button id="del_btn" style="display: none;"class="btn btn-primary btn-lg" data-toggle="modal"data-target="#delModal"></button>
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+		aria-labelledby="delModalLabel" aria-hidden="true" style="top:10%;">
+		<div class="modal-dialog" style="width:30%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="del_msg" style="font-size:14px"></span>
+					<p class="finish_tip" style="font-size:14px;margin:5px 0"></p>					
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm"data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--维修录入-->
+	<button id="repaireRecord"  style="display:none"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#impModal"></button>
+	<div class="modal fade" id="impModal" tabindex="-1" role="dialog"
+		aria-labelledby="impModalLabel" aria-hidden="true" style="top:10%">
+		<div class="modal-dialog" style="width:50%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="impModalLabel">维修录入</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:250px;overflow:auto">
+					<table class="table table-bordered" id="fault_repaire">
+							<tr>
+								<td class="title">维修完毕时间</td>
+								<td>
+									<input type="text" id="repairTime"/>
+								</td>
+								<td class="title">维修费用</td>
+								<td>
+									<input type="text" id="repairFee"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="title">需客户承担费用</td>
+								<td>
+									<input type="text" id="userPayFee"/>
+								</td>
+								<td class="title"><span class="bailFee_hide_show">维修详情</span></td>
+								<td><textarea id="repairDetail"></textarea></td>
+							</tr>	
+							<tr>					
+								<td class="title">备注</td>
+								<td>
+									<textarea id="remark"></textarea>
+								</td>
+							</tr>														
+						</table>							
+				</div>
+				<div class="modal-footer">
+					<button id="repaire_impbut" onclick="repaireClick()" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">提交</button>
+				</div>
+			</div>
+		</div>
+	</div>			
+	<!-- 扣除保证金-->
+	<button id="deductDeposit" style="display:none" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#deductModal"></button>
+	<div class="modal fade" id="deductModal" tabindex="-1" role="dialog"
+		aria-labelledby="impModalLabel" aria-hidden="true" style="top:10%">
+		<div class="modal-dialog" style="width:40%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="impModalLabel">扣除保证金</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:150px;overflow:auto">
+					<table class="table table-bordered" id="dec_table">
+							<tr>
+								<td class="title">扣除金额</td>
+								<td>
+									<input type="text" id="decMoney"/>
+								</td>					
+								<td class="title">扣除原因</td>
+								<td>
+									<textarea id="decReason"></textarea>
+								</td>
+							</tr>														
+						</table>							
+				</div>
+				<div class="modal-footer">
+					<button id="dec_impbut" onclick="dec_click()" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">提交</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+	<!-- 解冻故障保证金 -->
+	<button id="unfreezeDeposit" style="display:none" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#unfreezeModal"></button>
+	<div class="modal fade" id="unfreezeModal" tabindex="-1" role="dialog"
+		aria-labelledby="impModalLabel" aria-hidden="true" style="top:10%">
+		<div class="modal-dialog" style="width:30%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<table id="unfreeze_table">
+						<tr>
+							<td style="font-size:14px">是否解冻保证金？</td>
+						</tr>
+					</table>					
+				</div>
+				<div class="modal-footer double_select">
+					<button id="sure" style="margin-right:10px" onclick="unfreezeClick()" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+					<button id="cancle" style="margin-left:10px" type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 故障处理完毕 -->
+	<button id="dealComplete" style="display:none" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#dealCompleteModal"></button>
+	<div class="modal fade" id="dealCompleteModal" tabindex="-1" role="dialog"
+		aria-labelledby="impModalLabel" aria-hidden="true" style="top:10%">
+		<div class="modal-dialog" style="width:30%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<table id="unfreeze_table">
+						<tr>
+							<td style="font-size:14px">故障已正常处理完毕？</td>
+						</tr>
+					</table>					
+				</div>
+				<div class="modal-footer double_select">
+					<button id="sure" style="margin-right:10px" onclick="unfreezeClick()" type="button" class="btn btn-primary" data-dismiss="modal">是</button>
+					<button id="cancle" style="margin-left:10px" type="button" class="btn btn-primary" data-dismiss="modal">否</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		var now =new Date();
+		$("#repairTime").datetimepicker({
+			format:"yyyy-mm-dd hh:ii:ss",
+			language:'zh-CN',
+			autoclose:true,
+			todayBtn:true,
+			endDate:now,
+			pickerPosition:"bottom-left"
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+if(!sessionStorage.getItem("operateID")){
+	window.location.href = "../../operationFailure.html"
+}
+$(document).ready(function(){
+    search();
+})
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){
+    return res;
+}
+//加载所有站点信息
+function search() {
+	var cookieval=readCookie("companyID");
+	var data={
+			'companyID':cookieval
+	}
+//	alert(cookieval)
+    $('#tab').bootstrapTable({
+        method:'post',
+        url:'../../beacon/loadBeanconByCompanyID.do',
+        cache:false,
+        height:"auto",
+        striped:true,
+        pagination:true,
+        pageSize:10,
+        pageNumber:1,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:data,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"UUID",
+        sortOrder:"desc",
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                checkbox:true
+            }, {
+                field:'beaconNo',
+                title:'信标编号',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'uuid',
+                title:'识别码&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+            }, {
+                field:'mac',
+                title:'MAC地址',
+                align:'center',
+                valign:'middle',
+            }, {
+                field:'major',
+                title:'覆盖最大范围',
+                align:'center',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'minor',
+                title:'覆盖最小范围',
+                align:'center',
+                valign:'middle',
+                sortable:true             
+            }, {
+                field:'siteName',
+                title:'所属站点&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle'
+            }, {
+                field:'status',
+                title:'信标状态',
+                align:'center',
+                valign:'middle',
+                //formatter:statusFormatter
+            }, {
+                field:'createTime',
+                title:'投入时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+                sortable:true 
+            }, {
+                field:'fixTime',
+                title:'安装时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle'
+            }, {
+                field:'operate',
+                title:'操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+                formatter:operateFormatter,
+                events:operateEvents
+            }
+        ],
+        onLoadSuccess:function(data){
+            //alert("success");
+        },
+        onLoadError:function(){
+            //location.reload();
+        }
+    });
+};
+function operateFormatter(value, row, index){
+    return [
+        '<a class="edit" href="javascript:void(0)" title="Like">修改信息</a>',                         
+    ].join('');
+}
+window.operateEvents={
+    'click .edit': function (e, value, row, index){    	   	
+    	$('#beacon_table').attr('data-siteId',row.siteID);
+    	$('#beacon_table').attr('data-beaconID',row.beaconID);    	
+    	var beaconno=row.beaconNo;
+    	var uuid=row.uuid;
+    	var major=row.major;
+    	var minor=row.minor;
+    	var mac=row.mac;
+    	var position=row.position;
+    	var fixtime=row.fixTime;
+    	var status=row.status;
+    	var remark=row.remark; 
+    	$('#beaconno').val(beaconno);
+    	$('#uuid').val(uuid);
+    	$('#major').val(major);
+    	$('#minor').val(minor);
+    	$('#mac').val(mac);
+    	$('#position').val(position);
+    	$('#fixtime').val(fixtime);
+    	$('#status').val(status);
+    	$('#remark').val(remark); 
+    	$('#editLoad').click(); 
+    }
+};
+//信标修改提交
+$(function(){
+	$('#editbut').click(function(){ 
+		var cookieval=readCookie("operateID");
+    	var cookievals=readCookie("companyID");
+        var data={
+        		'operatorID':cookieval,
+        		'companyID':cookievals,
+        		'siteID':$('#beacon_table').attr('data-siteId'),
+        		'beaconID':$('#beacon_table').attr('data-beaconID'),
+    			'beaconNo':$('#beaconno').val(),
+    			'UUID':$('#uuid').val(),
+    			'Major':$('#major').val(),
+    			'Minor':$('#minor').val(),
+    			'Mac':$('#mac').val(),
+    			'position':$('#position').val(),
+    			'fixTime':$('#fixtime').val(),
+    			'remark':$('#remark').val(),        			
+    			'status':$('#status').val(),       			    			        		
+    	};
+    	$.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "../../beacon/changeBeancon.do",
+            traditional:true,
+            data:data,
+            success: function (data) {
+                if(data.status==0){
+                    alert("修改成功！");
+                    search();
+                    ss();
+                }else{
+                   alert("修改失败！");
+                }
+            },
+            error: function(){
+            	alert("服务异常！");
+            }
+        });       
+    })
+})
+//得到查询的参数
+var sn;
+var so;
+function queryParams(params){
+    sn=params.sortName;
+    so=params.sortOrder;
+    return{
+        pageSize:params.pageSize,
+        pageNumber:params.pageNumber,
+        sortName:params.sortName,
+        sortOrder:params.sortOrder,
+        sitename:$('#sitename').val(),
+        sitecode:$('#sitecode').val(),
+        status:$('#status').val(),
+        zcode:$('#zcode').val(),
+        starttime:$('#starttime').val(),
+        endtime:$('#endtime').val()
+    };
+};
+
+

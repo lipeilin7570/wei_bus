@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>违章信息</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.fr.js"></script>
+<script src="../../js/script/Order/illegal.js"></script>
+<style>
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+}
+</style>
+</head>
+<body>
+	<div class="container"
+		style="width: 100%; border: 0px; border-style: solid;">
+		<div class="panel center-block">
+			<h4 align="center">违章信息</h4>
+			<div id="custom-toolbar" style="padding-top: 10px;">
+				<form class="form-horizontal" role="form">					
+					<div class="form-group">						
+						<label for="illegalType" class="col-sm-2 control-label">违章类型</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="illegalType">
+								<option value="0"></option>
+								<option value="1"></option>
+							</select>
+						</div>
+						<label for="illegalStatus" class="col-sm-2 control-label">违章状态</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="illegalStatus">
+								<option value="1">未处理</option>
+								<option value="2">已处理</option>
+								<option value="3">已撤销</option>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<button type="button" class="btn btn-info" onclick="ss();">查询</button>
+						</div>
+					</div>					
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-height="400" data-show-refresh="true" data-search="true"></table>
+			</div>
+		</div>
+	</div>
+	<!-- 按钮触发模态框 -->
+	<button id="del_btn" style="display: none;"class="btn btn-primary btn-lg" data-toggle="modal"data-target="#delModal"></button>
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog"aria-labelledby="delModalLabel" aria-hidden="true" style="top: 25%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="del_msg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm"data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

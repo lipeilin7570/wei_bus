@@ -1,0 +1,24 @@
+package com.wgjev.weibus.service;
+
+import com.wgjev.weibus.entity.BusResult;
+
+public interface ChangeService {
+	
+	/**
+	 * 查询换电任务单
+	 * @param operatorID
+	 * @param changeManID
+	 * @param beginTime
+	 * @param endTime
+	 * @param status
+	 * @param changeID
+	 * @param carNo
+	 * @param order
+	 * @param loginIP
+	 * @return
+	 */
+	public BusResult queryChanges(Integer operatorID, Integer changeManID, String beginTime, String endTime, 
+			Integer status, Integer changeID, String carNo, Integer order, String loginIP);
+	
+	
+}

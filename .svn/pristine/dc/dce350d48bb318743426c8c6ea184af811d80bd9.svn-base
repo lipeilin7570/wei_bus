@@ -1,0 +1,174 @@
+package com.wgjev.weibus.service.impl;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.wgjev.weibus.dao.CompanyInfoMapper;
+import com.wgjev.weibus.dao.json.CompanyJsonMapper;
+import com.wgjev.weibus.entity.BusResult;
+import com.wgjev.weibus.entity.CompanyInfo;
+import com.wgjev.weibus.entity.json.CompanyJson;
+import com.wgjev.weibus.service.CompanyService;
+
+@Service
+public class CompanyServiceImpl implements CompanyService {
+	
+	@Resource
+	private CompanyInfoMapper companyInfoMapper;
+	
+	@Resource
+	private CompanyJsonMapper companyJsonMapper;
+	
+	/**
+	 * 加载所有公司信息
+	 * @return
+	 */
+	public BusResult loadCompanies() {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		List<CompanyJson> list = companyJsonMapper.loadAllCompanyJson();
+		
+		result.setStatus(0);
+		result.setData(list);
+		return result;
+	}
+
+	/**
+	 * 增加公司信息
+	 */
+	public BusResult addCompany(Integer operatorID, String address, String companyName, String shortName, Integer parentID, String companyPhone, 
+			String contacts, String zcode, Integer companyCode, String remark, Integer regionStatus, double lng, double lat) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		int order;
+		List<CompanyInfo> list = companyInfoMapper.loadCompanies();
+		if (list == null) {
+			order = 1;
+		}else {
+			order = list.size()+1;
+		}
+		CompanyInfo companyInfo = new CompanyInfo();
+		if (address != null) {
+			companyInfo.setAddress(address);
+		}
+		if (companyName != null) {
+			companyInfo.setCompanyname(companyName);
+		}
+		if (shortName != null) {
+			companyInfo.setShortname(shortName);
+		}
+		if (parentID != null) {
+			companyInfo.setPartentid(parentID);
+		}
+		if (companyPhone != null) {
+			companyInfo.setCompanyphone(companyPhone);
+		}
+		if (contacts != null) {
+			companyInfo.setContacts(contacts);
+		}
+		if (zcode != null) {
+			companyInfo.setZcode(zcode);
+		}
+		if (companyCode != null) {
+			companyInfo.setConpanycode(companyCode);
+		}
+		if (remark != null) {
+			companyInfo.setRemark(remark);
+		}
+		companyInfo.setCompanyorder(new Integer(order));
+		
+		if (regionStatus != null) {
+			companyInfo.setRegionstatus(regionStatus);
+		}
+		if (lng > 0) {
+			companyInfo.setLongitude(new BigDecimal(lng));
+		}
+		if (lat > 0) {
+			companyInfo.setLatitude(new BigDecimal(lat));
+		}
+		companyInfo.setCreatetime(new Date());
+		companyInfo.setStatus(1);
+		
+		companyInfoMapper.insertSelective(companyInfo);
+		result.setStatus(0);
+		return result;
+	}
+
+	/**
+	 * 修改公司信息
+	 */
+	public BusResult changeCompany(Integer operatorID, String address, Integer companyID, String companyName, String shortName, Integer parentID, String companyPhone, 
+			String contacts, String zcode, Integer companyCode, String remark, Integer regionStatus, double lng, double lat, Integer status) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		CompanyInfo companyInfo = new CompanyInfo();
+		companyInfo.setCompanyid(companyID);
+		if (address != null) {
+			companyInfo.setAddress(address);
+		}
+		if (companyName != null) {
+			companyInfo.setCompanyname(companyName);
+		}
+		if (shortName != null) {
+			companyInfo.setShortname(shortName);
+		}
+		if (parentID != null) {
+			companyInfo.setPartentid(parentID);
+		}
+		if (companyPhone != null) {
+			companyInfo.setCompanyphone(companyPhone);
+		}
+		if (contacts != null) {
+			companyInfo.setContacts(contacts);
+		}
+		if (zcode != null) {
+			companyInfo.setZcode(zcode);
+		}
+		if (companyCode != null) {
+			companyInfo.setConpanycode(companyCode);
+		}
+		if (remark != null) {
+			companyInfo.setRemark(remark);
+		}
+		if (regionStatus != null) {
+			companyInfo.setRegionstatus(regionStatus);
+		}
+		if (lng > 0) {
+			companyInfo.setLongitude(new BigDecimal(lng));
+		}
+		if (lat > 0) {
+			companyInfo.setLatitude(new BigDecimal(lat));
+		}
+		if (status != null) {
+			companyInfo.setStatus(status);
+		}
+		
+		companyInfoMapper.updateByPrimaryKeySelective(companyInfo);
+		result.setStatus(0);
+		return result;
+	}
+
+	/**
+	 * 删除公司信息
+	 * @param companyID
+	 * @param status
+	 * @return
+	 */
+	public BusResult delCompany(Integer companyID, Integer status) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		CompanyInfo companyInfo = new CompanyInfo();
+		companyInfo.setCompanyid(companyID);
+		companyInfo.setStatus(status);
+		
+		companyInfoMapper.updateByPrimaryKeySelective(companyInfo);
+		result.setStatus(0);
+		return result;
+	}
+
+}

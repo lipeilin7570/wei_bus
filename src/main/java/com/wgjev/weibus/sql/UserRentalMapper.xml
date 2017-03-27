@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.UserRentalMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.UserRental" >
+    <id column="RentalUserID" property="rentaluserid" jdbcType="INTEGER" />
+    <result column="RentalUserNo" property="rentaluserno" jdbcType="VARCHAR" />
+    <result column="TelPhone" property="telphone" jdbcType="VARCHAR" />
+    <result column="Passwd" property="passwd" jdbcType="VARCHAR" />
+    <result column="RentalUserName" property="rentalusername" jdbcType="VARCHAR" />
+    <result column="Sex" property="sex" jdbcType="INTEGER" />
+    <result column="Age" property="age" jdbcType="INTEGER" />
+    <result column="Birthday" property="birthday" jdbcType="DATE" />
+    <result column="License" property="license" jdbcType="VARCHAR" />
+    <result column="Identity" property="identity" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Authentication" property="authentication" jdbcType="INTEGER" />
+    <result column="ApproveTime" property="approvetime" jdbcType="TIMESTAMP" />
+    <result column="RentalStatusInt" property="rentalstatusint" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="RentalUserImg" property="rentaluserimg" jdbcType="VARCHAR" />
+    <result column="Nationality" property="nationality" jdbcType="VARCHAR" />
+    <result column="DrivingType" property="drivingtype" jdbcType="VARCHAR" />
+    <result column="EffectDate" property="effectdate" jdbcType="DATE" />
+    <result column="ExpireDate" property="expiredate" jdbcType="DATE" />
+    <result column="IssuingAgency" property="issuingagency" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RentalUserID, RentalUserNo, TelPhone, Passwd, RentalUserName, Sex, Age, Birthday, 
+    License, Identity, CreateTime, Authentication, ApproveTime, RentalStatusInt, Status, 
+    UpdateTime, RentalUserImg, Nationality, DrivingType, EffectDate, ExpireDate, IssuingAgency
+  </sql>
+  
+  <!-- 根据telPhone查找用户 -->
+  <select id="findByTelPhone" parameterType="string" resultType="com.wgjev.weibus.entity.UserRental">
+  	SELECT *
+    FROM t_rental_user
+    WHERE TelPhone = #{telPhone}
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_rental_user
+    where RentalUserID = #{rentaluserid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_rental_user
+    where RentalUserID = #{rentaluserid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.UserRental" >
+    insert into t_rental_user (RentalUserID, RentalUserNo, TelPhone, 
+      Passwd, RentalUserName, Sex, 
+      Age, Birthday, License, 
+      Identity, CreateTime, Authentication, 
+      ApproveTime, RentalStatusInt, Status, 
+      UpdateTime, RentalUserImg, Nationality, 
+      DrivingType, EffectDate, ExpireDate, 
+      IssuingAgency)
+    values (#{rentaluserid,jdbcType=INTEGER}, #{rentaluserno,jdbcType=VARCHAR}, #{telphone,jdbcType=VARCHAR}, 
+      #{passwd,jdbcType=VARCHAR}, #{rentalusername,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+      #{age,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{license,jdbcType=VARCHAR}, 
+      #{identity,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{authentication,jdbcType=INTEGER}, 
+      #{approvetime,jdbcType=TIMESTAMP}, #{rentalstatusint,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{rentaluserimg,jdbcType=VARCHAR}, #{nationality,jdbcType=VARCHAR}, 
+      #{drivingtype,jdbcType=VARCHAR}, #{effectdate,jdbcType=DATE}, #{expiredate,jdbcType=DATE}, 
+      #{issuingagency,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.UserRental" >
+    insert into t_rental_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rentaluserid != null" >
+        RentalUserID,
+      </if>
+      <if test="rentaluserno != null" >
+        RentalUserNo,
+      </if>
+      <if test="telphone != null" >
+        TelPhone,
+      </if>
+      <if test="passwd != null" >
+        Passwd,
+      </if>
+      <if test="rentalusername != null" >
+        RentalUserName,
+      </if>
+      <if test="sex != null" >
+        Sex,
+      </if>
+      <if test="age != null" >
+        Age,
+      </if>
+      <if test="birthday != null" >
+        Birthday,
+      </if>
+      <if test="license != null" >
+        License,
+      </if>
+      <if test="identity != null" >
+        Identity,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="authentication != null" >
+        Authentication,
+      </if>
+      <if test="approvetime != null" >
+        ApproveTime,
+      </if>
+      <if test="rentalstatusint != null" >
+        RentalStatusInt,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime,
+      </if>
+      <if test="rentaluserimg != null" >
+        RentalUserImg,
+      </if>
+      <if test="nationality != null" >
+        Nationality,
+      </if>
+      <if test="drivingtype != null" >
+        DrivingType,
+      </if>
+      <if test="effectdate != null" >
+        EffectDate,
+      </if>
+      <if test="expiredate != null" >
+        ExpireDate,
+      </if>
+      <if test="issuingagency != null" >
+        IssuingAgency,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rentaluserid != null" >
+        #{rentaluserid,jdbcType=INTEGER},
+      </if>
+      <if test="rentaluserno != null" >
+        #{rentaluserno,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null" >
+        #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="rentalusername != null" >
+        #{rentalusername,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="license != null" >
+        #{license,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authentication != null" >
+        #{authentication,jdbcType=INTEGER},
+      </if>
+      <if test="approvetime != null" >
+        #{approvetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rentalstatusint != null" >
+        #{rentalstatusint,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rentaluserimg != null" >
+        #{rentaluserimg,jdbcType=VARCHAR},
+      </if>
+      <if test="nationality != null" >
+        #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="drivingtype != null" >
+        #{drivingtype,jdbcType=VARCHAR},
+      </if>
+      <if test="effectdate != null" >
+        #{effectdate,jdbcType=DATE},
+      </if>
+      <if test="expiredate != null" >
+        #{expiredate,jdbcType=DATE},
+      </if>
+      <if test="issuingagency != null" >
+        #{issuingagency,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.UserRental" >
+    update t_rental_user
+    <set >
+      <if test="rentaluserno != null" >
+        RentalUserNo = #{rentaluserno,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null" >
+        TelPhone = #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        Passwd = #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="rentalusername != null" >
+        RentalUserName = #{rentalusername,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        Sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="age != null" >
+        Age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        Birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="license != null" >
+        License = #{license,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        Identity = #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authentication != null" >
+        Authentication = #{authentication,jdbcType=INTEGER},
+      </if>
+      <if test="approvetime != null" >
+        ApproveTime = #{approvetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rentalstatusint != null" >
+        RentalStatusInt = #{rentalstatusint,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rentaluserimg != null" >
+        RentalUserImg = #{rentaluserimg,jdbcType=VARCHAR},
+      </if>
+      <if test="nationality != null" >
+        Nationality = #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="drivingtype != null" >
+        DrivingType = #{drivingtype,jdbcType=VARCHAR},
+      </if>
+      <if test="effectdate != null" >
+        EffectDate = #{effectdate,jdbcType=DATE},
+      </if>
+      <if test="expiredate != null" >
+        ExpireDate = #{expiredate,jdbcType=DATE},
+      </if>
+      <if test="issuingagency != null" >
+        IssuingAgency = #{issuingagency,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RentalUserID = #{rentaluserid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.UserRental" >
+    update t_rental_user
+    set RentalUserNo = #{rentaluserno,jdbcType=VARCHAR},
+      TelPhone = #{telphone,jdbcType=VARCHAR},
+      Passwd = #{passwd,jdbcType=VARCHAR},
+      RentalUserName = #{rentalusername,jdbcType=VARCHAR},
+      Sex = #{sex,jdbcType=INTEGER},
+      Age = #{age,jdbcType=INTEGER},
+      Birthday = #{birthday,jdbcType=DATE},
+      License = #{license,jdbcType=VARCHAR},
+      Identity = #{identity,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      Authentication = #{authentication,jdbcType=INTEGER},
+      ApproveTime = #{approvetime,jdbcType=TIMESTAMP},
+      RentalStatusInt = #{rentalstatusint,jdbcType=INTEGER},
+      Status = #{status,jdbcType=INTEGER},
+      UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      RentalUserImg = #{rentaluserimg,jdbcType=VARCHAR},
+      Nationality = #{nationality,jdbcType=VARCHAR},
+      DrivingType = #{drivingtype,jdbcType=VARCHAR},
+      EffectDate = #{effectdate,jdbcType=DATE},
+      ExpireDate = #{expiredate,jdbcType=DATE},
+      IssuingAgency = #{issuingagency,jdbcType=VARCHAR}
+    where RentalUserID = #{rentaluserid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 加载所有用户信息 -->
+  <select id="loadAllUsers" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_rental_user
+  </select>
+  
+</mapper>

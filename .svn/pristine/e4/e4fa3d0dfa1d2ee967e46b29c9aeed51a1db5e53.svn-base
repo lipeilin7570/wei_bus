@@ -1,0 +1,494 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>车辆展示</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/map.css">
+    <script type="text/javascript" src="../../js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap/bootstrap.js"></script>
+    <script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.3&key=b7876b455e78b9902aab22acc39d61c9"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <script type="text/javascript" src="../../js/script/Info/map.js"></script>  
+    <script src="../../js/common2.js" type="text/javascript"></script>
+    <style>
+    	#tool{width:800px;height:50px;background-color:#FFFFFF;bottom:92%;left:10%;}
+    	#carStatus{position:relative;}
+        #car{
+                position:absolute;
+                width:200px;height:120px;left:38%;top:8%;
+                background-color:#F6F6F6;
+                display: none;
+        }
+        #site{
+                position:absolute;
+                width:100px;height:60px;left:58%;top:8%;
+                background-color:#F6F6F6;
+                display: none;
+        }
+        #Status{
+                position:absolute;
+                width:100px;height:60px;left:74%;top:8%;
+                background-color:#F6F6F6;
+                display: none;
+        }
+    </style> 
+</head>
+<body>
+	<div id="container"></div>
+	<div class='button-group' id="tool">
+    	<input type="search"/>
+    	<button class="btn btn-sm btn-success">搜索</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    	<button class="btn btn-sm btn-info" style="margin-right:10%;">重置</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    	<input type="checkbox" id="carStatus" checked="checked"/>&nbsp;&nbsp;<label for="carStatus" style="margin-right:10%;">车辆状态</label> &nbsp;&nbsp;&nbsp;&nbsp;      	
+    	<input type="checkbox" id="siteModel" checked="checked"/>&nbsp;&nbsp;<label for="siteModel" style="margin-right:10%;">站点类型</label>&nbsp;&nbsp;&nbsp;&nbsp;    	
+    	<input type="checkbox" id="siteStatus" checked="checked"/>&nbsp;&nbsp;<label for="siteStatus">站点状态</label>&nbsp;&nbsp;&nbsp;&nbsp;    	
+	</div>	
+	<div id="car">
+            <table class="car_info">
+                <tr>
+                    <td><label>&nbsp;&nbsp;预约中</label></td>
+                    <td><input type="checkbox" checked="checked">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td><label>空闲中</label></td>
+                    <td><input type="checkbox" checked="checked"></td>
+                </tr>
+                <tr>
+                    <td><label>&nbsp;&nbsp;使用中</label></td>
+                    <td><input type="checkbox" checked="checked">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td><label>已停用</label></td>
+                    <td><input type="checkbox" checked="checked"></td>
+                </tr>
+                <tr>
+                    <td><label>&nbsp;&nbsp;自动上线</label></td>
+                    <td><input type="checkbox" checked="checked">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td><label>自动下线</label></td>
+                    <td><input type="checkbox" checked="checked"></td>
+                </tr>
+                <tr>
+                    <td><label>&nbsp;&nbsp;未知</label></td>
+                    <td><input type="checkbox" checked="checked"></td>                   
+                </tr>
+            </table>                                                                             
+        </div>
+        <div id="site">
+            <table class="site_info">
+                <tr>
+                    <td><label>&nbsp;&nbsp;有桩站点&nbsp;&nbsp;</label></td>
+                    <td><input type="checkbox" checked="checked"></td>                    
+                </tr>
+                <tr>
+                    <td><label>&nbsp;&nbsp;无桩站点&nbsp;&nbsp;</label></td>
+                    <td><input type="checkbox" checked="checked"></td>                    
+                </tr>                
+            </table>                                                                             
+        </div>  
+        <div id="Status">
+            <table class="Status_info">
+                <tr>
+                    <td><label>&nbsp;&nbsp;&nbsp;&nbsp;启用&nbsp;&nbsp;</label></td>
+                    <td><input type="checkbox" checked="checked"></td>                    
+                </tr>
+                <tr>
+                    <td><label>&nbsp;&nbsp;&nbsp;&nbsp;停用&nbsp;&nbsp;</label></td>
+                    <td><input type="checkbox" checked="checked"></td>                    
+                </tr>                
+            </table>                                                                             
+        </div> 
+    <script type="text/javascript">           
+    $(document).ready(function(){
+        $("#carStatus").mousemove(function(){
+            $("#car").slideDown().mouseleave(function(){
+                $(this).slideUp()
+            })
+        });        
+    });
+     $(document).ready(function(){
+        $("#siteModel").mousemove(function(){
+            $("#site").slideDown().mouseleave(function(){
+                $(this).slideUp()
+            })
+        });
+     })
+    $(document).ready(function(){
+        $("#siteStatus").mousemove(function(){
+            $("#Status").slideDown().mouseleave(function(){
+                $(this).slideUp()
+            })
+        });
+     })
+    $(function () {    //全选或全不选 
+        $("#carStatus").click(function(){  //车辆状态  
+            if(this.checked){    
+                $(".car_info :checkbox").attr("checked", true);   
+            }else{    
+                $(".car_info :checkbox").attr("checked", false); 
+            }    
+        });         
+    })
+    $(function () {
+        $("#siteModel").click(function(){  //站点类型  
+            if(this.checked){    
+                $(".site_info :checkbox").attr("checked", true);   
+            }else{    
+                $(".site_info :checkbox").attr("checked", false); 
+            }    
+        });
+    }) 
+    $(function () {
+        $("#siteStatus").click(function(){  //站点状态  
+            if(this.checked){    
+                $(".Status_info :checkbox").attr("checked", true);   
+            }else{    
+                $(".Status_info :checkbox").attr("checked", false); 
+            }    
+        });
+    })  
+	</script>		
+	<script type="text/javascript">		
+	//地图在页面加载时执行
+	window.onload=function(){
+		addMarker();
+	}
+	function myrefresh(){  
+		window.location.reload(); 		
+	}  
+	setTimeout('myrefresh()',180000);
+	//显示地图
+	//var marker, map=new AMap.Map("container", {
+    	//resizeEnable:true,
+    //	zoom:13,       	 
+	//});	
+	var map, geolocation;//加载地图，调用浏览器定位服务
+    map = new AMap.Map('container', {
+        resizeEnable: true
+    });
+    map.plugin('AMap.Geolocation', function() {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            buttonOffset: new AMap.Pixel(200, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            buttonPosition:'RB'
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+       // AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+       // AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    });
+	//请求
+	var sites;
+	var cars; 
+	var cookieval=readCookie("companyID");
+	var data={
+			'companyID':cookieval
+	}
+	function addMarker(){    		
+		// 站点请求
+		$.ajax({		
+	        type:"POST",
+	        dataType:"json",
+	        data:data,
+	        url:"../../site/loadSite.do",
+	        success: function (data){
+	           sites=data.data;
+	           addsite();		          
+	        },
+	        error: function(data){
+	        	//alert('服务异常！')
+	        }
+	    });			   		
+		//车辆请求
+		$.ajax({				
+	        type:"POST",
+	        dataType:"json",
+	        url:"../../car/loadAllCarStatus.do",
+	        success: function (data){		        	
+	           cars=data.data; 
+	           addmark();
+	       	},
+	        error: function(data){
+	        	//alert("服务异常！")
+	        }
+	    });	
+	}    	
+	//点击站点详细信息
+	function addsite(){
+		// 添加一些分布不均的点到地图上,作为参照
+	    sites.forEach(function(mark){//该mark是sites循环出来的数据参数
+	    	//将充电桩装态改为汉字
+        	switch (mark.pileStatus){
+        	case 1:{
+        		mark.pileStatus = "有"
+        	}
+        		break;
+        	case 2:{
+        		mark.pileStatus ="无"
+        	}	        		
+        		break;
+        	default:
+        		break;
+        }       	
+	    	var icon_use=new AMap.Icon({
+               image:'../../imgs/inco/site_work.png',//24px*24px
+                //icon可缺省，缺省时为默认的蓝色水滴图标，
+                size:new AMap.Size(24,24)
+        	});
+	    	var icon_free=new AMap.Icon({
+	               image:'../../imgs/inco/site_stop.png',//24px*24px
+	                //icon可缺省，缺省时为默认的蓝色水滴图标，
+	                size:new AMap.Size(24,24)
+	        	});
+	    	//坐标转换
+	    		var x_PI = 3.14159265358979324 * 3000.0 / 180.0;
+				var PI = 3.1415926535897932384626;
+				var a = 6378245.0;
+				var ee = 0.00669342162296594323;
+				var lng=mark.lng;
+	    		var lat=mark.lat;  	    		
+	      		var wgs84togcj02 = coordtransform.wgs84togcj02(lng, lat); 
+	        if (mark.status==1){
+	        	var marker=new AMap.Marker({//该marker是new的标注点
+    	            map:map,
+    	            icon:icon_use,
+    	            position:[wgs84togcj02[0], wgs84togcj02[1]],
+    	          	offset:new AMap.Pixel(-25, -2)
+    	        }); 	        	
+    	      //实例化信息窗体
+    	        var title='详细信息';        	        
+    	            content=[];       	       
+    	        	content.push("站点名称:"+mark.siteName);
+    	        	content.push("站点状态:"+"启用");    	        	
+    	        	content.push("充电桩状态:"+mark.pileStatus);
+    	        	content.push("可用车数/总车辆数:"+mark.usableCar+"/"+mark.cars);   	        	
+    	        	content.push("可用车位/总车位数:"+mark.usablePark+"/"+mark.parks);
+    	        	content.push("站点位置:"+mark.siteAddress);       	        	        	    		       	    		
+    	        var infoWindow = new AMap.InfoWindow({
+    	            isCustom:true,  //使用自定义窗体
+    	            content:createInfoWindow(title, content.join("<br/>")),
+    	          //  offset:new AMap.Pixel(16, -45)
+    	        });
+    	      //鼠标点击marker弹出自定义的信息窗体
+    	        AMap.event.addListener(marker, 'click', function(){
+    	            infoWindow.open(map, marker.getPosition());
+    	        }); 
+	        }else if(mark.status==2){    	        	    	        	
+	        	var marker=new AMap.Marker({//该marker是new的标注点
+    	            map:map,
+    	            icon:icon_free,
+    	            position:[wgs84togcj02[0], wgs84togcj02[1]],
+    	          	offset:new AMap.Pixel(-25, -2)
+    	        });    	        	
+	        	//鼠标点击marker弹出自定义的信息窗体
+    	        AMap.event.addListener(marker, 'click', function(){
+    	            infoWindow.open(map, marker.getPosition());
+    	        });	        		        		        		        	
+    	      //实例化信息窗体
+    	         var title='详细信息';        	        
+    	            content=[];       	       
+    	        	content.push("站点名称:"+mark.siteName);
+    	        	content.push("站点状态:"+"停用"); 
+    	        	content.push("充电桩状态:"+mark.pileStatus);
+    	        	content.push("可用车数/总车辆数:"+mark.usableCar+"/"+mark.cars);   	        	
+    	        	content.push("可用车位/总车位数:"+mark.usablePark+"/"+mark.parks);
+    	        	content.push("站点位置:"+mark.siteAddress);   	        	
+    	        var infoWindow = new AMap.InfoWindow({
+    	            isCustom:true,  //使用自定义窗体
+    	            content:createInfoWindow(title, content.join("<br/>")),
+    	           // offset:new AMap.Pixel(16, -45)  	            	        
+	    		});
+	        } 
+	    });    
+	}
+	//点击车辆详细信息
+	function addmark(){
+		// 添加一些分布不均的点到地图上,作为参照
+	    cars.forEach(function(marker){
+	    	//将充电状态改为汉字
+        	switch (marker.electricityStatus){
+        	case 0:{
+        		marker.electricityStatus = "未知"
+        	}
+        		break;
+        	case 1:{
+        		marker.electricityStatus ="ON"
+        	}
+        	    break;
+        	case 2:{
+        		marker.electricityStatus ="OFF"
+        	}
+        		break;
+        	default:
+        		break;
+        }     
+	    	var icon=new AMap.Icon({
+               image:'../../imgs/inco/carStatus_on.png',//24px*24px
+                //icon可缺省，缺省时为默认的蓝色水滴图标，
+                size:new AMap.Size(24,24)
+        	});
+	    	var icon_free=new AMap.Icon({
+	               image:'../../imgs/inco/carStatus_free.png',//24px*24px
+	                //icon可缺省，缺省时为默认的蓝色水滴图标，
+	                size:new AMap.Size(24,24)
+	        	}); 
+	    	var icon_appoint=new AMap.Icon({
+	               image:'../../imgs/inco/carStatus_appoint.png',//24px*24px
+                //icon可缺省，缺省时为默认的蓝色水滴图标，
+                size:new AMap.Size(24,24)
+        	});     	    
+	    	//坐标转换
+    		var x_PI = 3.14159265358979324 * 3000.0 / 180.0;
+			var PI = 3.1415926535897932384626;
+			var a = 6378245.0;
+			var ee = 0.00669342162296594323;
+			var lg=marker.lng;
+    		var lt=marker.lat; 
+      		var wgs84togcj02 = coordtransform.wgs84togcj02(lg, lt);
+	    	if(marker.carServiceStatus==1){
+	    		var markera=new AMap.Marker({
+      	          map: map,
+      	          icon: icon_free,
+      	          position: [wgs84togcj02[0], wgs84togcj02[1]],
+      	          offset: new AMap.Pixel(-20, -24)
+      	    	});
+	    		//鼠标点击marker弹出自定义的信息窗体
+    	        AMap.event.addListener(markera, 'click', function(){
+    	            infoWindow.open(map, markera.getPosition());
+    	        });
+    	    	markera.setLabel({
+            	      offset: new AMap.Pixel(-20, 16),//修改label相对于maker的位置
+            	      content:marker.carNo		        	     
+            	});
+    	    	//实例化信息窗体
+    	        var title='详细信息',
+    	            content=[];
+    	        	content.push("车型:"+marker.alias+marker.modelName);
+    	        	content.push("车牌号:"+marker.carNo);
+    	        	content.push("剩余电量:"+marker.electricity+"%")  	        	
+    	        	content.push("续航里程:"+marker.remainKon+"KM");   	        	
+    	        	content.push("充电状态:"+marker.electricityStatus);
+    	        	content.push("车辆状态:"+"空闲中");
+    	        	content.push("车辆位置:"+marker.location);
+    	        var infoWindow = new AMap.InfoWindow({
+    	            isCustom:true,  //使用自定义窗体
+    	            content:createInfoWindow(title, content.join("<br/>")),
+    	            offset:new AMap.Pixel(16, -45)
+    	        });
+	    	}else if(marker.carServiceStatus==2){
+	    		var markera=new AMap.Marker({
+        	          map: map,
+        	          icon: icon_appoint,
+        	          position: [wgs84togcj02[0], wgs84togcj02[1]],
+        	          offset: new AMap.Pixel(-20, -24)
+        	    	});
+  	    		//鼠标点击marker弹出自定义的信息窗体
+      	        AMap.event.addListener(markera, 'click', function(){
+      	            infoWindow.open(map, markera.getPosition());
+      	        });
+      	    	markera.setLabel({
+              	      offset: new AMap.Pixel(-18, 18),//修改label相对于maker的位置
+              	      content:marker.carNo		        	     
+              	});
+      	    	//实例化信息窗体
+      	        var title='详细信息',
+      	            content=[];
+      	      content.push("车型:"+marker.alias+marker.modelName);
+	        	content.push("车牌号:"+marker.carNo);
+	        	content.push("剩余电量:"+marker.electricity+"%")  	        	
+	        	content.push("续航里程:"+marker.remainKon+"KM");   	        	
+	        	content.push("充电状态:"+marker.electricityStatus);
+	        	content.push("车辆状态:"+"预约中");
+	        	content.push("车辆位置:"+marker.location);
+      	        var infoWindow = new AMap.InfoWindow({
+      	            isCustom:true,  //使用自定义窗体
+      	            content:createInfoWindow(title, content.join("<br/>")),
+      	            offset:new AMap.Pixel(16, -45)
+      	        });
+	    	}else if(marker.carServiceStatus==3){
+	    		var markera=new AMap.Marker({
+      	          map: map,
+      	          icon: icon,
+      	          position: [wgs84togcj02[0], wgs84togcj02[1]],
+      	          offset: new AMap.Pixel(-15, -32)
+      	    	});
+	    		//鼠标点击marker弹出自定义的信息窗体
+    	        AMap.event.addListener(markera, 'click', function(){
+    	            infoWindow.open(map, markera.getPosition());
+    	        });
+    	    	markera.setLabel({
+            	      offset: new AMap.Pixel(-20, 20),//修改label相对于maker的位置
+            	      content:marker.carNo		        	     
+            	});
+    	    	//实例化信息窗体
+    	    	
+    	        var title='详细信息',
+    	            content=[];
+    	        content.push("车型:"+marker.alias+marker.modelName);
+	        	content.push("车牌号:"+marker.carNo);
+	        	content.push("剩余电量:"+marker.electricity+"%")  	        	
+	        	content.push("续航里程:"+marker.remainKon+"KM");   	        	
+	        	content.push("充电状态:"+marker.electricityStatus);
+	        	content.push("车辆状态:"+"使用中");
+	        	content.push("车辆位置:"+marker.location);
+    	        var infoWindow = new AMap.InfoWindow({
+    	            isCustom:true,  //使用自定义窗体
+    	            content:createInfoWindow(title, content.join("<br/>")),
+    	            offset:new AMap.Pixel(16, -45)
+    	        });
+	    	}    	    		        	    	    		   	    	   	            	            	    	   	        
+	    });
+	}    	    	
+	//构建自定义信息窗体
+    function createInfoWindow(title, content){
+        var info = document.createElement("div");
+        info.className = "info";
+
+        //可以通过下面的方式修改自定义窗体的宽高
+        //info.style.width = "400px";
+        // 定义顶部标题
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = title;
+        closeX.src = "http://webapi.amap.com/images/close2.gif";
+        closeX.onclick = closeInfoWindow;
+
+        top.appendChild(titleD);
+        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        // 定义底部内容
+        var bottom = document.createElement("div");
+        bottom.className = "info-bottom";
+        bottom.style.position = 'relative';
+        bottom.style.top = '0px';
+        bottom.style.margin = '0 auto';
+        var sharp = document.createElement("img");
+        sharp.src = "http://webapi.amap.com/images/sharp.png";
+        bottom.appendChild(sharp);
+        info.appendChild(bottom);
+        return info;
+    }
+    //关闭信息窗体
+    function closeInfoWindow() {
+        map.clearInfoWindow();
+    }
+	//地图中添加地图操作ToolBar插件
+	 AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],function(){
+        map.addControl(new AMap.ToolBar());
+        map.addControl(new AMap.Scale());
+        map.addControl(new AMap.OverView({isOpen:true}));
+	})		  	
+	</script>	
+</body>
+</html>			

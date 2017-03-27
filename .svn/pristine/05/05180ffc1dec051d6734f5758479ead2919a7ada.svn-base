@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>角色管理</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/easyui/themes/default/easyui.css">
+<link rel="stylesheet" href="../../css/easyui/themes/icon.css">
+<link rel="stylesheet" href="../../css/easyui/themes/demo.css">
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootbox.js"></script>
+<script src="../../js/script/System/roles.js"></script>
+<script src="../../js/common2.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../js/easyui/jquery.easyui.min.js"></script>
+<style>
+
+.title{background-color:#F6F6F6;}
+</style>
+</head>
+<body>
+	<div class="container" style="width:100%; border:0px; border-style:solid;">
+		<div class="panel center-block">
+			<h4 align="center">角色管理</h4>
+			<div id="custom-toolbar" style="padding-top:10px;">
+				<form class="form-horizontal" role="form" action="" method="get">
+					<div class="form-group">											
+						<label for="roleStatus" class="col-sm-2 control-label">角色状态</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="roleStatus">
+								<option value="">请选择</option>
+								<option value="1">正常</option>
+								<option value="2">暂停</option>
+							</select>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-info" onclick="ss();">
+								<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>查询
+							</button>
+						</div>
+						<div class="col-sm-6">						
+							<button type="button" class="btn btn-primary" onclick="add();">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+							</button>
+							<button type="button" class="btn btn-danger" onclick="del();">
+								<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>删除
+							</button>						
+						</div>
+					</div>					
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-show-columns="true" data-id="row.roleID" data-show-refresh="true" data-search="true"></table>
+			</div>
+		</div>
+	</div>
+	<!-- 新增-->
+	<button id="impload" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal"data-target="#impModal">
+	</button>
+	<div class="modal fade" id="impModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:25%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">新增角色</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<table  class="table table-bordered">
+						<tr>
+							<td class="title">角色名称</td>
+							<td><input type="text" id="roleName" value=""></td>
+						</tr>
+						<tr>
+							<td class="title">角色编号</td>
+							<td><input type="text" id="roleNo" value=""></td>
+						</tr>
+						<tr>
+							<td class="title">备注</td>
+							<td><textarea id="remark"></textarea></td>
+						</tr>												
+					</table>
+				</div>
+				<div class="modal-footer">					
+					<button id="impbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="urlSubmit();">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 修改-->
+	<button id="editload" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal"data-target="#editModal">
+	</button>
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true" style="top:5%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="editModalLabel">修改角色信息</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<table  class="table table-bordered" id="edit_table">
+						<tr>
+							<td class="title">角色名称</td>
+							<td><input type="text" id="rolename" value=""></td>
+						</tr>
+						<tr>
+							<td class="title">角色编号</td>
+							<td><input type="text" id="roleno" value=""></td>
+						</tr>
+						<tr>
+							<td class="title">备注</td>
+							<td><textarea id="Remark"></textarea></td>
+						</tr>												
+					</table>
+				</div>
+				<div class="modal-footer">					
+					<button id="editbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 删除 -->
+	<button id="del_btn" style="display: none;"class="btn btn-primary btn-lg" data-toggle="modal"data-target="#delModal"></button>
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog"aria-labelledby="delModalLabel" aria-hidden="true" style="top: 25%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="del_msg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm"data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+	<!-- 授权 -->
+	<button id="empower" style="display:none;"class="btn btn-primary btn-lg" data-toggle="modal"data-target="#empowerModal"></button>
+	<div class="modal fade" id="empowerModal" tabindex="-1" role="dialog"aria-labelledby="empowerModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:600px;top:10%;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="empowerModalLabel">角色授权</h4>
+				</div>
+				<div class="modal-body"style="height:400px;">	
+					<div class="top_viw" style="width:60%;height:30px;background-color:#1B6D85;padding-top:5px;">
+						<a style="color:#fff;">[<span id="role_resource"></span>]&nbsp;&nbsp;角色可以访问的资源</a>
+					</div>	
+					<div class="body_view title" style="width:60%;height:350px;overflow:auto;">								
+							<ul id="tt"></ul>							
+							</div>	
+						</div>
+					<div class="modal-footer" style="text-align:center;">
+						<button id="empower_submit" type="button" class="btn btn-primary btn-sm"data-dismiss="modal">授权</button>
+					</div>
+				</div>
+			</div>
+		</div>			
+		<script type="text/javascript">    	
+    		 
+  		</script>		
+	</body>
+</html>

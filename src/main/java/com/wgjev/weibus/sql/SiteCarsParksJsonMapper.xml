@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.SiteHasCarsAndParksJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.SiteHasCarsAndParkJson" >
+    <id column="SiteID" property="siteID" jdbcType="INTEGER" />
+    <result column="ParkingCount" property="parkingCount" jdbcType="INTEGER" />
+    <result column="UsableCar" property="usaleCar" jdbcType="INTEGER" />
+    <result column="AllCar" property="allCar" jdbcType="INTEGER" />
+    <result column="UsablePark" property="usablePark" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="findSiteCarsParksBySiteID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT s.SiteID,s.ParkingCount,
+				(SELECT count(*) FROM v_info_carstatus cs WHERE cs.SiteID =s.SiteID and cs.ServiceStatus =1) UsableCar,
+	(SELECT count(*) FROM v_info_carstatus cs WHERE cs.SiteID =s.SiteID) AllCar,
+	s.ParkingCount-(select count(*) FROM v_info_carstatus cs WHERE cs.SiteID =s.SiteID) UsablePark
+	FROM t_info_site s
+	WHERE s.`Status` =1 and s.SiteID=#{siteID,jdbcType=INTEGER}
+  </select>
+  
+  
+</mapper>

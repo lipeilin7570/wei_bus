@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.CompanyJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.CompanyJson" >
+    <id column="CompanyID" property="companyID" jdbcType="INTEGER" />
+    <result column="CompanyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="ShortName" property="shortName" jdbcType="VARCHAR" />
+    <result column="Zcode" property="zcode" jdbcType="VARCHAR" />
+    <result column="Longitude" property="lng" jdbcType="DECIMAL" />
+    <result column="Latitude" property="lat" jdbcType="DECIMAL" />
+    
+    <result column="CompanyPhone" property="companyPhone" jdbcType="VARCHAR" />
+    <result column="Contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="ConpanyCode" property="conpanyCode" jdbcType="INTEGER" />
+    <result column="RegionStatus" property="regionStatus" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    
+    <result column="PCompanyName" property="pCompanyName" jdbcType="VARCHAR" />
+    <result column="PShortName" property="pShortName" jdbcType="VARCHAR" />
+    
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <select id="loadAllCompanyJson" resultMap="BaseResultMap">
+   SELECT 
+	cp.CompanyID,cp.CompanyName,cp.ShortName,cp.Zcode,cp.Longitude,cp.Latitude,cp.CompanyPhone,cp.Contacts,
+	cp.CreateTime,cp.`Status`,cp.ConpanyCode,cp.RegionStatus,cp.Remark,cp.Address,
+	ocp.CompanyName PCompanyName,ocp.ShortName PShortName
+   FROM t_info_company cp
+   LEFT JOIN t_info_company ocp ON ocp.CompanyID = cp.PartentID
+  </select>
+  
+</mapper>

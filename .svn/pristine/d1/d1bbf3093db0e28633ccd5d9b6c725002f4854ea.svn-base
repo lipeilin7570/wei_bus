@@ -1,0 +1,32 @@
+package com.wgjev.weibus.controller.price;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.wgjev.weibus.entity.BusResult;
+import com.wgjev.weibus.service.PriceService;
+
+@Controller
+@RequestMapping("/price")
+public class ChangeCompanyPriceController {
+	@Resource
+	private PriceService priceService;
+	
+	@RequestMapping("/changeCompanyPrice.do")
+	@ResponseBody
+	public BusResult execute(Integer operatorID, Integer priceID, double cleanFee, double safeFee, double minutePrice,
+			double hourMileage, double superPrice, String earlyBegin, String earlyEnd, double earlySale, String nightBegin, 
+			String nightEnd, double nightSale,
+			HttpServletRequest request, HttpServletResponse response){
+		String loginIP = request.getRemoteHost();
+		return priceService.changeCompanyPrice(operatorID, priceID, cleanFee, safeFee, 
+				minutePrice, hourMileage, superPrice, earlyBegin, earlyEnd, earlySale, 
+				nightBegin, nightEnd, nightSale);
+				
+	}
+}

@@ -1,0 +1,114 @@
+package com.wgjev.weibus.service.impl;
+
+import java.util.ArrayList;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+
+import com.wgjev.weibus.entity.BusResult;
+import com.wgjev.weibus.service.ChangeService;
+import com.wgjev.weibus.util.BusUtil;
+import com.wgjev.weibus.util.JsonPostUtil;
+
+@Service
+public class ChangeServiceImpl implements ChangeService {
+
+	/**
+	 * 查询换电任务单
+	 */
+	public BusResult queryChanges(Integer operatorID, Integer changeManID, String beginTime, String endTime,
+			Integer status, Integer changeID, String carNo, Integer order, String loginIP) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		
+		JSONObject obj = new JSONObject();
+		obj.putOpt("OptID", operatorID);
+		obj.putOpt("ChargeManID", changeManID);
+		obj.putOpt("BeginTime", beginTime);
+		obj.putOpt("EndTime", endTime);
+		obj.putOpt("Status", status);
+		obj.putOpt("ChargeID", changeID);
+		obj.putOpt("CarNo", carNo);
+		obj.putOpt("Order", order);
+		
+		
+        String url = BusUtil.BASE_IP+"Info/QueryCharges/?UserID="+operatorID+"&UserType=1&UserIP="+loginIP;
+        
+        BusResult  jsonResult = JsonPostUtil.sendPost(url, obj.toString());
+        String jsonStr = jsonResult.getData().toString();
+		
+        JSONObject jsonObject = new JSONObject(jsonStr);
+		int rStatus = jsonObject.getInt("Result");
+		result.setStatus(rStatus);
+		
+		if (rStatus != 0) {
+			return result;
+		}
+		List<Map<String, Object>> Illegals = new ArrayList<Map<String,Object>>();
+		JSONArray Charges = jsonObject.getJSONArray("Charges");
+		for (int i = 0; i < Charges.length(); i++) {
+			JSONObject jsonItem = Charges.getJSONObject(i);
+			
+			Integer ChargeID = jsonItem.getInt("ChargeID");
+			String OrderNo = jsonItem.getString("OrderNo");
+			Integer ChargeManID = jsonItem.getInt("ChargeManID");
+			String ChargeManName = jsonItem.getString("ChargeManName");
+			String ChargeManTel = jsonItem.getString("ChargeManTel");
+			Integer CarID = jsonItem.getInt("CarID");
+			String CarNo = jsonItem.getString("CarNo");
+			String CarModel = jsonItem.getString("CarModel");
+			Double CarLng = jsonItem.getDouble("CarLng");
+			Double CarLat = jsonItem.getDouble("CarLat");
+			String CarLoc = jsonItem.getString("CarLoc");
+			String CarBluetoothNo = jsonItem.getString("CarBluetoothNo");
+			String CarSIMNo = jsonItem.getString("CarSIMNo");
+			Integer Status = jsonItem.getInt("Status");
+			String ReserveTime = jsonItem.getString("ReserveTime");
+			String BeginTime = jsonItem.getString("BeginTime");
+			String EndTime = jsonItem.getString("EndTime");
+			Integer BeginSOC = jsonItem.getInt("BeginSOC");
+			String BBattNo1 = jsonItem.getString("BBattNo1");
+			String BBattNo2 = jsonItem.getString("BBattNo2");
+			Integer EndSOC = jsonItem.getInt("EndSOC");
+			String EBattNo1 = jsonItem.getString("EBattNo1");
+			String EBattNo2 = jsonItem.getString("EBattNo2");
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("ChargeID", ChargeID);
+			map.put("OrderNo", OrderNo);
+			map.put("ChargeManID", ChargeManID);
+			map.put("ChargeManName", ChargeManName);
+			map.put("ChargeManTel", ChargeManTel);
+			map.put("CarID", CarID);
+			map.put("CarNo", CarNo);
+			map.put("CarModel", CarModel);
+			map.put("CarLng", CarLng);
+			map.put("CarLat", CarLat);
+			map.put("CarLoc", CarLoc);
+			map.put("CarBluetoothNo", CarBluetoothNo);
+			map.put("CarSIMNo", CarSIMNo);
+			map.put("Status", Status);
+			map.put("ReserveTime", ReserveTime);
+			map.put("BeginTime", BeginTime);
+			map.put("EndTime", EndTime);
+			map.put("BeginSOC", BeginSOC);
+			map.put("BBattNo1", BBattNo1);
+			map.put("BBattNo2", BBattNo2);
+			map.put("EndSOC", EndSOC);
+			map.put("EBattNo1", EBattNo1);
+			map.put("EBattNo2", EBattNo2);
+			Illegals.add(map);
+		}
+		result.setData(Illegals);
+		
+		return result;
+	}
+	
+	
+	
+}

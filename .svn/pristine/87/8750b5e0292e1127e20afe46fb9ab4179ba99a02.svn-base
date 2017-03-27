@@ -1,0 +1,465 @@
+
+$(document).ready(function(){
+    search();
+})
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){   
+    return res;
+}
+//加载所有车辆信息
+function search() {	
+	var cookieval=readCookie("companyID");
+	var data={
+			'companyID':cookieval
+	};
+    $('#tab').bootstrapTable({
+        method:'post',//请求方式（*）
+        url:"../../car/loadCars.do",//请求后台的URL（*）
+        cache:false,
+        strictSearch:true,
+        height:"auto",
+        striped:true,//是否显示行间隔色
+        pagination:true,//是否显示分页（*）
+        pageList:[ 10, 20 ],//可供选择的每页的行数（*）
+        pageSize:5,//每页的记录行数（*）
+        pageNumber:1,//初始化加载第一页，默认第一页
+        sidePagination:'client', //分页方式：client客户端分页，server服务端分页（*）
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:data,//传递参数（*）表示每次发送给服务器的参数，可以添加自己需要的参数
+        queryParamsType:'undefined', // undefined
+        sortable:true,//是否启用排序
+        sortName:"carNo",
+        sortOrder:"desc",//排序方式
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                checkbox:true           
+            }, {
+                field:'carVin',
+                title:'VIN码',
+                valign:'middle',
+                sortable:true
+            }, {
+                field:'carNo',
+                title:'车牌号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle'
+            }, {
+                field:'str',
+                title:'车型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',      
+                valign:'middle',
+                formatter: function (value, row) {
+                        var str = "";
+                        var people = row.people;
+                        var modelName = row.modelName;
+                        var alias = row.alias;
+                        if ('' != people&&'' != modelName&&'' != alias){
+                            str +=row.alias + row.modelName+row.people;
+                        }
+                        return str;
+                    }
+            }, {
+                field:'siteName',
+                title:'所属站点&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle'
+            }, {
+                field:'companyShortName',
+                title:'所属公司简称',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'createTime',
+                title:'录入时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                align:'center',
+                valign:'middle',
+               // formatter:dateFormatter,
+                sortable:true
+            }, {
+                field:'electricityStatus',
+                title:'充电状态',
+                align:'center',
+                valign:'middle',
+                formatter:electricityStatusFormatter
+            }, {
+                field:'carStatus',
+                title:'车辆状态',
+                align:'center',
+                valign:'middle',
+                formatter:carStatusFormatter
+            }, {
+                field:'carRentStatus',
+                title:'租车状态',
+                align:'center',
+                valign:'middle',
+                formatter:carRentStatusFormatter
+            }, {
+                field:'electricity',
+                title:'剩余电量(%)',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'remainKON',
+                title:'剩余里程(KM)',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'terminalNo',
+                title:'终端号',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'bluetoothNo',
+                title:'蓝牙编号',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'SIMNo',
+                title:'SIM卡号',
+                align:'center',
+                valign:'middle'
+            }, {
+            	field:'operate',
+                title:'操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                valign:'middle',
+                formatter:operateFormatter,
+                events:operateEvents
+            }
+        ],
+        onLoadSuccess:function(date){
+        	//alert("success");       	
+        },
+        onLoadError:function(){
+         //  location.reload();
+        }
+    });
+}
+//得到查询的参数
+var sn;
+var so;
+function queryParams(params){
+	sn=params.sortName;
+	so=params.sortOrder;
+    return{
+        pageSize:params.pageSize,
+        pageNumber:params.pageNumber,
+        sortName:params.sortName,
+        sortOrder:params.sortOrder,
+        carNo:$('#carNo').val(),
+        carVin:$('#carVin').val(),
+        siteID:$('#siteID').val(),
+        electricityStatus:$('#electricityStatus').val(),
+        batteryStatus:$('#batteryStatus').val(),
+        simno:$('#simno').val()       
+    };
+};
+function operateFormatter(value, row, index){
+    return [
+        '<a class="info" href="javascript:void(0)" title="info">车辆详情</a>|',
+        '<a class="status" href="javascript:void(0)" title="status">车辆控制</a>'        
+    ].join('');
+}
+window.operateEvents={//显示车辆详情
+    'click .info': function (e, value, row, index){  	
+    	$('#Modal').click(); 
+    	$("#reviseTab").attr("data-id",row.carID);   	    	    	   	
+    	var data={'carID':$("#reviseTab").attr("data-id")};    	   	  	       		
+       			$.ajax({		
+       				   type:"post",
+       				   dataType:"json",
+       				   url: "../../car/showCarInfo.do",    	    
+       				   data:data,
+       				   success: function (data) {
+       					   var result=data.data; 
+       					   if(data.status==0){ 
+       						   $('#car_No').val(result.carNo);
+       						   $('#model_Name').val(result.modelName);
+       						   $('#Alias').val(result.alias);
+       						   $('#site_Name').val(result.siteName);
+       						   $('#car_Vin').val(result.carVin);
+       						   //$('#People').val(result.people);
+       						   $('#terminal_No').val(result.terminalNo);
+       						   $('#SIM_No').val(result.SIMNo);
+       						   $('#bluetooth_No').val(result.bluetoothNo);
+       						   $('#remain_KON').val(result.remainKON);       				    	
+      						   $('#electricity_Status').val(result.electricityStatus);
+       						   $('#carRent_Status').val(result.carRentStatus);
+       						   $('#carstatus').val(result.carStatus);
+       						   $('#electri_city').val(result.electricity);
+      						   $('#create_Time').val(result.createTime);
+       						   //照片
+       						   $("#car_License").attr("src",result.carLicense);
+       						   $("#car_Icon").attr("src",result.carIcon);
+       						   //充电状态
+       						   if(result.electricityStatus==0){
+       							   $('#electricity_Status').val("未知");
+       						   }else if(result.electricityStatus==1){
+       							   $('#electricity_Status').val("ON");
+       						   }else if(result.electricityStatus==2){
+       							   $('#electricity_Status').val("OFF");    				    	
+       						   };
+       						  //租车状态 
+       						   if(result.carRentStatus==1){
+    							   $('#carRent_Status').val("空闲");
+    						   }else if(result.carRentStatus==2){
+    							   $('#carRent_Status').val("预约中");
+    						   }else if(result.carRentStatus==3){
+    							   $('#carRent_Status').val("租用中");    				    	
+    						   }   						  
+       					   }
+       				    },
+       				    error: function (data){	
+       				    	$('#del_btn').click();
+       	        			$('.del_msg').text("服务异常！");	
+       				    }       			
+           })			     
+     },
+    'click .status': function (e, value, row, index){ 
+    	//车辆控制 	
+     	$('#vip').click();  
+     	$("button.one").click(function(){					
+		 	var carId = row.carID;
+		 	var cookieval=readCookie("operateID");
+		 	var data={
+	 			'operatorID':cookieval,
+	 			'carID':row.carID,
+	 			'controlType':$(this).val()
+		 	};
+		 	$.ajax({		
+		 		type:"post",
+		 		dataType:"json",
+		 		url: "../../car/carControl.do",    	    
+		 		data:data,
+		 		success: function (data) {	
+		 			if(data.status==0){ 
+		 				$('#del_btn').click();
+	        			$('.del_msg').text("成功！"); 
+		 				search();
+		 				ss();
+		 			}   				    	     				    		 	    				    		
+		 		},
+		 		error: function (data){	  
+		 			$('#del_btn').click();
+        			$('.del_msg').text("服务异常！");
+		 		}
+		 	})     	
+     	})				
+    }
+}
+//修改车辆
+$(function(){
+	$('#yes').click(function(){
+		var cookieval=readCookie("operateID");    							
+		var data={
+				'operatorID':cookieval,
+				'carID':$("#reviseTab").attr("data-id"),         					 
+				'carNo':$('#car_No').val(), 
+				'carVin':$('#car_Vin').val(),
+				'terminalNo':$('#terminal_No').val(),
+				'SIMNo':$('#SIM_No').val(),
+				'bluetoothNo':$('#bluetooth_No').val(),				
+//				'people':$('#people').val(),
+				'carModel':$('#model_Name').val(),	
+				'carStatus':$('#carstatus').val()
+		};			         				
+		$.ajax({		
+			type:"post",
+			dataType:"json",
+			url: "../../car/changeCarInfo.do",    	    
+			data:data,
+			success: function (data){	
+				if(data.status==0){  
+					$('#del_btn').click();
+        			$('.del_msg').text("保存成功！");
+			    		search();
+				    	ss();
+			    	} else {
+			    		$('#del_btn').click();
+	        			$('.del_msg').text("保存失败！");
+			    	}        				         					   				    	     				    		 	    				    		
+			},
+			error: function (result){	
+				$('#del_btn').click();
+    			$('.del_msg').text("服务异常！");	
+			}
+		})	  
+	})
+})
+//批量导入
+function import_excel(){
+	var cookieval=readCookie("operateID");
+	var cookievals=readCookie("companyID");
+	var formData=new FormData();
+	    formData.append('uploadFile', $('#excel_file')[0].files[0]);
+	    formData.append('companyID',cookievals);
+		formData.append('operatorID',cookieval);	
+	$.ajax({		
+		   type:"post",
+		   dataType:"json",
+		   url:"../../car/importCar.do",    	    
+		   data:formData,
+		   cache:false,
+	       processData:false,  
+	       contentType:false,
+		   success:function (data){			          					 
+			   if(data.status==0){ 
+				   search();
+				   ss();
+				   $('#del_btn').click();
+       			   $('.del_msg').text("成功导入"+data.data+"条"+","+"数据导入失败为第"+data.msg+"条");			   
+			   };
+		    },
+		    error: function (data){	
+		    	$('#del_btn').click();
+    			$('.del_msg').text("服务异常！");
+		    }       			
+	})			     
+}
+//时间校验
+/*function dateFormatter(value, row, index) {
+	var myDate=new Date();
+	myDate.setTime(row.enterTime);
+    return myDate.format("yyyy-MM-dd");    
+}
+function dateFormatter(value, row, index) {
+	var date;
+	if(value == null){
+		date = "";
+	}else{
+		date = new Date();
+		date.setTime(value);
+        return date.format("yyyy-MM-dd HH:mm:ss");
+	}
+	return date;
+} */
+//充电状态
+function electricityStatusFormatter(value,row,index){
+	var electricityStatus;
+	switch(value){
+		case 0:
+			electricityStatus='未知';
+			break;
+		case 1:
+			electricityStatus='ON';
+			break;
+		case 2:
+			electricityStatus='OFF';
+			break;		
+		default:
+			electricityStatus='';
+			break;
+	}
+	return electricityStatus;
+}
+//车辆状态
+function carStatusFormatter(value,row,index){
+	var carStatus;
+	switch(value){
+		case 1:
+			carStatus='启用';
+			break;
+		case 2:
+			carStatus='暂停';
+			break;
+		case 3:
+			carStatus='自动下线';
+			break;
+		case 4:
+			carStatus='维修';
+			break;
+		case 5:
+			carStatus='保养';
+			break;
+		case 6:
+			carStatus='报废';
+			break;
+		default:
+			carStatus='';
+			break;
+	}
+	return carStatus;
+}
+//租车状态
+function carRentStatusFormatter(value,row,index){
+	var carRentStatus;
+	switch(value){
+		case 1:
+			carRentStatus='空闲中';
+			break;
+		case 2:
+			carRentStatus='预约中';
+			break;
+		case 3:
+			carRentStatus='使用中';
+			break;
+		default:
+			carRentStatus='';
+			break;
+	}
+	return carRentStatus;
+}
+//新增车辆
+function add(){
+    $('#impload').click();    
+}
+function urlAdd(){
+	var cookieval=readCookie("operateID");
+	var cookievalS=readCookie("companyID");
+	var formData=new FormData();
+		formData.append('file', $('#carLicense')[0].files[0]);
+		formData.append('file1', $('#carIcon')[0].files[0]);
+	
+		formData.append('companyID',cookievalS);
+		formData.append('operatorID',cookieval);
+		formData.append('carNo',$('#carno').val());
+		formData.append('carModel',$('#carModel').val()); 	
+		formData.append('carColor',$('#carColor').val());
+		formData.append('carVin',$('#carvin').val());
+		formData.append('people',$('#people').val());
+		formData.append('terminalNo',$('#terminalNo').val());
+		formData.append('SIMNo',$('#SIMNo').val());
+		formData.append('bluetoothNo',$('#bluetoothNo').val());
+		formData.append('remark',$('#remark').val());		
+	$.ajax({
+        type: "POST",        
+        dataType: "json",
+        url: "../../car/addCar.do",
+        data:formData,
+        cache : false,
+        processData : false,  
+        contentType : false,
+        success: function (data){
+            if(data.status==0){
+            	$('#del_btn').click();
+    			$('.del_msg').text("新增成功！");
+                search();
+                ss();
+            }else{
+            	$('#del_btn').click();
+    			$('.del_msg').text("新增失败！");
+            };
+        },
+        error: function(data){
+        	$('#del_btn').click();
+			$('.del_msg').text("服务异常！");
+        }
+    });
+}
+//格式校验
+$("#impBut").click(function(){
+    var submit = true;//默认可以提交数据
+    var td = $("#tab :input[type='text']");
+    for(var i =0;i<td.length;i++){
+        if($(td[i]).val() == ''){
+            submit = false;
+            alert('输入框不能为空');
+            $(td[i]).focus();
+            return;
+        }
+    }
+    if(i == td.length && submit){   
+        alert('可以提交数据');
+        //提交数据         
+    }
+});

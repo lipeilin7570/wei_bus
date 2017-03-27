@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.CouponRunMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.CouponRun" >
+    <id column="CouponID" property="couponid" jdbcType="INTEGER" />
+    <result column="CouponNo" property="couponno" jdbcType="VARCHAR" />
+    <result column="CouponName" property="couponname" jdbcType="VARCHAR" />
+    <result column="CouponModel" property="couponmodel" jdbcType="INTEGER" />
+    <result column="ArrivalType" property="arrivaltype" jdbcType="INTEGER" />
+    <result column="InviteType" property="invitetype" jdbcType="INTEGER" />
+    <result column="InviteBeginTime" property="invitebegintime" jdbcType="TIMESTAMP" />
+    <result column="InviteEndTime" property="inviteendtime" jdbcType="TIMESTAMP" />
+    <result column="Condition" property="condition" jdbcType="INTEGER" />
+    <result column="LimitDays" property="limitdays" jdbcType="INTEGER" />
+    <result column="UserIDList" property="useridlist" jdbcType="VARCHAR" />
+    <result column="LimitReceive" property="limitreceive" jdbcType="INTEGER" />
+    <result column="CouponLimit" property="couponlimit" jdbcType="INTEGER" />
+    <result column="CodeCount" property="codecount" jdbcType="INTEGER" />
+    <result column="CouponCount" property="couponcount" jdbcType="INTEGER" />
+    <result column="AppointCompany" property="appointcompany" jdbcType="VARCHAR" />
+    <result column="ValidateType" property="validatetype" jdbcType="INTEGER" />
+    <result column="ValidateDays" property="validatedays" jdbcType="INTEGER" />
+    <result column="Coupontype" property="coupontype" jdbcType="INTEGER" />
+    <result column="CouponMoney" property="couponmoney" jdbcType="DECIMAL" />
+    <result column="LimitMoney" property="limitmoney" jdbcType="DECIMAL" />
+    <result column="SendType" property="sendtype" jdbcType="INTEGER" />
+    <result column="SendModel" property="sendmodel" jdbcType="INTEGER" />
+    <result column="SendDate" property="senddate" jdbcType="DATE" />
+    <result column="CreateManID" property="createmanid" jdbcType="INTEGER" />
+    <result column="CreateMan" property="createman" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CouponID, CouponNo, CouponName, CouponModel, ArrivalType, InviteType, InviteBeginTime, 
+    InviteEndTime, Condition, LimitDays, UserIDList, LimitReceive, CouponLimit, CodeCount, 
+    CouponCount, AppointCompany, ValidateType, ValidateDays, Coupontype, CouponMoney, 
+    LimitMoney, SendType, SendModel, SendDate, CreateManID, CreateMan, Status, CompanyID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_run_coupon
+    where CouponID = #{couponid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_run_coupon
+    where CouponID = #{couponid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.CouponRun" >
+    insert into t_run_coupon (CouponID, CouponNo, CouponName, 
+      CouponModel, ArrivalType, InviteType, 
+      InviteBeginTime, InviteEndTime, Condition, 
+      LimitDays, UserIDList, LimitReceive, 
+      CouponLimit, CodeCount, CouponCount, 
+      AppointCompany, ValidateType, ValidateDays, 
+      Coupontype, CouponMoney, LimitMoney, 
+      SendType, SendModel, SendDate, 
+      CreateManID, CreateMan, Status, 
+      CompanyID)
+    values (#{couponid,jdbcType=INTEGER}, #{couponno,jdbcType=VARCHAR}, #{couponname,jdbcType=VARCHAR}, 
+      #{couponmodel,jdbcType=INTEGER}, #{arrivaltype,jdbcType=INTEGER}, #{invitetype,jdbcType=INTEGER}, 
+      #{invitebegintime,jdbcType=TIMESTAMP}, #{inviteendtime,jdbcType=TIMESTAMP}, #{condition,jdbcType=INTEGER}, 
+      #{limitdays,jdbcType=INTEGER}, #{useridlist,jdbcType=VARCHAR}, #{limitreceive,jdbcType=INTEGER}, 
+      #{couponlimit,jdbcType=INTEGER}, #{codecount,jdbcType=INTEGER}, #{couponcount,jdbcType=INTEGER}, 
+      #{appointcompany,jdbcType=VARCHAR}, #{validatetype,jdbcType=INTEGER}, #{validatedays,jdbcType=INTEGER}, 
+      #{coupontype,jdbcType=INTEGER}, #{couponmoney,jdbcType=DECIMAL}, #{limitmoney,jdbcType=DECIMAL}, 
+      #{sendtype,jdbcType=INTEGER}, #{sendmodel,jdbcType=INTEGER}, #{senddate,jdbcType=DATE}, 
+      #{createmanid,jdbcType=INTEGER}, #{createman,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{companyid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.CouponRun" >
+    insert into t_run_coupon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="couponid != null" >
+        CouponID,
+      </if>
+      <if test="couponno != null" >
+        CouponNo,
+      </if>
+      <if test="couponname != null" >
+        CouponName,
+      </if>
+      <if test="couponmodel != null" >
+        CouponModel,
+      </if>
+      <if test="arrivaltype != null" >
+        ArrivalType,
+      </if>
+      <if test="invitetype != null" >
+        InviteType,
+      </if>
+      <if test="invitebegintime != null" >
+        InviteBeginTime,
+      </if>
+      <if test="inviteendtime != null" >
+        InviteEndTime,
+      </if>
+      <if test="condition != null" >
+        Condition,
+      </if>
+      <if test="limitdays != null" >
+        LimitDays,
+      </if>
+      <if test="useridlist != null" >
+        UserIDList,
+      </if>
+      <if test="limitreceive != null" >
+        LimitReceive,
+      </if>
+      <if test="couponlimit != null" >
+        CouponLimit,
+      </if>
+      <if test="codecount != null" >
+        CodeCount,
+      </if>
+      <if test="couponcount != null" >
+        CouponCount,
+      </if>
+      <if test="appointcompany != null" >
+        AppointCompany,
+      </if>
+      <if test="validatetype != null" >
+        ValidateType,
+      </if>
+      <if test="validatedays != null" >
+        ValidateDays,
+      </if>
+      <if test="coupontype != null" >
+        Coupontype,
+      </if>
+      <if test="couponmoney != null" >
+        CouponMoney,
+      </if>
+      <if test="limitmoney != null" >
+        LimitMoney,
+      </if>
+      <if test="sendtype != null" >
+        SendType,
+      </if>
+      <if test="sendmodel != null" >
+        SendModel,
+      </if>
+      <if test="senddate != null" >
+        SendDate,
+      </if>
+      <if test="createmanid != null" >
+        CreateManID,
+      </if>
+      <if test="createman != null" >
+        CreateMan,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="couponid != null" >
+        #{couponid,jdbcType=INTEGER},
+      </if>
+      <if test="couponno != null" >
+        #{couponno,jdbcType=VARCHAR},
+      </if>
+      <if test="couponname != null" >
+        #{couponname,jdbcType=VARCHAR},
+      </if>
+      <if test="couponmodel != null" >
+        #{couponmodel,jdbcType=INTEGER},
+      </if>
+      <if test="arrivaltype != null" >
+        #{arrivaltype,jdbcType=INTEGER},
+      </if>
+      <if test="invitetype != null" >
+        #{invitetype,jdbcType=INTEGER},
+      </if>
+      <if test="invitebegintime != null" >
+        #{invitebegintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inviteendtime != null" >
+        #{inviteendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="condition != null" >
+        #{condition,jdbcType=INTEGER},
+      </if>
+      <if test="limitdays != null" >
+        #{limitdays,jdbcType=INTEGER},
+      </if>
+      <if test="useridlist != null" >
+        #{useridlist,jdbcType=VARCHAR},
+      </if>
+      <if test="limitreceive != null" >
+        #{limitreceive,jdbcType=INTEGER},
+      </if>
+      <if test="couponlimit != null" >
+        #{couponlimit,jdbcType=INTEGER},
+      </if>
+      <if test="codecount != null" >
+        #{codecount,jdbcType=INTEGER},
+      </if>
+      <if test="couponcount != null" >
+        #{couponcount,jdbcType=INTEGER},
+      </if>
+      <if test="appointcompany != null" >
+        #{appointcompany,jdbcType=VARCHAR},
+      </if>
+      <if test="validatetype != null" >
+        #{validatetype,jdbcType=INTEGER},
+      </if>
+      <if test="validatedays != null" >
+        #{validatedays,jdbcType=INTEGER},
+      </if>
+      <if test="coupontype != null" >
+        #{coupontype,jdbcType=INTEGER},
+      </if>
+      <if test="couponmoney != null" >
+        #{couponmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="limitmoney != null" >
+        #{limitmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="sendtype != null" >
+        #{sendtype,jdbcType=INTEGER},
+      </if>
+      <if test="sendmodel != null" >
+        #{sendmodel,jdbcType=INTEGER},
+      </if>
+      <if test="senddate != null" >
+        #{senddate,jdbcType=DATE},
+      </if>
+      <if test="createmanid != null" >
+        #{createmanid,jdbcType=INTEGER},
+      </if>
+      <if test="createman != null" >
+        #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.CouponRun" >
+    update t_run_coupon
+    <set >
+      <if test="couponno != null" >
+        CouponNo = #{couponno,jdbcType=VARCHAR},
+      </if>
+      <if test="couponname != null" >
+        CouponName = #{couponname,jdbcType=VARCHAR},
+      </if>
+      <if test="couponmodel != null" >
+        CouponModel = #{couponmodel,jdbcType=INTEGER},
+      </if>
+      <if test="arrivaltype != null" >
+        ArrivalType = #{arrivaltype,jdbcType=INTEGER},
+      </if>
+      <if test="invitetype != null" >
+        InviteType = #{invitetype,jdbcType=INTEGER},
+      </if>
+      <if test="invitebegintime != null" >
+        InviteBeginTime = #{invitebegintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inviteendtime != null" >
+        InviteEndTime = #{inviteendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="condition != null" >
+        Condition = #{condition,jdbcType=INTEGER},
+      </if>
+      <if test="limitdays != null" >
+        LimitDays = #{limitdays,jdbcType=INTEGER},
+      </if>
+      <if test="useridlist != null" >
+        UserIDList = #{useridlist,jdbcType=VARCHAR},
+      </if>
+      <if test="limitreceive != null" >
+        LimitReceive = #{limitreceive,jdbcType=INTEGER},
+      </if>
+      <if test="couponlimit != null" >
+        CouponLimit = #{couponlimit,jdbcType=INTEGER},
+      </if>
+      <if test="codecount != null" >
+        CodeCount = #{codecount,jdbcType=INTEGER},
+      </if>
+      <if test="couponcount != null" >
+        CouponCount = #{couponcount,jdbcType=INTEGER},
+      </if>
+      <if test="appointcompany != null" >
+        AppointCompany = #{appointcompany,jdbcType=VARCHAR},
+      </if>
+      <if test="validatetype != null" >
+        ValidateType = #{validatetype,jdbcType=INTEGER},
+      </if>
+      <if test="validatedays != null" >
+        ValidateDays = #{validatedays,jdbcType=INTEGER},
+      </if>
+      <if test="coupontype != null" >
+        Coupontype = #{coupontype,jdbcType=INTEGER},
+      </if>
+      <if test="couponmoney != null" >
+        CouponMoney = #{couponmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="limitmoney != null" >
+        LimitMoney = #{limitmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="sendtype != null" >
+        SendType = #{sendtype,jdbcType=INTEGER},
+      </if>
+      <if test="sendmodel != null" >
+        SendModel = #{sendmodel,jdbcType=INTEGER},
+      </if>
+      <if test="senddate != null" >
+        SendDate = #{senddate,jdbcType=DATE},
+      </if>
+      <if test="createmanid != null" >
+        CreateManID = #{createmanid,jdbcType=INTEGER},
+      </if>
+      <if test="createman != null" >
+        CreateMan = #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where CouponID = #{couponid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.CouponRun" >
+    update t_run_coupon
+    set CouponNo = #{couponno,jdbcType=VARCHAR},
+      CouponName = #{couponname,jdbcType=VARCHAR},
+      CouponModel = #{couponmodel,jdbcType=INTEGER},
+      ArrivalType = #{arrivaltype,jdbcType=INTEGER},
+      InviteType = #{invitetype,jdbcType=INTEGER},
+      InviteBeginTime = #{invitebegintime,jdbcType=TIMESTAMP},
+      InviteEndTime = #{inviteendtime,jdbcType=TIMESTAMP},
+      Condition = #{condition,jdbcType=INTEGER},
+      LimitDays = #{limitdays,jdbcType=INTEGER},
+      UserIDList = #{useridlist,jdbcType=VARCHAR},
+      LimitReceive = #{limitreceive,jdbcType=INTEGER},
+      CouponLimit = #{couponlimit,jdbcType=INTEGER},
+      CodeCount = #{codecount,jdbcType=INTEGER},
+      CouponCount = #{couponcount,jdbcType=INTEGER},
+      AppointCompany = #{appointcompany,jdbcType=VARCHAR},
+      ValidateType = #{validatetype,jdbcType=INTEGER},
+      ValidateDays = #{validatedays,jdbcType=INTEGER},
+      Coupontype = #{coupontype,jdbcType=INTEGER},
+      CouponMoney = #{couponmoney,jdbcType=DECIMAL},
+      LimitMoney = #{limitmoney,jdbcType=DECIMAL},
+      SendType = #{sendtype,jdbcType=INTEGER},
+      SendModel = #{sendmodel,jdbcType=INTEGER},
+      SendDate = #{senddate,jdbcType=DATE},
+      CreateManID = #{createmanid,jdbcType=INTEGER},
+      CreateMan = #{createman,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      CompanyID = #{companyid,jdbcType=INTEGER}
+    where CouponID = #{couponid,jdbcType=INTEGER}
+  </update>
+</mapper>

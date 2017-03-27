@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.ModelDetailInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.ModelDetailInfo" >
+    <id column="ModelDetailID" property="modeldetailid" jdbcType="INTEGER" />
+    <result column="CarModelID" property="carmodelid" jdbcType="INTEGER" />
+    <result column="DetailName" property="detailname" jdbcType="VARCHAR" />
+    <result column="LimitSOC" property="limitsoc" jdbcType="DECIMAL" />
+    <result column="LimitMileage" property="limitmileage" jdbcType="DECIMAL" />
+    <result column="Level" property="level" jdbcType="INTEGER" />
+    <result column="Length" property="length" jdbcType="INTEGER" />
+    <result column="Width" property="width" jdbcType="INTEGER" />
+    <result column="Height" property="height" jdbcType="INTEGER" />
+    <result column="Wheelbase" property="wheelbase" jdbcType="INTEGER" />
+    <result column="Structure" property="structure" jdbcType="INTEGER" />
+    <result column="Doors" property="doors" jdbcType="INTEGER" />
+    <result column="Seats" property="seats" jdbcType="INTEGER" />
+    <result column="BodyColor" property="bodycolor" jdbcType="INTEGER" />
+    <result column="InteriorColor" property="interiorcolor" jdbcType="INTEGER" />
+    <result column="Engine" property="engine" jdbcType="INTEGER" />
+    <result column="MaxPower" property="maxpower" jdbcType="INTEGER" />
+    <result column="Mileages" property="mileages" jdbcType="INTEGER" />
+    <result column="MaxSpeed" property="maxspeed" jdbcType="INTEGER" />
+    <result column="DriveType" property="drivetype" jdbcType="INTEGER" />
+    <result column="Scuttle" property="scuttle" jdbcType="INTEGER" />
+    <result column="ControlScreen" property="controlscreen" jdbcType="INTEGER" />
+    <result column="ReverseVideo" property="reversevideo" jdbcType="INTEGER" />
+    <result column="CarIcon" property="caricon" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="OptID" property="optid" jdbcType="INTEGER" />
+    <result column="OptMan" property="optman" jdbcType="VARCHAR" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ModelDetailID, CarModelID, DetailName, LimitSOC, LimitMileage, Level, Length, Width, 
+    Height, Wheelbase, Structure, Doors, Seats, BodyColor, InteriorColor, Engine, MaxPower, 
+    Mileages, MaxSpeed, DriveType, Scuttle, ControlScreen, ReverseVideo, CarIcon, CreateTime, 
+    OptID, OptMan, Remark, CompanyID
+  </sql>
+  
+  <!-- 根据车辆模型名和公司ID查找车模信息 -->
+  <select id="findModelDetailByModelNameAndCompanyID" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_modeldetail
+    where DetailName=#{modelName} and CompanyID=#{companyID}
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_modeldetail
+    where ModelDetailID = #{modeldetailid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_modeldetail
+    where ModelDetailID = #{modeldetailid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.ModelDetailInfo" >
+    insert into t_info_modeldetail (ModelDetailID, CarModelID, DetailName, 
+      LimitSOC, LimitMileage, Level, 
+      Length, Width, Height, 
+      Wheelbase, Structure, Doors, 
+      Seats, BodyColor, InteriorColor, 
+      Engine, MaxPower, Mileages, 
+      MaxSpeed, DriveType, Scuttle, 
+      ControlScreen, ReverseVideo, CarIcon, 
+      CreateTime, OptID, OptMan, 
+      Remark, CompanyID)
+    values (#{modeldetailid,jdbcType=INTEGER}, #{carmodelid,jdbcType=INTEGER}, #{detailname,jdbcType=VARCHAR}, 
+      #{limitsoc,jdbcType=DECIMAL}, #{limitmileage,jdbcType=DECIMAL}, #{level,jdbcType=INTEGER}, 
+      #{length,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
+      #{wheelbase,jdbcType=INTEGER}, #{structure,jdbcType=INTEGER}, #{doors,jdbcType=INTEGER}, 
+      #{seats,jdbcType=INTEGER}, #{bodycolor,jdbcType=INTEGER}, #{interiorcolor,jdbcType=INTEGER}, 
+      #{engine,jdbcType=INTEGER}, #{maxpower,jdbcType=INTEGER}, #{mileages,jdbcType=INTEGER}, 
+      #{maxspeed,jdbcType=INTEGER}, #{drivetype,jdbcType=INTEGER}, #{scuttle,jdbcType=INTEGER}, 
+      #{controlscreen,jdbcType=INTEGER}, #{reversevideo,jdbcType=INTEGER}, #{caricon,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{optid,jdbcType=INTEGER}, #{optman,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{companyid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.ModelDetailInfo" >
+    insert into t_info_modeldetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="modeldetailid != null" >
+        ModelDetailID,
+      </if>
+      <if test="carmodelid != null" >
+        CarModelID,
+      </if>
+      <if test="detailname != null" >
+        DetailName,
+      </if>
+      <if test="limitsoc != null" >
+        LimitSOC,
+      </if>
+      <if test="limitmileage != null" >
+        LimitMileage,
+      </if>
+      <if test="level != null" >
+        Level,
+      </if>
+      <if test="length != null" >
+        Length,
+      </if>
+      <if test="width != null" >
+        Width,
+      </if>
+      <if test="height != null" >
+        Height,
+      </if>
+      <if test="wheelbase != null" >
+        Wheelbase,
+      </if>
+      <if test="structure != null" >
+        Structure,
+      </if>
+      <if test="doors != null" >
+        Doors,
+      </if>
+      <if test="seats != null" >
+        Seats,
+      </if>
+      <if test="bodycolor != null" >
+        BodyColor,
+      </if>
+      <if test="interiorcolor != null" >
+        InteriorColor,
+      </if>
+      <if test="engine != null" >
+        Engine,
+      </if>
+      <if test="maxpower != null" >
+        MaxPower,
+      </if>
+      <if test="mileages != null" >
+        Mileages,
+      </if>
+      <if test="maxspeed != null" >
+        MaxSpeed,
+      </if>
+      <if test="drivetype != null" >
+        DriveType,
+      </if>
+      <if test="scuttle != null" >
+        Scuttle,
+      </if>
+      <if test="controlscreen != null" >
+        ControlScreen,
+      </if>
+      <if test="reversevideo != null" >
+        ReverseVideo,
+      </if>
+      <if test="caricon != null" >
+        CarIcon,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="optid != null" >
+        OptID,
+      </if>
+      <if test="optman != null" >
+        OptMan,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="modeldetailid != null" >
+        #{modeldetailid,jdbcType=INTEGER},
+      </if>
+      <if test="carmodelid != null" >
+        #{carmodelid,jdbcType=INTEGER},
+      </if>
+      <if test="detailname != null" >
+        #{detailname,jdbcType=VARCHAR},
+      </if>
+      <if test="limitsoc != null" >
+        #{limitsoc,jdbcType=DECIMAL},
+      </if>
+      <if test="limitmileage != null" >
+        #{limitmileage,jdbcType=DECIMAL},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="length != null" >
+        #{length,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="wheelbase != null" >
+        #{wheelbase,jdbcType=INTEGER},
+      </if>
+      <if test="structure != null" >
+        #{structure,jdbcType=INTEGER},
+      </if>
+      <if test="doors != null" >
+        #{doors,jdbcType=INTEGER},
+      </if>
+      <if test="seats != null" >
+        #{seats,jdbcType=INTEGER},
+      </if>
+      <if test="bodycolor != null" >
+        #{bodycolor,jdbcType=INTEGER},
+      </if>
+      <if test="interiorcolor != null" >
+        #{interiorcolor,jdbcType=INTEGER},
+      </if>
+      <if test="engine != null" >
+        #{engine,jdbcType=INTEGER},
+      </if>
+      <if test="maxpower != null" >
+        #{maxpower,jdbcType=INTEGER},
+      </if>
+      <if test="mileages != null" >
+        #{mileages,jdbcType=INTEGER},
+      </if>
+      <if test="maxspeed != null" >
+        #{maxspeed,jdbcType=INTEGER},
+      </if>
+      <if test="drivetype != null" >
+        #{drivetype,jdbcType=INTEGER},
+      </if>
+      <if test="scuttle != null" >
+        #{scuttle,jdbcType=INTEGER},
+      </if>
+      <if test="controlscreen != null" >
+        #{controlscreen,jdbcType=INTEGER},
+      </if>
+      <if test="reversevideo != null" >
+        #{reversevideo,jdbcType=INTEGER},
+      </if>
+      <if test="caricon != null" >
+        #{caricon,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optid != null" >
+        #{optid,jdbcType=INTEGER},
+      </if>
+      <if test="optman != null" >
+        #{optman,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.ModelDetailInfo" >
+    update t_info_modeldetail
+    <set >
+      <if test="carmodelid != null" >
+        CarModelID = #{carmodelid,jdbcType=INTEGER},
+      </if>
+      <if test="detailname != null" >
+        DetailName = #{detailname,jdbcType=VARCHAR},
+      </if>
+      <if test="limitsoc != null" >
+        LimitSOC = #{limitsoc,jdbcType=DECIMAL},
+      </if>
+      <if test="limitmileage != null" >
+        LimitMileage = #{limitmileage,jdbcType=DECIMAL},
+      </if>
+      <if test="level != null" >
+        Level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="length != null" >
+        Length = #{length,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        Width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        Height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="wheelbase != null" >
+        Wheelbase = #{wheelbase,jdbcType=INTEGER},
+      </if>
+      <if test="structure != null" >
+        Structure = #{structure,jdbcType=INTEGER},
+      </if>
+      <if test="doors != null" >
+        Doors = #{doors,jdbcType=INTEGER},
+      </if>
+      <if test="seats != null" >
+        Seats = #{seats,jdbcType=INTEGER},
+      </if>
+      <if test="bodycolor != null" >
+        BodyColor = #{bodycolor,jdbcType=INTEGER},
+      </if>
+      <if test="interiorcolor != null" >
+        InteriorColor = #{interiorcolor,jdbcType=INTEGER},
+      </if>
+      <if test="engine != null" >
+        Engine = #{engine,jdbcType=INTEGER},
+      </if>
+      <if test="maxpower != null" >
+        MaxPower = #{maxpower,jdbcType=INTEGER},
+      </if>
+      <if test="mileages != null" >
+        Mileages = #{mileages,jdbcType=INTEGER},
+      </if>
+      <if test="maxspeed != null" >
+        MaxSpeed = #{maxspeed,jdbcType=INTEGER},
+      </if>
+      <if test="drivetype != null" >
+        DriveType = #{drivetype,jdbcType=INTEGER},
+      </if>
+      <if test="scuttle != null" >
+        Scuttle = #{scuttle,jdbcType=INTEGER},
+      </if>
+      <if test="controlscreen != null" >
+        ControlScreen = #{controlscreen,jdbcType=INTEGER},
+      </if>
+      <if test="reversevideo != null" >
+        ReverseVideo = #{reversevideo,jdbcType=INTEGER},
+      </if>
+      <if test="caricon != null" >
+        CarIcon = #{caricon,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optid != null" >
+        OptID = #{optid,jdbcType=INTEGER},
+      </if>
+      <if test="optman != null" >
+        OptMan = #{optman,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ModelDetailID = #{modeldetailid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.ModelDetailInfo" >
+    update t_info_modeldetail
+    set CarModelID = #{carmodelid,jdbcType=INTEGER},
+      DetailName = #{detailname,jdbcType=VARCHAR},
+      LimitSOC = #{limitsoc,jdbcType=DECIMAL},
+      LimitMileage = #{limitmileage,jdbcType=DECIMAL},
+      Level = #{level,jdbcType=INTEGER},
+      Length = #{length,jdbcType=INTEGER},
+      Width = #{width,jdbcType=INTEGER},
+      Height = #{height,jdbcType=INTEGER},
+      Wheelbase = #{wheelbase,jdbcType=INTEGER},
+      Structure = #{structure,jdbcType=INTEGER},
+      Doors = #{doors,jdbcType=INTEGER},
+      Seats = #{seats,jdbcType=INTEGER},
+      BodyColor = #{bodycolor,jdbcType=INTEGER},
+      InteriorColor = #{interiorcolor,jdbcType=INTEGER},
+      Engine = #{engine,jdbcType=INTEGER},
+      MaxPower = #{maxpower,jdbcType=INTEGER},
+      Mileages = #{mileages,jdbcType=INTEGER},
+      MaxSpeed = #{maxspeed,jdbcType=INTEGER},
+      DriveType = #{drivetype,jdbcType=INTEGER},
+      Scuttle = #{scuttle,jdbcType=INTEGER},
+      ControlScreen = #{controlscreen,jdbcType=INTEGER},
+      ReverseVideo = #{reversevideo,jdbcType=INTEGER},
+      CarIcon = #{caricon,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      OptID = #{optid,jdbcType=INTEGER},
+      OptMan = #{optman,jdbcType=VARCHAR},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CompanyID = #{companyid,jdbcType=INTEGER}
+    where ModelDetailID = #{modeldetailid,jdbcType=INTEGER}
+  </update>
+</mapper>

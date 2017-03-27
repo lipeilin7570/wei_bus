@@ -1,0 +1,37 @@
+package com.wgjev.weibus.util;
+
+import java.io.File;
+import java.util.Date;
+
+import org.springframework.web.multipart.MultipartFile;
+/**
+ * 把base64编码的图片解析保存到图片库里，返回图片URL地址的工具类
+ * @author Administrator
+ *
+ */
+public class SaveImgUtil {
+	
+	public static String save(String path, MultipartFile file) throws Exception{
+		String UUID = BusUtil.dateToLongStr(new Date())+BusUtil.createId();
+		//本地
+//		String savefilePath = "D:/workspace/pictureLib/"+path+"/"+UUID+".jpg";
+//		String savefilePath = "F:/pic/"+path+"/"+UUID+".jpg";
+		
+		
+		//115服务器
+//		String savefilePath = "F:/Tomcat 7.0/webapps/picLib/weibus/"+path+"/"+UUID+".jpg";
+		//郑工服务器
+//		String savefilePath = "D:/Program Files/Tomcat 7.0/webapps/picLib/weibus/"+path+"/"+UUID+".jpg";
+		
+		//阿里云服务器
+		String savefilePath = "E:/Tomcat 7.0/webapps/picLib/weibus/"+path+"/"+UUID+".jpg";
+		
+		
+		file.transferTo(new File(savefilePath));
+		
+		String picUrl = "picLib/weibus/"+path+"/"+UUID+".jpg";
+		
+		return picUrl.trim();
+	}
+	
+}

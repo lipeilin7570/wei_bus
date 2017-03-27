@@ -1,0 +1,174 @@
+$(document).ready(function(){
+    search();
+})
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){
+    return res;
+}
+function search() {
+    $('#tab').bootstrapTable({
+        method:'post',
+        url:'',
+        cache:false,
+        height:"auto",
+        striped:true,
+        pagination:true,
+        pageList:[ 10, 20 ],
+        pageSize:10,
+        pageNumber:1,
+        //search : true,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:queryParams,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"userNo",
+        sortOrder:"desc",
+        //showColumns : true,
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                checkbox:true
+            }, {
+                field:'userID',
+                title:'会员账号',
+                align:'center',
+                valign:'middle',
+                sortable:true,
+            }, {
+                field:'userName',
+                title:'会员姓名',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'telePhone',
+                title:'会员积分',
+                align:'center',
+                valign:'middle'
+            }, {
+                field:'authentication',
+                title:'会员等级',
+                align:'center',
+                valign:'middle',
+                formatter:authenticationFormatter
+            }, {
+                field:'createTimeStr',
+                title:'会员政策',
+                align:'center',
+                valign:'middle'        
+            }, {
+                field:'operate',
+                title:'操作',
+                align:'center',
+                valign:'middle',
+                formatter:operateFormatter,
+                events:operateEvents
+            }
+        ],
+        onLoadSuccess:function(){
+            //alert("success");
+        },
+        onLoadError:function(){
+           // location.reload();
+        }
+    });
+}
+
+var sn;
+var so;
+function queryParams(params){
+	sn=params.sortName;
+	so=params.sortOrder;
+    return{
+        pageSize:params.pageSize,
+        pageNumber:params.pageNumber,
+        sortName:params.sortName,
+        sortOrder:params.sortOrder,
+        userNo:$('#userNo').val(),
+        userName:$('#userName').val(),
+        telphone:$('#telphone').val()
+    };
+};
+//认证状态
+var authentication;
+function authenticationFormatter(value,row,index){	
+	switch(value){
+	case 0:
+		authentication="未认证";
+		break;
+	case 1:
+		authentication="认证中";
+		break;
+	case 2:
+		authentication="已认证";
+		break;
+	case 3:
+		authentication="认证失败";
+		break;
+	default :
+		authentication="";
+		break;
+	}
+	return authentication;	
+}
+//租车状态
+function rentalStatusIntFormatter(value,row,index){
+	var rentalStatusInt;
+	switch(value){
+	case 0:
+		rentalStatusInt="正常";
+		break;
+	case 1:
+		rentalStatusInt="预约";
+		break;
+	case 2:
+		rentalStatusInt="租车中";
+		break;
+	default :
+		rentalStatusInt="";
+		break;
+	}
+	return rentalStatusInt;	
+}
+function operateFormatter(value, row, index){
+    return [
+        '<a class="info" href="javascript:void(0)" title="like"></a>'       
+    ].join('');
+}
+window.operateEvents={
+    
+}
+var now =new Date();
+$('#createTime').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+$('#approvetime').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+//重置
+function doreset(){
+    $("#createTime").datetimepicker('setEndDate', now);
+    $("#approvetime").datetimepicker('approvetime', null);
+}
+//时间顺序设定
+$(function(){
+    $("#createTime").on("changeDate", function (e) {
+        var create = new Date(Date.parse($("#createTime").val()));
+        $('#approvetime').datetimepicker('setStartDate', create);
+    });
+    $("#approvetime").on("changeDate", function (e) {
+        var approve = new Date(Date.parse($("#approvetime").val()));
+        $('#createTime').datetimepicker('setEndDate',approve );
+    });
+})

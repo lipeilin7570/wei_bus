@@ -1,0 +1,252 @@
+$(document).ready(function(){
+    search();
+})
+//从表格查询
+function ss(){
+    $('#tab').bootstrapTable('refresh');
+}
+function checkData(res){
+    return res;
+}
+//请求后台和返回的参数数据
+function search(){
+    $('#tab').bootstrapTable({
+        method:'post',
+        url:'',
+        cache:false,
+        height:"500",
+        striped:true,
+        pagination:true,
+        pageList:[ 10, 20 ],
+        pageSize:10,
+        pageNumber:1,
+        //search : true,
+        sidePagination:'client',
+        contentType:"application/x-www-form-urlencoded",
+        queryParams:queryParams,
+        queryParamsType:'undefined', // undefined
+        sortable:true,
+        sortName:"",
+        sortOrder:"",
+        //showColumns : true,
+        responseHandler:checkData,
+        columns:[
+            {
+                field:'check',
+                width:'30px',
+                checkbox:true
+            }, {
+                field:'noticeNum',
+                title:'公告编号',
+                align:'center',
+                valign:'middle',
+                width:'50px',
+                sortable:true
+            }, {
+                field:'noticeTitle',
+                title:'公告标题',
+                align:'center',
+                valign:'middle',
+                width:'50px',
+                sortable:true
+            }, {
+                field:'noticeContent',
+                title:'公告内容',
+                align:'center',
+                valign:'middle',
+                width:'50px',
+                sortable:true
+            }, {
+                field:'createTime',
+                title:'创建时间',
+                align:'center',
+                valign:'middle',
+                width:'50px',
+                formatter:dateFormatter,
+                sortable:true
+            }, {
+                field:'startTime',
+                title:'开始时间',
+                align:'center',
+                valign:'middle',
+                formatter:dateFormatter,
+                width:'50px'
+            }, {
+                field:'endTime',
+                title:'结束时间',
+                align:'center',
+                valign:'middle',
+                formatter:dateFormatter,
+                width:'50px'
+            }, {
+                field:'downType',
+                title:'下架类型',
+                align:'center',
+                valign:'middle',
+                formatter:downTypeFormatter,
+                width:'50px'
+            }, {
+                field:'downTime',
+                title:'下架时间',
+                align:'center',
+                valign:'middle',
+                formatter:dateFormatter,
+                width:'50px'
+            }, {
+                field:'status',
+                title:'状态',
+                align:'center',
+                valign:'middle',
+                formatter:statusFormatter,
+                width:'50px'
+            }, {
+                field:'noticeObj',
+                title:'公告对象',
+                align:'center',
+                valign:'middle',
+                formatter:noticeObjFormatter,
+                width:'50px'
+            }, {
+                field:'createManID',
+                title:'创建人ID',
+                align:'center',
+                valign:'middle',
+                width:'50px'
+            }, {
+                field:'createMan',
+                title:'创建人',
+                align:'center',
+                valign:'middle',
+                width:'50px'
+            }, {
+                field:'companyID',
+                title:'公司ID',
+                align:'center',
+                valign:'middle',
+                width:'50px'
+
+            }, {
+                field: 'Remark',
+                title: '备注',
+                align: 'center',
+                valign: 'middle',
+                width: '50px'
+            }
+        ],
+        onLoadSuccess:function(){
+            //alert("success");
+        },
+        onLoadError:function(){
+            location.reload();
+        }
+    });
+};
+//查询请求参数
+var sn;
+var so;
+function queryParams(params) {
+    sn = params.sortName;
+    so = params.sortOrder;
+    return {
+        pageSize: params.pageSize,
+        pageNumber: params.pageNumber,
+        sortName: params.sortName,
+        sortOrder: params.sortOrder,
+        noticeNum: $('#noticeNum').val(),
+        noticeTitle: $('#noticeTitle').val(),
+        noticeType: $('#noticeType').val(),
+        createTime: $('#createTime').val(),
+        startTime: $('#startTime').val(),
+        endTime: $('#endTime').val(),
+        noticeObj: $('#noticeObj').val(),
+        downType: $('#downType').val()
+    };
+}
+//时间校验
+function dateFormatter(value, row, index){
+    var myDate=new  Date();
+    myDate.setTime(row.createTime);
+    return myDate.formatter('yy-MM-dd')
+}
+//状态
+function statusFormatter(value,row,index){
+    var status;
+    switch(value)
+    {
+        case 1:
+            status='正常';
+            break;
+        case 2:
+            status='下架';
+            break;
+        default :
+            status='';
+            break
+    }
+    return status;
+}
+//下发模式
+function noticeObjFormatter(value,row,index){
+    var noticeObj;
+    switch(value)
+    {
+        case 1:
+            noticeObj='对外';
+            break;
+        case 2:
+            noticeObj='对内';
+            break;
+        default :
+            noticeObj='';
+            break
+    }
+    return noticeObj;
+}
+//下发类型
+function downTypeFormatter(){
+    var downType;
+    switch(value)
+    {
+        case 1:
+            downType='自动';
+            break;
+        case 2:
+            downType='手动';
+            break;
+        default :
+            downType='';
+            break
+    }
+    return downType;
+}
+var now =new Date();
+$('#startTime').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+$('#endTime').datetimepicker({
+    language: 'zh',
+    format : 'yyyy-mm-dd',
+    autoclose : true,
+    minView : '2',
+    endDate:now
+});
+//重置
+function doreset(){
+    $("#startTime").datetimepicker('setEndDate', now);
+    $("#endTime").datetimepicker('setStartDate', null);
+}
+//时间顺序设定
+$(function(){
+    $("#startTime").on("changeDate", function (e) {
+        var start = new Date(Date.parse($("#startTime").val()));
+        $('#end').datetimepicker('setStartDate', start);
+    });
+    $("#endTime").on("changeDate", function (e) {
+        var end = new Date(Date.parse($("#endTime").val()));
+        $('#startTime').datetimepicker('setEndDate', end);
+    });
+})

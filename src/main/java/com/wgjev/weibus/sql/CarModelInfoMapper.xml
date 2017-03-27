@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.CarModelInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.CarModelInfo" >
+    <id column="CarModelID" property="carmodelid" jdbcType="INTEGER" />
+    <result column="ModelName" property="modelname" jdbcType="VARCHAR" />
+    <result column="Alias" property="alias" jdbcType="VARCHAR" />
+    <result column="CarBrand" property="carbrand" jdbcType="INTEGER" />
+    <result column="CarIcon" property="caricon" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="OptID" property="optid" jdbcType="INTEGER" />
+    <result column="OptMan" property="optman" jdbcType="VARCHAR" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CarModelID, ModelName, Alias, CarBrand, CarIcon, CreateTime, OptID, OptMan, CompanyID
+  </sql>
+  
+  <!-- 加载所有车辆信息 -->
+  <select id="loadAllCarInfos" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_car
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_carmodel
+    where CarModelID = #{carmodelid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_carmodel
+    where CarModelID = #{carmodelid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.CarModelInfo" >
+    insert into t_info_carmodel (CarModelID, ModelName, Alias, 
+      CarBrand, CarIcon, CreateTime, 
+      OptID, OptMan, CompanyID
+      )
+    values (#{carmodelid,jdbcType=INTEGER}, #{modelname,jdbcType=VARCHAR}, #{alias,jdbcType=VARCHAR}, 
+      #{carbrand,jdbcType=INTEGER}, #{caricon,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{optid,jdbcType=INTEGER}, #{optman,jdbcType=VARCHAR}, #{companyid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.CarModelInfo" >
+    insert into t_info_carmodel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carmodelid != null" >
+        CarModelID,
+      </if>
+      <if test="modelname != null" >
+        ModelName,
+      </if>
+      <if test="alias != null" >
+        Alias,
+      </if>
+      <if test="carbrand != null" >
+        CarBrand,
+      </if>
+      <if test="caricon != null" >
+        CarIcon,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="optid != null" >
+        OptID,
+      </if>
+      <if test="optman != null" >
+        OptMan,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carmodelid != null" >
+        #{carmodelid,jdbcType=INTEGER},
+      </if>
+      <if test="modelname != null" >
+        #{modelname,jdbcType=VARCHAR},
+      </if>
+      <if test="alias != null" >
+        #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="carbrand != null" >
+        #{carbrand,jdbcType=INTEGER},
+      </if>
+      <if test="caricon != null" >
+        #{caricon,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optid != null" >
+        #{optid,jdbcType=INTEGER},
+      </if>
+      <if test="optman != null" >
+        #{optman,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.CarModelInfo" >
+    update t_info_carmodel
+    <set >
+      <if test="modelname != null" >
+        ModelName = #{modelname,jdbcType=VARCHAR},
+      </if>
+      <if test="alias != null" >
+        Alias = #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="carbrand != null" >
+        CarBrand = #{carbrand,jdbcType=INTEGER},
+      </if>
+      <if test="caricon != null" >
+        CarIcon = #{caricon,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optid != null" >
+        OptID = #{optid,jdbcType=INTEGER},
+      </if>
+      <if test="optman != null" >
+        OptMan = #{optman,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where CarModelID = #{carmodelid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.CarModelInfo" >
+    update t_info_carmodel
+    set ModelName = #{modelname,jdbcType=VARCHAR},
+      Alias = #{alias,jdbcType=VARCHAR},
+      CarBrand = #{carbrand,jdbcType=INTEGER},
+      CarIcon = #{caricon,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      OptID = #{optid,jdbcType=INTEGER},
+      OptMan = #{optman,jdbcType=VARCHAR},
+      CompanyID = #{companyid,jdbcType=INTEGER}
+    where CarModelID = #{carmodelid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,414 @@
+package com.wgjev.weibus.service.impl;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.wgjev.weibus.dao.CarInfoMapper;
+import com.wgjev.weibus.dao.CarModelInfoMapper;
+import com.wgjev.weibus.dao.CarServiceInfoMapper;
+import com.wgjev.weibus.dao.CarStatusInfoMapper;
+import com.wgjev.weibus.dao.ControlLogMapper;
+import com.wgjev.weibus.dao.DictSysMapper;
+import com.wgjev.weibus.dao.ModelDetailInfoMapper;
+import com.wgjev.weibus.dao.OperatorSysMapper;
+import com.wgjev.weibus.dao.json.CarInfoJsonMapper;
+import com.wgjev.weibus.dao.json.CarModelJsonMapper;
+import com.wgjev.weibus.dao.json.CarStatusInfoJsonMapper;
+import com.wgjev.weibus.dao.json.OptViewJsonMapper;
+import com.wgjev.weibus.entity.BusResult;
+import com.wgjev.weibus.entity.CarInfo;
+import com.wgjev.weibus.entity.ControlLog;
+import com.wgjev.weibus.entity.ModelDetailInfo;
+import com.wgjev.weibus.entity.OperatorSys;
+import com.wgjev.weibus.entity.json.CarInfoJson;
+import com.wgjev.weibus.entity.json.CarModelJson;
+import com.wgjev.weibus.entity.json.CarStatusInfoJson;
+import com.wgjev.weibus.entity.json.OptViewJson;
+import com.wgjev.weibus.service.CarService;
+import com.wgjev.weibus.util.BusUtil;
+import com.wgjev.weibus.util.JsonPostUtil;
+import com.wgjev.weibus.util.SaveImgUtil;
+
+@Service
+public class CarServiceImpl implements CarService {
+	
+	@Resource
+	private CarInfoMapper carInfoMapper;
+	
+	@Resource
+	private CarInfoJsonMapper carInfoJsonMapper;
+	
+	@Resource
+	private CarStatusInfoMapper carStatusInfoMapper;
+		
+	@Resource
+	private DictSysMapper dictSysMapper;
+	
+	@Resource
+	private CarServiceInfoMapper carServiceInfoMapper;
+	
+	@Resource
+	private OptViewJsonMapper optViewJsonMapper;
+	
+	@Resource
+	private ControlLogMapper controlLogMapper;
+	
+	@Resource
+	private OperatorSysMapper operatorSysMapper;
+	
+	@Resource
+	private CarStatusInfoJsonMapper carStatusInfoJsonMapper;
+	
+	@Resource
+	private CarModelInfoMapper carModelInfoMapper;
+	
+	@Resource
+	private ModelDetailInfoMapper modelDetailInfoMapper;
+	
+	@Resource
+	private CarModelJsonMapper carModelJsonMapper;
+	
+	/**
+	 * 加载所有车辆信息
+	 */
+	public BusResult loadCars(Integer companyID) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+//		List<CarInfo> list = carInfoMapper.loadAllCarInfos();
+		List<CarInfoJson> list = carInfoJsonMapper.loadAllCarInfos(companyID);
+		
+		
+		result.setData(list);
+		result.setStatus(0);
+		return result;
+	}
+
+	/**
+	 * 查看车辆详细信息
+	 */
+	public BusResult findCarByCarID(Integer carID) {
+		// TODO Auto-generated method stub  
+		BusResult result = new BusResult();
+		CarInfoJson carInfo = carInfoJsonMapper.findCarInfoJsonByCarID(carID);
+		result.setData(carInfo);
+		result.setStatus(0);
+		return result;
+	}
+
+	/**
+	 * 添加车辆信息
+	 */
+	public BusResult addCarInfo(Integer operatorID, String carNo, Integer carBrand, Integer carModel, 
+			Integer carColor, String carVin, Integer people, 
+			String terminalNo, String SIMNo, String bluetoothNo,
+			String remark, Integer companyID, String nameplateTime, String registrationTime, 
+			String machineNo, String batteryCode, Integer chargingGun, Integer extinguisher, 
+			Integer tools, Integer sign, Integer spareTire, MultipartFile carLicense, 
+			MultipartFile carIcon) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		CarInfo carInfo = new CarInfo();
+		if (carNo != null) {
+			carInfo.setCarno(carNo);
+		}
+		if (carBrand != null) {
+			carInfo.setCarbrand(carBrand);
+		}
+		if (carModel != null) {
+			carInfo.setModeldetailid(carModel);
+		}
+		if (carColor!= null) {
+			carInfo.setCarcolor(carColor);
+		}
+		if (carVin != null) {
+			carInfo.setCarvin(carVin);
+		}
+		if (people != null) {
+			carInfo.setPeople(people);
+		}
+		if (terminalNo != null) {
+			carInfo.setTerminalno(terminalNo);
+		}
+		if (SIMNo != null) {
+			carInfo.setSimno(SIMNo);
+		}
+		if (bluetoothNo != null) {
+			carInfo.setBluetoothno(bluetoothNo);
+		}
+		if (companyID != null) {
+			carInfo.setCompanyid(companyID);
+		}
+		OperatorSys operatorSys = operatorSysMapper.selectByPrimaryKey(operatorID);
+		carInfo.setCreatemanid(operatorID);
+		carInfo.setCreateman(operatorSys.getSysusename());
+		carInfo.setCompanyid(operatorSys.getCompanyid());
+		
+		if (remark != null) {
+			carInfo.setRemark(remark);
+		}
+		if (nameplateTime != null) {
+			carInfo.setNameplatetime(BusUtil.stringToTime(nameplateTime));
+		}
+		if (registrationTime != null) {
+			carInfo.setRegistrationtime(BusUtil.stringToTime(registrationTime));
+		}
+		if (machineNo != null) {
+			carInfo.setMachineno(machineNo);
+		}
+		if (batteryCode != null) {
+			carInfo.setBatterycode(batteryCode);
+		}
+		if (chargingGun != null) {
+			carInfo.setCharginggun(chargingGun);
+		}
+		if (extinguisher != null) {
+			carInfo.setExtinguisher(extinguisher);
+		}
+		if (tools != null) {
+			carInfo.setTools(tools);
+		}
+		if (sign != null) {
+			carInfo.setSign(sign);
+		}
+		if (spareTire != null) {
+			carInfo.setSparetire(spareTire);
+		}
+		carInfo.setCarstatus(1);
+		carInfo.setCreatetime(new Date());
+		
+		if (!carLicense.isEmpty()) {
+			//获取文件类型
+//			String contentType=carLicense.getContentType();
+			//获取文件后缀名称
+//			String imageName=contentType.substring(contentType.indexOf("/")+1);
+//			System.out.println(imageName);
+			try {
+				String path = SaveImgUtil.save("car/carLicense", carLicense);
+				carInfo.setCarlicense(path);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if (!carIcon.isEmpty()) {
+			//获取文件类型
+//			String contentType=carIcon.getContentType();
+			//获取文件后缀名称
+//			String imageName=contentType.substring(contentType.indexOf("/")+1);
+//			System.out.println(imageName);
+			try {
+				String path = SaveImgUtil.save("car/carIcon", carIcon);
+				carInfo.setCaricon(path);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		carInfoMapper.insertSelective(carInfo);
+		result.setStatus(0);
+		return result;
+	}
+
+	/**
+	 * 修改车辆信息
+	 */
+	public BusResult changeCarInfo(Integer operatorID, Integer carID, String carNo, Integer carBrand, String carModel, 
+			Integer carColor, String carVin,
+			String terminalNo, String SIMNo, String bluetoothNo,
+			String remark, String nameplateTime, String registrationTime, 
+			String machineNo, String batteryCode, Integer chargingGun, Integer extinguisher, 
+			Integer tools, Integer sign, Integer spareTire, Integer carStatus, MultipartFile carLicense, 
+			MultipartFile carIcon) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		CarInfo carInfo = carInfoMapper.selectByPrimaryKey(carID);
+		if (carNo != null) {
+			carInfo.setCarno(carNo);
+		}
+		if (carBrand != null) {
+			carInfo.setCarbrand(carBrand);
+		}
+		
+		if (carModel != null) {
+			carModel=carModel.toUpperCase();
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("modelName", carModel);
+			params.put("companyID", carInfo.getCompanyid());
+			ModelDetailInfo modelDetailInfo = modelDetailInfoMapper.findModelDetailByModelNameAndCompanyID(params);
+			carInfo.setModeldetailid(modelDetailInfo.getModeldetailid());
+			carInfo.setCarmodelid(modelDetailInfo.getCarmodelid());
+		}
+		if (carColor!= null) {
+			carInfo.setCarcolor(carColor);
+		}
+		if (carVin != null) {
+			carInfo.setCarvin(carVin);
+		}
+		if (terminalNo != null) {
+			carInfo.setTerminalno(terminalNo);
+		}
+		if (SIMNo != null) {
+			carInfo.setSimno(SIMNo);
+		}
+		if (bluetoothNo != null) {
+			carInfo.setBluetoothno(bluetoothNo);
+		}
+		OperatorSys operatorSys = operatorSysMapper.selectByPrimaryKey(operatorID);
+		carInfo.setUpdatemanid(operatorID);
+		carInfo.setUpdateman(operatorSys.getSysusename());
+		
+		if (remark != null) {
+			carInfo.setRemark(remark);
+		}
+		if (nameplateTime != null) {
+			carInfo.setNameplatetime(BusUtil.stringToTime(nameplateTime));
+		}
+		if (registrationTime != null) {
+			carInfo.setRegistrationtime(BusUtil.stringToTime(registrationTime));
+		}
+		if (machineNo != null) {
+			carInfo.setMachineno(machineNo);
+		}
+		if (batteryCode != null) {
+			carInfo.setBatterycode(batteryCode);
+		}
+		if (chargingGun != null) {
+			carInfo.setCharginggun(chargingGun);
+		}
+		if (extinguisher != null) {
+			carInfo.setExtinguisher(extinguisher);
+		}
+		if (tools != null) {
+			carInfo.setTools(tools);
+		}
+		if (sign != null) {
+			carInfo.setSign(sign);
+		}
+		if (spareTire != null) {
+			carInfo.setSparetire(spareTire);
+		}
+		if (carStatus != null) {
+			carInfo.setCarstatus(carStatus);
+		}
+		carInfo.setLasttime(new Date());
+		if (carLicense != null) {
+			if (!carLicense.isEmpty()) {
+				//获取文件类型
+//				String contentType=carLicense.getContentType();
+				//获取文件后缀名称
+//				String imageName=contentType.substring(contentType.indexOf("/")+1);
+//				System.out.println(imageName);
+				try {
+					String path = SaveImgUtil.save("car/carLicense", carLicense);
+					carInfo.setCarlicense(path);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if (carIcon != null) {
+			if (!carIcon.isEmpty()) {
+				//获取文件类型
+//				String contentType=carIcon.getContentType();
+				//获取文件后缀名称
+//				String imageName=contentType.substring(contentType.indexOf("/")+1);
+//				System.out.println(imageName);
+				try {
+					String path = SaveImgUtil.save("car/carIcon", carIcon);
+					carInfo.setCaricon(path);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		carInfoMapper.updateByPrimaryKeySelective(carInfo);
+		result.setStatus(0);
+		return result;
+	}
+
+	/**
+	 * 修改车辆状态
+	 */
+	public BusResult changeCarStatus(Integer carID, Integer carStatus) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		CarInfo carInfo = new CarInfo();
+		carInfo.setCarid(carID);
+		carInfo.setCarstatus(carStatus);
+		
+		carInfoMapper.updateByPrimaryKeySelective(carInfo);
+		result.setStatus(0);
+		return result;
+	}
+	
+	/**
+	 * 加载所有车辆状态信息
+	 */
+	public BusResult loadAllCarStatus() {
+		BusResult result = new BusResult();
+		List<CarStatusInfoJson> list = carStatusInfoJsonMapper.loadAllCarStatus();
+		
+		result.setStatus(0);
+		result.setData(list);
+		
+		return result;
+	}
+
+	/**
+	 * 车辆控制
+	 */
+	public BusResult carControl(int operatorID, int carID, int controlType,String loginIP) {
+		BusResult result = new BusResult();
+		
+		JSONObject obj = new JSONObject();
+        obj.putOpt("CarID", carID);
+        obj.putOpt("ControlType", controlType);
+        
+        String url = BusUtil.BASE_IP+"Control/ControlCar/?UserID="+operatorID+"&UserType=1&UserIP="+loginIP;
+        
+        BusResult  jsonResult = JsonPostUtil.sendPost(url, obj.toString());
+        String jsonStr = jsonResult.getData().toString();
+		
+        JSONObject jsonObject = new JSONObject(jsonStr);
+		int status = jsonObject.getInt("Result");
+		result.setStatus(status);
+		//操作员控制车辆操作表
+		OptViewJson optViewJson = optViewJsonMapper.findOptByUserID(new Integer(operatorID));
+		ControlLog controlLog = new ControlLog();
+		controlLog.setOptid(optViewJson.getOprID());
+		controlLog.setOptname(optViewJson.getOptName());
+		controlLog.setCarid(new Integer(carID));
+		controlLog.setCreatetime(new Date());
+		controlLog.setIpaddress(loginIP);
+		controlLog.setDescription(new Integer(controlType));
+		controlLog.setStatus(new Integer(status));
+		controlLogMapper.insertSelective(controlLog);
+		
+		return result;
+	}
+
+	
+	/**
+	 * 根据公司ID显示车辆模型信息
+	 */
+	public BusResult showAllCarModelByCompanyID(Integer companyID) {
+		// TODO Auto-generated method stub
+		BusResult result = new BusResult();
+		List<CarModelJson> list = carModelJsonMapper.loadAllCarModelJsonByCompanyID(companyID);
+		result.setStatus(0);
+		result.setData(list);
+		
+		return result;
+	}
+	
+	
+	
+}

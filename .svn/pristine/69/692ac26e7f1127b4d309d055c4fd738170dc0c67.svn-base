@@ -1,0 +1,795 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>优惠券信息</title>
+<link rel="stylesheet" href="../../css/roles.css" />
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-table.min.css" />
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+
+<script src="../../js/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/tableExport.js"></script>
+<script src="../../js/jquery.base64.js"></script>
+<script src="../../js/bootstrap/bootstrap-table.js"></script>
+<script src="../../js/bootstrap/bootstrap-table-zh-CN.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.fr.js"></script>
+<script src="../../js/bootstrap/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../js/common2.js" type="text/javascript"></script>
+<script src="../../js/script/Operative/coupon.js"></script>	
+
+<style>
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+}
+.title{
+	background-color:#F6F6F6;
+}
+.tdstyle{visibility:hidden;}
+</style>
+</head>
+<body>
+	<div class="container"
+		style="width: 100%; border: 0px; border-style: solid;">
+		<div class="panel center-block">
+			<h4 align="center">优惠券信息</h4>
+			<div id="custom-toolbar" style="padding-top: 10px;">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="Couponnum" class="col-sm-2 control-label">优惠券编号</label>
+						<div class="col-sm-2">
+							<input type="text" id="Couponnum" class="form-control" />
+						</div>						
+						<label for="couponmodel" class="col-sm-2 control-label">优惠券类别</label>
+						<div class="col-sm-2">
+							<select name="" id="couponmodel" class="form-control">
+								<option value="1">优惠券</option>
+								<option value="2">推荐券</option>
+								<option value="3">新人券</option>
+							</select>
+						</div>
+						<label for="sendType" class="col-sm-2 control-label">下发类型</label>
+						<div class="col-sm-2">
+							<select class="form-control" id="sendtype">
+								<option value="1">自动</option>
+								<option value="2">手动</option>
+							</select>
+						</div>
+					</div>											
+					<div style="margin-left:10%;">						
+						<button type="button" class="btn btn-info" onclick="ss();">查询</button>	
+						<button type="button" class="btn btn-primary" onclick="add();">新增</button>	
+						<button type="button" class="btn btn-success" onclick="invitation();">邀请码</button>	
+						<button type="button" onclick="$('#tab').tableExport({ type:'excel',separator:';', escape:'false'});"class="btn btn-danger">
+							<i class="glyphicon glyphicon-search">导出Excel</i>
+						</button>								
+					</div>
+				</form>
+			</div>
+			<div class="table-responsive">
+				<table id="tab" data-show-columns="true" data-show-refresh="true" data-search="true"></table>
+			</div>
+		</div>
+	</div>			
+	<!-- 优惠券新增 -->
+	<button id="addbtn" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal"
+		data-target="#addModal"></button>
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog"aria-labelledby="addModalLabel" aria-hidden="true" style="top:15%;">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:700px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="addModalLabel">优惠券新增</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:300px;overflow:auto;">
+					<table class="table table-bordered">
+						<tr>
+							<td class="title">优惠券类别</td>
+							<td>
+								<select id="couponModel" onchange="sel_div(this)" class="textbox" data-options="required:true,novalidate:true">
+									<option value="">请选择</option>
+									<option value="1">普通</option>
+									<option value="2">延时下发</option>
+									<option value="3">领取型</option>
+									<option value="4">新人</option>
+									<option value="5">指定账户</option>									
+								</select>
+							</td>
+							<td class="title">可在哪个公司下使用</td>
+							<td><input type="text" id="appointCompany" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">优惠券名称</td>
+							<td><input type="text" id="couponName" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+							<td class="title">优惠券类型</td>
+							<td>
+								<select id="couponType" class="textbox" data-options="required:true,novalidate:true">
+									<option value="1">按折扣抵用</option>
+									<option value="2">按金额抵用</option>
+								</select>
+							</td>							
+						</tr>
+						<tr>
+							<td class="title">订单必须满多少金额才能使用优惠券</td>
+							<td><input type="text" id="limitMoney" name="limitMoney" value="" class="easyui-numberbox textbox" data-options="required:true,novalidate:true"></td>
+							<td class="title">抵用额</td>
+							<td><input type="text" id="couponMoney" name="couponMoney" value="" class=" textbox" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>							
+							<td class="title">备注信息</td>
+							<td><input type="text" id="remark" name="remark" value=""></td>
+						</tr>
+					</table>
+					<!--1.普通优惠券 -->
+					<table class="table table-bordered" id="1" style="display:none">
+						<tr>
+							<td class="title">会员注册日期开始时间</td>
+							<td><input type="text" id="AA" class="regBegin textbox"  value="" data-options="required:true,novalidate:true"></td>
+							<td class="title">会员注册日期截止时间</td>
+							<td><input type="text" id="BB" class="regEnd textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">会员是否需要认证</td>
+							<td>
+								<select id="G" class="userAuth textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+							<td class="title">会员是否需要产生订单</td>
+							<td>
+								<select id="GG" class="hasOrder textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="title">优惠券有效起始日期</td>
+							<td><input type="text" id="A" class="validateBegin textbox"  value="" data-options="required:true,novalidate:true"></td>
+							<td class="title">优惠券有效截止日期</td>
+							<td><input type="text" id="B" class="validateEnd textbox"  value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+					</table>
+					<!--2.延时下发  -->
+					<table class="table table-bordered" id="2" style="display:none">
+						<tr>
+							<td class="title">会员注册日期开始时间</td>
+							<td><input type="text" id="CC" class="regBegin textbox" value="" data-options="required:true,novalidate:true"></td>
+							<td class="title">会员注册日期截止时间</td>
+							<td><input type="text" id="DD" class="regEnd textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">会员是否需要认证</td>
+							<td>
+								<select id="H" class="userAuth textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+							<td class="title">会员是否需要产生订单</td>
+							<td>
+								<select id="HH" class="hasOrder textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="title">优惠券有效起始日期</td>
+							<td><input type="text" id="C" class="validateBegin textbox" value="" data-options="required:true,novalidate:true"></td>
+							<td class="title">优惠券有效截止日期</td>
+							<td><input type="text" id="D" class="validateEnd textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">到账时间</td>
+							<td><input type="text" id="aa" class="reachTime textbox" value="" data-options="required:true,novalidate:true"></td>
+							<td class="title">到账截止时间</td>
+							<td><input type="text" id="bb" class="reachEndTime textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">新会员是否能领</td>
+							<td>
+								<select class="newUser" id="AAA">
+									<option value="1">能</option>
+									<option value="2">不能</option>									
+								</select>
+							</td>
+							<td class="title">优惠券张数</td>
+							<td><input id="aaa" type="text" value="" class="couponNum easyui-numberbox textbox" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">优惠券有效期类型</td>
+							<td>
+								<select id="AAAA" class="validateType textbox" data-options="required:true,novalidate:true">
+									<option value="1">指定日期内有效</option>
+									<option value="2">领用取后指定天数有效</option>
+								</select>
+							</td>
+							<td class="title">领取后有效天数</td>
+							<td><input type="text" id="aaaa" class="validateDays textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+					</table>
+					<!-- 3.领取型-->
+					<table class="table table-bordered" id="3" style="display:none">
+						<tr>
+							<td class="title">会员注册日期开始时间</td>
+							<td><input type="text" id="EE" class="regBegin textbox" value=""  data-options="required:true,novalidate:true"></td>
+							<td class="title">会员注册日期截止时间</td>
+							<td><input type="text" id="FF" class="regEnd textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">会员是否需要认证</td>
+							<td>
+								<select id="I" class="userAuth textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+							<td class="title">会员是否需要产生订单</td>
+							<td>
+								<select id="II" class="hasOrder textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+						</tr>						
+						<tr>
+							<td class="title">到账时间</td>
+							<td><input type="text" id="cc" class="reachTime textbox" value="" data-options="required:true,novalidate:true"></td>
+							<td class="title">到账截止时间</td>
+							<td><input type="text" id="dd" class="reachEndTime textbox" value=""  data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">新会员是否能领</td>
+							<td>
+								<select id="BBB" class="newUser">
+									<option value="1">能</option>
+									<option value="2">不能</option>
+								</select>
+							</td>
+							<td class="title">优惠券张数</td>
+							<td><input id="bbb" type="text" value="" class=" couponNum easyui-numberbox textbox" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">会员注册后需要多少天内产生订单</td>
+							<td>
+								<input id="orderday" class="hasOrderDays textbox" data-options="required:true,novalidate:true">									
+							</td>
+							<td class="title">领取后有效天数</td>
+							<td><input id="bbbb" type="text" class="validateDays textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+					</table>
+					<!--4.新人 券-->
+					<table class="table table-bordered" id="4" style="display:none">
+						<tr>
+							<td class="title">会员是否需要认证</td>
+							<td>
+								<select class="userAuth" id="J">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+							<td class="title">会员是否需要产生订单</td>
+							<td>
+								<select class="hasOrder" id="JJ">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="title">到账时间</td>
+							<td><input type="text" id="ee" class="reachTime textbox" value="" data-options="required:true,novalidate:true"></td>
+							<td class="title">到账截止时间</td>
+							<td><input type="text" id="ff" class="reachEndTime textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">会员注册后需要多少天内产生订单</td>
+							<td>
+								<input type="text" id="orderday1" class="hasOrderDays textbox" value="" data-options="required:true,novalidate:true">
+							</td>
+							<td class="title">领取后有效天数</td>
+							<td><input id="cccc" type="text" class="validateDays textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">优惠券张数</td>
+							<td><input id="ccc" type="text" class="couponNum" value="" class="easyui-numberbox textbox" data-options="required:true,novalidate:true"></td>
+						</tr>
+					</table> 
+					<!--5.指定账户  -->	
+					<table class="table table-bordered" id="5" style="display:none">
+						<tr>
+							<td class="title">优惠券有效起始日期</td>
+							<td><input type="text" id="E" class="validateBegin textbox" value="" data-options="required:true,novalidate:true"></td>
+							<td class="title">优惠券有效截止日期</td>
+							<td><input type="text" id="F" class="validateEnd textbox" value="" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">指定会员账户</td>
+							<td colspan="3"><textarea id="zz" style="width:400px;" class="users" placeholder="请输入会员手机号码，用逗号隔开。若指定用户超过10位，建议使用文件上传!"></textarea></td>
+						</tr>												
+						<tr>
+							<td class="title">文件上传</td>
+							<td colspan="3"><a href="" download="data.txt">模板下载</a></td>
+						</tr>
+						<tr>
+							<td class="title">请选择会员账号文件</td>
+							<td colspan="3">
+								<div style="padding:10px;">
+									<input type="file" name="listFile" id="file" size="26"><br/>
+									<input type="button" value="上传数据" onclick="importData();">
+								</div>
+							</td>
+						</tr>											
+					</table>							
+				</div>
+				<div class="modal-footer" style="text-align:center;">
+					<button id="addbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal"onclick="urlSubmit();">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 邀请码新增 -->
+	<button id="invitationBtn" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal"
+		data-target="#invitationModal"></button>
+	<div class="modal fade" id="invitationModal" tabindex="-1" role="dialog"aria-labelledby="invitationModalLabel" aria-hidden="true" style="top:15%;">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:700px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="invitationModalLabel">邀请码活动信息</h4>
+				</div>
+				<div class="modal-body" align="center" style="height:300px;overflow:auto;">
+					<table class="table table-bordered">
+						<tr>
+							<td class="title">优惠券名称</td>
+							<td><input type="text" id="CouponName" name="CouponName" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+							<td class="title">邀请类型</td>
+							<td>
+								<select id="InviteType" class="textbox" data-options="required:true,novalidate:true">
+									<option value="1">链接注册</option>
+									<option value="2">邀请码注册</option>																	
+								</select>
+							</td>							
+						</tr>
+						<tr>
+							<td class="title">邀请截止时间</td>
+							<td><input type="text" id="InviteEndTime" name="InviteEndTime" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+							<td class="title">新会员是否能生成邀请码</td>
+							<td>
+								<select id="NewUser" class="textbox" data-options="required:true,novalidate:true">
+									<option value="1">能</option>
+									<option value="2">不能</option>									
+								</select>
+							</td>							
+						</tr>
+						<tr>
+							<td class="title">会员注册日期开始时间</td>
+							<td><input type="text" id="RegBegin" name="REgBegin" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+							<td class="title">会员注册日期截止时间</td>
+							<td><input type="text" id="RegEnd" name="REgEnd" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>							
+							<td class="title">会员是否需要认证</td>
+							<td>
+								<select id="UserAuth" class="textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+							<td class="title">会员是否需要产生订单</td>
+							<td>
+								<select id="HasOrder" class="textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="title">指定会员账户ID列表</td>
+							<td><input type="text" id="Users" name="Users" value=""></td>
+							<td class="title">推荐人自己是否也能获取优惠券</td>
+							<td> 
+								<select id="InviteSelf"  data-options="required:true,novalidate:true">
+									<option value="1">是</option>
+									<option value="2">否</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="title">邀请码最多使用次数</td>
+							<td><input type="text" id="InviteLime" name="InviteLime" value=""></td>
+							<td class="title">被推荐会员是否需要认证</td>
+							<td>
+								<select id="BUserAuth" class="textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select> 	
+							</td>
+						</tr>
+						<tr>
+							<td class="title">被推荐会员是否需要产生订单</td>
+							<td>
+								<select id="BHasOrder" class="textbox" data-options="required:true,novalidate:true">
+									<option value="1">需要</option>
+									<option value="2">不需要</option>
+								</select>
+							</td>
+							<td class="title">被推荐会员注册后需要多少天内产生订单</td>
+							<td><input type="text" id="BHasOrderDays" name="BHasOrderDays" value=""></td>
+						</tr>
+						<tr>
+							<td class="title">可在哪个公司下使用</td>
+							<td><input type="text" id="AppointCompany" name="AppointCompany" value=""></td>
+							<td class="title">领取后有效天数</td>
+							<td><input type="text" id="ValidateDays" name="ValidateDays" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">优惠券类型</td>
+							<td>
+								<select id="CouponType" class="textbox" data-options="required:true,novalidate:true">
+									<option value="1">按折扣抵用</option>
+									<option value="2">按金额抵用</option>
+								</select>
+							</td>
+							<td class="title">抵用额</td>
+							<td><input type="text" id="CouponMoney" name="CouponMoney" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+						</tr>
+						<tr>
+							<td class="title">订单必须满多少金额才能使用优惠券</td>
+							<td><input type="text" id="LimitMoney" name="LimitMoney" value="" class="textbox" data-options="required:true,novalidate:true"></td>
+							<td class="title">备注信息</td>
+							<td><textarea  id="REmark" name="REmark"></textarea></td>
+						</tr>
+					</table>
+					
+				</div>
+				<div class="modal-footer" style="text-align:center;">
+					<button id="invitationbut" type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="Submit();">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 审核派发 -->
+	<button id="Modal" style="display:none;" class="btn btn-primary btn-lg" data-toggle="modal"data-target="#memberModal"></button>
+		<div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:700px; padding-top:5%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" id="memberModalLabel">优惠券审核详情</h5>
+					</div>
+					<div class="modal-body" style="padding-left:10px; padding-top:30px;height:200px;overflow:auto;">					
+					<table class="table table-bordered" id="modal_table">
+						<tr>
+							<td class="title">优惠券编号</td>
+							<td><span id="couponNum" ></span></td>
+							<td class="title">优惠券名称</td>
+							<td><span id="couponNam"></span></td>
+						</tr>
+						<tr>
+							<td class="title">优惠额/元</td>
+							<td><span id="couponMon"></span></td>
+							<td class="title">审核状态</td>
+							<td>
+								<select id="auditStatus">
+									<option value="1">成功</option>
+									<option value="2">失败</option>
+								</select>
+							</td>							
+						</tr>
+						<tr id="two" class="tdstyle">
+							<td class="title">失败原因</td>
+							<td><input type="text" value="" id="failCause"></td>							
+						</tr>
+					</table>
+				</div>	
+			<div class="modal-footer" style="text-align:center;">
+				<button id="save_but" type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="urlsubmit();">保存</button>
+			</div>
+		</div>			
+	</div>	
+</div>		
+	<!-- 按钮触发模态框 -->
+	<button id="del_btn" style="display: none;" class="btn btn-primary btn-lg" data-toggle="modal"data-target="#delModal"></button>
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog"aria-labelledby="delModalLabel" aria-hidden="true" style="top:10%;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="delModalLabel">温馨提醒</h4>
+				</div>
+				<div class="modal-body" align="center">
+					<span class="del_msg"></span>
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary btn-sm"data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+	//验证
+	$(function(){
+		$('input.textbox').validatebox().bind('blur', function(){
+			$(this).validatebox('enableValidation').validatebox('validate');
+		});
+	});
+	
+	//邀请码截止日期
+	$("input[name=InviteEndTime]").datetimepicker({
+		format:"yyyy-mm-dd hh:ii:ss",
+		language: 'zh-CN',
+		autoclose: true,
+		todayBtn: true,
+		pickerPosition: "bottom-left"
+	});
+	//邀请码(会员注册日)
+	$("input[name=REgBegin]").datetimepicker({
+		format:"yyyy-mm-dd hh:ii:ss",
+		language: 'zh-CN',
+		autoclose: true,
+		todayBtn: true,
+		pickerPosition: "bottom-left"
+	});
+	$("input[name=REgEnd]").datetimepicker({
+		format:"yyyy-mm-dd hh:ii:ss",
+		language: 'zh-CN',
+		autoclose: true,
+		todayBtn: true,
+		pickerPosition: "bottom-left"
+	});
+	$(function(){
+		$("input[name=REgBegin]").on("changeDate", function (e) {
+			var start = new Date(Date.parse($("input[name=REgBegin]").val()));
+			$('input[name=REgEnd]').datetimepicker('setStartDate', start);
+		});
+		$("input[name=REgEnd]").on("changeDate", function (e) {
+			var end = new Date(Date.parse($("input[name=REgEnd]").val()));
+			$('input[name=REgBegin]').datetimepicker('setEndDate', end);
+		});
+	})
+	//到账时间(延时下发)
+$("#aa").datetimepicker({
+	format:"yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#bb").datetimepicker({
+	format:"yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#aa").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#aa").val()));
+		$('#bb').datetimepicker('setStartDate', start);
+	});
+	$("#bb").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#bb").val()));
+		$('#aa').datetimepicker('setEndDate', end);
+	});
+})
+//会员注册日期(延时下发)
+$("#CC").datetimepicker({
+	format: "yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#DD").datetimepicker({
+	format: "yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#CC").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#CC").val()));
+		$('#DD').datetimepicker('setStartDate', start);
+	});
+	$("#DD").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#DD").val()));
+		$('#CC').datetimepicker('setEndDate', end);
+	});
+})
+//优惠券有效日期(延时下发)
+$("#C").datetimepicker({
+	format:"yyyy-mm-dd",
+	language: 'zh-CN',
+	minView:2,
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#D").datetimepicker({
+	format:"yyyy-mm-dd",
+	language: 'zh-CN',
+	minView:2,
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#C").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#C").val()));
+		$('#D').datetimepicker('setStartDate', start);
+	});
+	$("#D").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#D").val()));
+		$('#C').datetimepicker('setEndDate', end);
+	});
+})
+//会员注册日期(普通)
+$("#AA").datetimepicker({
+	format: "yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#BB").datetimepicker({
+	format: "yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#AA").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#AA").val()));
+		$('#BB').datetimepicker('setStartDate', start);
+	});
+	$("#BB").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#BB").val()));
+		$('#AA').datetimepicker('setEndDate', end);
+	});
+})
+//优惠券有效日期(普通)
+$("#A").datetimepicker({
+	format:"yyyy-mm-dd",
+	language: 'zh-CN',
+	minView:2,
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#B").datetimepicker({
+	format:"yyyy-mm-dd",
+	language: 'zh-CN',
+	minView:2,
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#A").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#A").val()));
+		$("#B").datetimepicker('setStartDate', start);
+	});
+	$("#B").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#B").val()));
+		$("#A").datetimepicker('setEndDate', end);
+	});
+})
+//领取型
+//会员注册日期(领取)
+$("#EE").datetimepicker({
+	format: "yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#FF").datetimepicker({
+	format: "yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#EE").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#EE").val()));
+		$('#FF').datetimepicker('setStartDate', start);
+	});
+	$("#FF").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#FF").val()));
+		$('#EE').datetimepicker('setEndDate', end);
+	});
+})
+
+//到账时间(领取)
+$("#cc").datetimepicker({
+	format:"yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#dd").datetimepicker({
+	format:"yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#cc").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#cc").val()));
+		$('#dd').datetimepicker('setStartDate', start);
+	});
+	$("#dd").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#dd").val()));
+		$('#cc').datetimepicker('setEndDate', end);
+	});
+})
+//到账时间(新人)
+$("#ee").datetimepicker({
+	format:"yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#ff").datetimepicker({
+	format:"yyyy-mm-dd hh:ii:ss",
+	language: 'zh-CN',
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#ee").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#ee").val()));
+		$('#ff').datetimepicker('setStartDate', start);
+	});
+	$("#ff").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#ff").val()));
+		$('#ee').datetimepicker('setEndDate', end);
+	});
+})
+//优惠券有效日期(指定)
+$("#E").datetimepicker({
+	format:"yyyy-mm-dd",
+	language: 'zh-CN',
+	minView:2,
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$("#F").datetimepicker({
+	format:"yyyy-mm-dd",
+	language: 'zh-CN',
+	minView:2,
+	autoclose: true,
+	todayBtn: true,
+	pickerPosition: "bottom-left"
+});
+$(function(){
+	$("#E").on("changeDate", function (e) {
+		var start = new Date(Date.parse($("#E").val()));
+		$('#F').datetimepicker('setStartDate', start);
+	});
+	$("#F").on("changeDate", function (e) {
+		var end = new Date(Date.parse($("#F").val()));
+		$('#E').datetimepicker('setEndDate', end);
+	});
+})
+	</script>		
+</body>
+</html>

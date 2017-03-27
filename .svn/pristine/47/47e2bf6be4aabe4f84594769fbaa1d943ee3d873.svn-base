@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.json.BeaconJsonMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.json.BeaconJson" >
+    <id column="BeaconID" property="beaconID" jdbcType="INTEGER" />
+    <result column="BeaconNo" property="beaconNo" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UUID" property="UUID" jdbcType="VARCHAR" />
+    <result column="Major" property="Major" jdbcType="VARCHAR" />
+    <result column="Minor" property="Minor" jdbcType="VARCHAR" />
+    <result column="MAC" property="Mac" jdbcType="VARCHAR" />
+    <result column="Position" property="position" jdbcType="VARCHAR" />
+    <result column="FixTime" property="fixTime" jdbcType="TIMESTAMP" />
+    <result column="SiteID" property="siteID" jdbcType="INTEGER" />
+    <result column="SiteName" property="siteName" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CompanyID" property="companyID" jdbcType="INTEGER" />
+    <result column="CompanyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="ShortName" property="shortName" jdbcType="VARCHAR" />
+    
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="OptID" property="optID" jdbcType="INTEGER" />
+    <result column="OptName" property="optName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+	
+  <!-- 根据公司ID查找信标信息 -->
+  <select id="loadBeaconByCompanyID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+	b.BeaconID,b.BeaconNo,b.CreateTime,b.UUID,b.Major,b.Minor,b.MAC,b.Position,
+	b.FixTime,b.SiteID,b.`Status`,b.CompanyID,b.OptID,b.OptName,b.Remark,
+	s.SiteName,c.CompanyName,c.ShortName
+	FROM t_info_beacon b
+	LEFT JOIN t_info_site s ON s.SiteID=b.SiteID
+	LEFT JOIN t_info_company c ON c.CompanyID=b.CompanyID
+	WHERE b.CompanyID=#{companyid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查找所有信标信息 -->
+  <select id="loadAllBeacon" resultMap="BaseResultMap">
+    SELECT 
+	b.BeaconID,b.BeaconNo,b.CreateTime,b.UUID,b.Major,b.Minor,b.MAC,b.Position,
+	b.FixTime,b.SiteID,b.`Status`,b.CompanyID,b.OptID,b.OptName,b.Remark,
+	s.SiteName,c.CompanyName,c.ShortName
+	FROM t_info_beacon b
+	LEFT JOIN t_info_site s ON s.SiteID=b.SiteID
+	LEFT JOIN t_info_company c ON c.CompanyID=b.CompanyID
+  </select>
+  
+  <!-- 根据siteID查找信标信息 -->
+  <select id="loadBeaconBySiteID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+	b.BeaconID,b.BeaconNo,b.CreateTime,b.UUID,b.Major,b.Minor,b.MAC,b.Position,
+	b.FixTime,b.SiteID,b.`Status`,b.CompanyID,b.OptID,b.OptName,b.Remark,
+	s.SiteName,c.CompanyName,c.ShortName
+	FROM t_info_beacon b
+	LEFT JOIN t_info_site s ON s.SiteID=b.SiteID
+	LEFT JOIN t_info_company c ON c.CompanyID=b.CompanyID
+	WHERE b.SiteID=#{siteID,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+</mapper>

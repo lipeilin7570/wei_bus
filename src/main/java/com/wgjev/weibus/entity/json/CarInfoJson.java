@@ -1,0 +1,158 @@
+package com.wgjev.weibus.entity.json;
+
+import com.wgjev.weibus.util.BusUtil;
+
+public class CarInfoJson {
+	
+	private Integer carID;
+	private String carNo;
+	private String carVin;
+	private Integer siteID;
+	private String createTime;
+	private Integer electricityStatus;
+	private Integer carRentStatus;
+	private String terminalNo;
+	private String bluetoothNo;
+	private String SIMNo;
+	private Integer electricity;
+	private double remainKON;
+	private String companyShortName;
+	
+	private String people;
+	private String siteName;
+	private String modelName;
+	private String alias;
+	
+	private String carLicense;
+	private String carIcon;
+	private Integer carStatus;
+	
+	public Integer getCarStatus() {
+		return carStatus;
+	}
+	public void setCarStatus(Integer carStatus) {
+		this.carStatus = carStatus;
+	}
+	public String getCarLicense() {
+		return carLicense;
+	}
+	public void setCarLicense(String carLicense) {
+		this.carLicense = BusUtil.SERVICE_IP + carLicense;
+	}
+	public String getCarIcon() {
+		return carIcon;
+	}
+	public void setCarIcon(String carIcon) {
+		this.carIcon = BusUtil.SERVICE_IP + carIcon;
+	}
+	public String getPeople() {
+		return people;
+	}
+	public void setPeople(Integer people) {
+		if (people == 2) {
+			this.people = "两座";
+		}else if (people == 4) {
+			this.people = "四座";
+		}else if (people == 5) {
+			this.people = "五座";
+		}
+		
+	}
+	public String getSiteName() {
+		return siteName;
+	}
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+	public String getModelName() {
+		return modelName;
+	}
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	public String getAlias() {
+		return alias;
+	}
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+	public Integer getElectricity() {
+		return electricity;
+	}
+	public void setElectricity(Integer electricity) {
+		this.electricity = electricity;
+	}
+	public double getRemainKON() {
+		return remainKON;
+	}
+	public void setRemainKON(double remainKON) {
+		this.remainKON = remainKON;
+	}
+	public String getCompanyShortName() {
+		return companyShortName;
+	}
+	public void setCompanyShortName(String companyShortName) {
+		this.companyShortName = companyShortName;
+	}
+	public Integer getCarID() {
+		return carID;
+	}
+	public void setCarID(Integer carID) {
+		this.carID = carID;
+	}
+	public String getCarNo() {
+		return carNo;
+	}
+	public void setCarNo(String carNo) {
+		this.carNo = carNo;
+	}
+	public String getCarVin() {
+		return carVin;
+	}
+	public void setCarVin(String carVin) {
+		this.carVin = carVin;
+	}
+	public Integer getSiteID() {
+		return siteID;
+	}
+	public void setSiteID(Integer siteID) {
+		this.siteID = siteID;
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime.substring(0, 19);
+	}
+	public Integer getElectricityStatus() {
+		return electricityStatus;
+	}
+	public void setElectricityStatus(Integer electricityStatus) {
+		this.electricityStatus = electricityStatus;
+	}
+	public Integer getCarRentStatus() {
+		return carRentStatus;
+	}
+	public void setCarRentStatus(Integer carRentStatus) {
+		this.carRentStatus = carRentStatus;
+	}
+	public String getTerminalNo() {
+		return terminalNo;
+	}
+	public void setTerminalNo(String terminalNo) {
+		this.terminalNo = terminalNo;
+	}
+	public String getBluetoothNo() {
+		return bluetoothNo;
+	}
+	public void setBluetoothNo(String bluetoothNo) {
+		this.bluetoothNo = bluetoothNo;
+	}
+	public String getSIMNo() {
+		return SIMNo;
+	}
+	public void setSIMNo(String sIMNo) {
+		SIMNo = sIMNo;
+	}
+	
+}

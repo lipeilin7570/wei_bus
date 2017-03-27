@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.SiteInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.SiteInfo" >
+    <id column="SiteID" property="siteid" jdbcType="INTEGER" />
+    <result column="SiteName" property="sitename" jdbcType="VARCHAR" />
+    <result column="SiteCode" property="sitecode" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="SiteAddress" property="siteaddress" jdbcType="VARCHAR" />
+    <result column="Longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="Latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="SiteManID" property="sitemanid" jdbcType="INTEGER" />
+    <result column="SiteMan" property="siteman" jdbcType="VARCHAR" />
+    <result column="StartTime" property="starttime" jdbcType="VARCHAR" />
+    <result column="EndTime" property="endtime" jdbcType="VARCHAR" />
+    <result column="PileStatus" property="pilestatus" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+    <result column="Zcode" property="zcode" jdbcType="VARCHAR" />
+    <result column="SiteRadius" property="siteradius" jdbcType="DECIMAL" />
+    <result column="MiniParkingCount" property="miniparkingcount" jdbcType="INTEGER" />
+    <result column="ParkingCount" property="parkingcount" jdbcType="INTEGER" />
+    <result column="SitePicIcon" property="sitepicicon" jdbcType="VARCHAR" />
+    <result column="SitePic" property="sitepic" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SiteID, SiteName, SiteCode, CreateTime, SiteAddress, Longitude, Latitude, SiteManID, 
+    SiteMan, StartTime, EndTime, PileStatus, Status, Remark, CompanyID, Zcode, SiteRadius, 
+    MiniParkingCount, ParkingCount, SitePicIcon, SitePic
+  </sql>
+  
+  <select id="findSiteInfoBySiteNoAndCompanyID" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_site
+    where SiteCode = #{siteNo,jdbcType=VARCHAR} AND CompanyID=#{companyID,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_info_site
+    where SiteID = #{siteid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_info_site
+    where SiteID = #{siteid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.SiteInfo" >
+    insert into t_info_site (SiteID, SiteName, SiteCode, 
+      CreateTime, SiteAddress, Longitude, 
+      Latitude, SiteManID, SiteMan, 
+      StartTime, EndTime, PileStatus, 
+      Status, Remark, CompanyID, 
+      Zcode, SiteRadius, MiniParkingCount, 
+      ParkingCount, SitePicIcon, SitePic
+      )
+    values (#{siteid,jdbcType=INTEGER}, #{sitename,jdbcType=VARCHAR}, #{sitecode,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{siteaddress,jdbcType=VARCHAR}, #{longitude,jdbcType=DECIMAL}, 
+      #{latitude,jdbcType=DECIMAL}, #{sitemanid,jdbcType=INTEGER}, #{siteman,jdbcType=VARCHAR}, 
+      #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, #{pilestatus,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{companyid,jdbcType=INTEGER}, 
+      #{zcode,jdbcType=VARCHAR}, #{siteradius,jdbcType=DECIMAL}, #{miniparkingcount,jdbcType=INTEGER}, 
+      #{parkingcount,jdbcType=INTEGER}, #{sitepicicon,jdbcType=VARCHAR}, #{sitepic,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.SiteInfo" >
+    insert into t_info_site
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="siteid != null" >
+        SiteID,
+      </if>
+      <if test="sitename != null" >
+        SiteName,
+      </if>
+      <if test="sitecode != null" >
+        SiteCode,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="siteaddress != null" >
+        SiteAddress,
+      </if>
+      <if test="longitude != null" >
+        Longitude,
+      </if>
+      <if test="latitude != null" >
+        Latitude,
+      </if>
+      <if test="sitemanid != null" >
+        SiteManID,
+      </if>
+      <if test="siteman != null" >
+        SiteMan,
+      </if>
+      <if test="starttime != null" >
+        StartTime,
+      </if>
+      <if test="endtime != null" >
+        EndTime,
+      </if>
+      <if test="pilestatus != null" >
+        PileStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+      <if test="zcode != null" >
+        Zcode,
+      </if>
+      <if test="siteradius != null" >
+        SiteRadius,
+      </if>
+      <if test="miniparkingcount != null" >
+        MiniParkingCount,
+      </if>
+      <if test="parkingcount != null" >
+        ParkingCount,
+      </if>
+      <if test="sitepicicon != null" >
+        SitePicIcon,
+      </if>
+      <if test="sitepic != null" >
+        SitePic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="siteid != null" >
+        #{siteid,jdbcType=INTEGER},
+      </if>
+      <if test="sitename != null" >
+        #{sitename,jdbcType=VARCHAR},
+      </if>
+      <if test="sitecode != null" >
+        #{sitecode,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="siteaddress != null" >
+        #{siteaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="sitemanid != null" >
+        #{sitemanid,jdbcType=INTEGER},
+      </if>
+      <if test="siteman != null" >
+        #{siteman,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="pilestatus != null" >
+        #{pilestatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="zcode != null" >
+        #{zcode,jdbcType=VARCHAR},
+      </if>
+      <if test="siteradius != null" >
+        #{siteradius,jdbcType=DECIMAL},
+      </if>
+      <if test="miniparkingcount != null" >
+        #{miniparkingcount,jdbcType=INTEGER},
+      </if>
+      <if test="parkingcount != null" >
+        #{parkingcount,jdbcType=INTEGER},
+      </if>
+      <if test="sitepicicon != null" >
+        #{sitepicicon,jdbcType=VARCHAR},
+      </if>
+      <if test="sitepic != null" >
+        #{sitepic,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.SiteInfo" >
+    update t_info_site
+    <set >
+      <if test="sitename != null" >
+        SiteName = #{sitename,jdbcType=VARCHAR},
+      </if>
+      <if test="sitecode != null" >
+        SiteCode = #{sitecode,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="siteaddress != null" >
+        SiteAddress = #{siteaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        Longitude = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        Latitude = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="sitemanid != null" >
+        SiteManID = #{sitemanid,jdbcType=INTEGER},
+      </if>
+      <if test="siteman != null" >
+        SiteMan = #{siteman,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        StartTime = #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        EndTime = #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="pilestatus != null" >
+        PileStatus = #{pilestatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="zcode != null" >
+        Zcode = #{zcode,jdbcType=VARCHAR},
+      </if>
+      <if test="siteradius != null" >
+        SiteRadius = #{siteradius,jdbcType=DECIMAL},
+      </if>
+      <if test="miniparkingcount != null" >
+        MiniParkingCount = #{miniparkingcount,jdbcType=INTEGER},
+      </if>
+      <if test="parkingcount != null" >
+        ParkingCount = #{parkingcount,jdbcType=INTEGER},
+      </if>
+      <if test="sitepicicon != null" >
+        SitePicIcon = #{sitepicicon,jdbcType=VARCHAR},
+      </if>
+      <if test="sitepic != null" >
+        SitePic = #{sitepic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SiteID = #{siteid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.SiteInfo" >
+    update t_info_site
+    set SiteName = #{sitename,jdbcType=VARCHAR},
+      SiteCode = #{sitecode,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      SiteAddress = #{siteaddress,jdbcType=VARCHAR},
+      Longitude = #{longitude,jdbcType=DECIMAL},
+      Latitude = #{latitude,jdbcType=DECIMAL},
+      SiteManID = #{sitemanid,jdbcType=INTEGER},
+      SiteMan = #{siteman,jdbcType=VARCHAR},
+      StartTime = #{starttime,jdbcType=VARCHAR},
+      EndTime = #{endtime,jdbcType=VARCHAR},
+      PileStatus = #{pilestatus,jdbcType=INTEGER},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CompanyID = #{companyid,jdbcType=INTEGER},
+      Zcode = #{zcode,jdbcType=VARCHAR},
+      SiteRadius = #{siteradius,jdbcType=DECIMAL},
+      MiniParkingCount = #{miniparkingcount,jdbcType=INTEGER},
+      ParkingCount = #{parkingcount,jdbcType=INTEGER},
+      SitePicIcon = #{sitepicicon,jdbcType=VARCHAR},
+      SitePic = #{sitepic,jdbcType=VARCHAR}
+    where SiteID = #{siteid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="loadSiteInfoByCompanyID" resultMap="BaseResultMap" parameterType="integer" >
+    select *
+    from t_info_site
+    where CompanyID = #{companyID,jdbcType=INTEGER}
+  </select>
+  
+  <select id="loadSiteInfos" resultMap="BaseResultMap" >
+    select *
+    from t_info_site
+  </select>
+  
+  
+</mapper>

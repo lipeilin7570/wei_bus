@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgjev.weibus.dao.PriceFinanceMapper" >
+  <resultMap id="BaseResultMap" type="com.wgjev.weibus.entity.PriceFinance" >
+    <id column="PriceID" property="priceid" jdbcType="INTEGER" />
+    <result column="PriceVersion" property="priceversion" jdbcType="INTEGER" />
+    <result column="PriceName" property="pricename" jdbcType="VARCHAR" />
+    <result column="CarModel" property="carmodel" jdbcType="INTEGER" />
+    <result column="CalcType" property="calctype" jdbcType="INTEGER" />
+    <result column="CleanFee" property="cleanfee" jdbcType="DECIMAL" />
+    <result column="SafeFee" property="safefee" jdbcType="DECIMAL" />
+    <result column="MinutePrice" property="minuteprice" jdbcType="DECIMAL" />
+    <result column="HourMileage" property="hourmileage" jdbcType="DECIMAL" />
+    <result column="SuperPrice" property="superprice" jdbcType="DECIMAL" />
+    <result column="EarlyBegin" property="earlybegin" jdbcType="VARCHAR" />
+    <result column="EarlyEnd" property="earlyend" jdbcType="VARCHAR" />
+    <result column="EarlySale" property="earlysale" jdbcType="DECIMAL" />
+    <result column="NightBegin" property="nightbegin" jdbcType="VARCHAR" />
+    <result column="NightEnd" property="nightend" jdbcType="VARCHAR" />
+    <result column="NightSale" property="nightsale" jdbcType="DECIMAL" />
+    <result column="OldPriceID" property="oldpriceid" jdbcType="INTEGER" />
+    <result column="CreateManID" property="createmanid" jdbcType="INTEGER" />
+    <result column="CreateMan" property="createman" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="NewStatus" property="newstatus" jdbcType="INTEGER" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PriceID, PriceVersion, PriceName, CarModel, CalcType, CleanFee, SafeFee, MinutePrice, 
+    HourMileage, SuperPrice, EarlyBegin, EarlyEnd, EarlySale, NightBegin, NightEnd, NightSale, 
+    OldPriceID, CreateManID, CreateMan, CreateTime, Status, NewStatus, CompanyID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_price
+    where PriceID = #{priceid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_finance_price
+    where PriceID = #{priceid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wgjev.weibus.entity.PriceFinance" >
+    insert into t_finance_price (PriceID, PriceVersion, PriceName, 
+      CarModel, CalcType, CleanFee, 
+      SafeFee, MinutePrice, HourMileage, 
+      SuperPrice, EarlyBegin, EarlyEnd, 
+      EarlySale, NightBegin, NightEnd, 
+      NightSale, OldPriceID, CreateManID, 
+      CreateMan, CreateTime, Status, 
+      NewStatus, CompanyID)
+    values (#{priceid,jdbcType=INTEGER}, #{priceversion,jdbcType=INTEGER}, #{pricename,jdbcType=VARCHAR}, 
+      #{carmodel,jdbcType=INTEGER}, #{calctype,jdbcType=INTEGER}, #{cleanfee,jdbcType=DECIMAL}, 
+      #{safefee,jdbcType=DECIMAL}, #{minuteprice,jdbcType=DECIMAL}, #{hourmileage,jdbcType=DECIMAL}, 
+      #{superprice,jdbcType=DECIMAL}, #{earlybegin,jdbcType=VARCHAR}, #{earlyend,jdbcType=VARCHAR}, 
+      #{earlysale,jdbcType=DECIMAL}, #{nightbegin,jdbcType=VARCHAR}, #{nightend,jdbcType=VARCHAR}, 
+      #{nightsale,jdbcType=DECIMAL}, #{oldpriceid,jdbcType=INTEGER}, #{createmanid,jdbcType=INTEGER}, 
+      #{createman,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{newstatus,jdbcType=INTEGER}, #{companyid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgjev.weibus.entity.PriceFinance" >
+    insert into t_finance_price
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="priceid != null" >
+        PriceID,
+      </if>
+      <if test="priceversion != null" >
+        PriceVersion,
+      </if>
+      <if test="pricename != null" >
+        PriceName,
+      </if>
+      <if test="carmodel != null" >
+        CarModel,
+      </if>
+      <if test="calctype != null" >
+        CalcType,
+      </if>
+      <if test="cleanfee != null" >
+        CleanFee,
+      </if>
+      <if test="safefee != null" >
+        SafeFee,
+      </if>
+      <if test="minuteprice != null" >
+        MinutePrice,
+      </if>
+      <if test="hourmileage != null" >
+        HourMileage,
+      </if>
+      <if test="superprice != null" >
+        SuperPrice,
+      </if>
+      <if test="earlybegin != null" >
+        EarlyBegin,
+      </if>
+      <if test="earlyend != null" >
+        EarlyEnd,
+      </if>
+      <if test="earlysale != null" >
+        EarlySale,
+      </if>
+      <if test="nightbegin != null" >
+        NightBegin,
+      </if>
+      <if test="nightend != null" >
+        NightEnd,
+      </if>
+      <if test="nightsale != null" >
+        NightSale,
+      </if>
+      <if test="oldpriceid != null" >
+        OldPriceID,
+      </if>
+      <if test="createmanid != null" >
+        CreateManID,
+      </if>
+      <if test="createman != null" >
+        CreateMan,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="newstatus != null" >
+        NewStatus,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="priceid != null" >
+        #{priceid,jdbcType=INTEGER},
+      </if>
+      <if test="priceversion != null" >
+        #{priceversion,jdbcType=INTEGER},
+      </if>
+      <if test="pricename != null" >
+        #{pricename,jdbcType=VARCHAR},
+      </if>
+      <if test="carmodel != null" >
+        #{carmodel,jdbcType=INTEGER},
+      </if>
+      <if test="calctype != null" >
+        #{calctype,jdbcType=INTEGER},
+      </if>
+      <if test="cleanfee != null" >
+        #{cleanfee,jdbcType=DECIMAL},
+      </if>
+      <if test="safefee != null" >
+        #{safefee,jdbcType=DECIMAL},
+      </if>
+      <if test="minuteprice != null" >
+        #{minuteprice,jdbcType=DECIMAL},
+      </if>
+      <if test="hourmileage != null" >
+        #{hourmileage,jdbcType=DECIMAL},
+      </if>
+      <if test="superprice != null" >
+        #{superprice,jdbcType=DECIMAL},
+      </if>
+      <if test="earlybegin != null" >
+        #{earlybegin,jdbcType=VARCHAR},
+      </if>
+      <if test="earlyend != null" >
+        #{earlyend,jdbcType=VARCHAR},
+      </if>
+      <if test="earlysale != null" >
+        #{earlysale,jdbcType=DECIMAL},
+      </if>
+      <if test="nightbegin != null" >
+        #{nightbegin,jdbcType=VARCHAR},
+      </if>
+      <if test="nightend != null" >
+        #{nightend,jdbcType=VARCHAR},
+      </if>
+      <if test="nightsale != null" >
+        #{nightsale,jdbcType=DECIMAL},
+      </if>
+      <if test="oldpriceid != null" >
+        #{oldpriceid,jdbcType=INTEGER},
+      </if>
+      <if test="createmanid != null" >
+        #{createmanid,jdbcType=INTEGER},
+      </if>
+      <if test="createman != null" >
+        #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="newstatus != null" >
+        #{newstatus,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgjev.weibus.entity.PriceFinance" >
+    update t_finance_price
+    <set >
+      <if test="priceversion != null" >
+        PriceVersion = #{priceversion,jdbcType=INTEGER},
+      </if>
+      <if test="pricename != null" >
+        PriceName = #{pricename,jdbcType=VARCHAR},
+      </if>
+      <if test="carmodel != null" >
+        CarModel = #{carmodel,jdbcType=INTEGER},
+      </if>
+      <if test="calctype != null" >
+        CalcType = #{calctype,jdbcType=INTEGER},
+      </if>
+      <if test="cleanfee != null" >
+        CleanFee = #{cleanfee,jdbcType=DECIMAL},
+      </if>
+      <if test="safefee != null" >
+        SafeFee = #{safefee,jdbcType=DECIMAL},
+      </if>
+      <if test="minuteprice != null" >
+        MinutePrice = #{minuteprice,jdbcType=DECIMAL},
+      </if>
+      <if test="hourmileage != null" >
+        HourMileage = #{hourmileage,jdbcType=DECIMAL},
+      </if>
+      <if test="superprice != null" >
+        SuperPrice = #{superprice,jdbcType=DECIMAL},
+      </if>
+      <if test="earlybegin != null" >
+        EarlyBegin = #{earlybegin,jdbcType=VARCHAR},
+      </if>
+      <if test="earlyend != null" >
+        EarlyEnd = #{earlyend,jdbcType=VARCHAR},
+      </if>
+      <if test="earlysale != null" >
+        EarlySale = #{earlysale,jdbcType=DECIMAL},
+      </if>
+      <if test="nightbegin != null" >
+        NightBegin = #{nightbegin,jdbcType=VARCHAR},
+      </if>
+      <if test="nightend != null" >
+        NightEnd = #{nightend,jdbcType=VARCHAR},
+      </if>
+      <if test="nightsale != null" >
+        NightSale = #{nightsale,jdbcType=DECIMAL},
+      </if>
+      <if test="oldpriceid != null" >
+        OldPriceID = #{oldpriceid,jdbcType=INTEGER},
+      </if>
+      <if test="createmanid != null" >
+        CreateManID = #{createmanid,jdbcType=INTEGER},
+      </if>
+      <if test="createman != null" >
+        CreateMan = #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="newstatus != null" >
+        NewStatus = #{newstatus,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where PriceID = #{priceid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgjev.weibus.entity.PriceFinance" >
+    update t_finance_price
+    set PriceVersion = #{priceversion,jdbcType=INTEGER},
+      PriceName = #{pricename,jdbcType=VARCHAR},
+      CarModel = #{carmodel,jdbcType=INTEGER},
+      CalcType = #{calctype,jdbcType=INTEGER},
+      CleanFee = #{cleanfee,jdbcType=DECIMAL},
+      SafeFee = #{safefee,jdbcType=DECIMAL},
+      MinutePrice = #{minuteprice,jdbcType=DECIMAL},
+      HourMileage = #{hourmileage,jdbcType=DECIMAL},
+      SuperPrice = #{superprice,jdbcType=DECIMAL},
+      EarlyBegin = #{earlybegin,jdbcType=VARCHAR},
+      EarlyEnd = #{earlyend,jdbcType=VARCHAR},
+      EarlySale = #{earlysale,jdbcType=DECIMAL},
+      NightBegin = #{nightbegin,jdbcType=VARCHAR},
+      NightEnd = #{nightend,jdbcType=VARCHAR},
+      NightSale = #{nightsale,jdbcType=DECIMAL},
+      OldPriceID = #{oldpriceid,jdbcType=INTEGER},
+      CreateManID = #{createmanid,jdbcType=INTEGER},
+      CreateMan = #{createman,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      Status = #{status,jdbcType=INTEGER},
+      NewStatus = #{newstatus,jdbcType=INTEGER},
+      CompanyID = #{companyid,jdbcType=INTEGER}
+    where PriceID = #{priceid,jdbcType=INTEGER}
+  </update>
+</mapper>
